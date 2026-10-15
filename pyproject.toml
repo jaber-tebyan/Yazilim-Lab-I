@@ -7,7 +7,9 @@ authors = [
     { name = "jaber-tebyan", email = "jabertebyan@gmail.com" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "pydantic>=2.14.1",
+]
 
 [project.scripts]
 yazilim-lab-project = "yazilim_lab_project:main"
