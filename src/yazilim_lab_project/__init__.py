@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from pydantic import TypeAdapter
 import pathlib
 
@@ -11,10 +13,16 @@ def main() -> None:
     initial_data = InitialData.model_validate_json(
         pathlib.Path(assets_folder / "baslangic.json").read_text()
     )
-    print(initial_data)
     # we have jsonl file inside assets folder
-    with open(assets_folder / "komutlar_1.jsonl") as f:
+    commands_file = CommandsFile()
+    commands = commands_file.read(assets_folder / "komutlar_1.jsonl")
+
+
+class CommandsFile:
+    def read(self, path: pathlib.Path) -> list[AnyCommand]:
+        commands: list[AnyCommand] = []
         t = TypeAdapter(AnyCommand)
-        for line in f:
-            o = t.validate_json(line)
-            print(o)
+        with open(path) as f:
+            for line in f:
+                commands.append(t.validate_json(line))
+        return commands
