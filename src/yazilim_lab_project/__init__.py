@@ -1,9 +1,7 @@
-from pydantic import BaseModel, Field, RootModel, TypeAdapter
-from datetime import datetime
+from pydantic import TypeAdapter
 import pathlib
-import json
 
-from yazilim_lab_project.models.baslangic import InitialData
+from yazilim_lab_project.models.initial_data import InitialData
 from yazilim_lab_project.models.command import AnyCommand
 
 assets_folder = pathlib.Path(__file__).parent / "assets"

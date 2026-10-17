@@ -1,9 +1,6 @@
 from datetime import datetime
-from sqlite3 import adapters
-from typing import Annotated, Literal, Union
-from pydantic import BaseModel, Field, TypeAdapter
-
-from .baslangic import BakimPencere
+from typing import Annotated, Literal
+from pydantic import BaseModel, Field
 
 # {"komut":"kullanici_ekle","id":"u1","ad":"Ayşe Kaya","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
 
