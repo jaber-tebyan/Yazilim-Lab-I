@@ -44,3 +44,14 @@ class InitialData(BaseModel):
     resources: list[Resource] = Field(alias="kaynaklar")
     maintenance_windows: list[MaintenanceWindow] = Field(alias="bakim_pencereleri")
     users: list[User] = Field(alias="kullanicilar")
+
+    @staticmethod
+    def empty():
+        return InitialData(
+            saat=datetime.now(),
+            kaynak_turleri={},
+            roller={},
+            kaynaklar=[],
+            bakim_pencereleri=[],
+            kullanicilar=[],
+        )
