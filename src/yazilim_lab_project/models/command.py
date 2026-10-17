@@ -54,10 +54,16 @@ class FiyatCommand(BaseModel):
 # {"komut":"paket","kullanici":"u3","kalemler":[{"kaynak":"CIH-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"},{"kaynak":"ODA-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"}]}
 
 
+class ReservationRequests(BaseModel):
+    kaynak: str
+    baslangic: datetime
+    bitis: datetime
+
+
 class PaketCommand(BaseModel):
     komut: Literal["paket"]
     kullanici: str
-    kalemler: list[BakimPencere]
+    kalemler: list[ReservationRequests]
 
 
 # {"komut":"bekleme","kullanici":"u2","kaynak":"YAZ-1","baslangic":"2027-03-08T12:00","bitis":"2027-03-08T13:00"}
