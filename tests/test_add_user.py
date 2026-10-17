@@ -12,7 +12,7 @@ class TestAddUser(unittest.TestCase):
         commands = CommandsFile().read(assets_folder / "komutlar_1.jsonl")
         l: list[AnyCommand] = []
         for i in commands:
-            if i.komut == "kullanici_ekle":
+            if i.command == "kullanici_ekle":
                 l.append(i)
 
 
