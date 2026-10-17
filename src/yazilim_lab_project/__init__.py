@@ -1,8 +1,10 @@
-from pydantic import BaseModel, RootModel
+from pydantic import BaseModel, Field, RootModel, TypeAdapter
 from datetime import datetime
 import pathlib
 import json
-from .models import InitialData
+
+from yazilim_lab_project.models.baslangic import InitialData
+from yazilim_lab_project.models.command import AnyCommand
 
 assets_folder = pathlib.Path(__file__).parent / "assets"
 
@@ -12,3 +14,9 @@ def main() -> None:
         pathlib.Path(assets_folder / "baslangic.json").read_text()
     )
     print(initial_data)
+    # we have jsonl file inside assets folder
+    with open(assets_folder / "komutlar_1.jsonl") as f:
+        t = TypeAdapter(AnyCommand)
+        for line in f:
+            o = t.validate_json(line)
+            print(o)

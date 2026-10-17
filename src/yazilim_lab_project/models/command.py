@@ -1,17 +1,15 @@
 from datetime import datetime
-from pydantic import BaseModel
+from sqlite3 import adapters
+from typing import Annotated, Literal, Union
+from pydantic import BaseModel, Field, TypeAdapter
 
 from .baslangic import BakimPencere
-
-
-class Command(BaseModel):
-    komut: str
-
 
 # {"komut":"kullanici_ekle","id":"u1","ad":"Ayşe Kaya","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
 
 
-class KullaniciEkleCommand(Command):
+class KullaniciEkleCommand(BaseModel):
+    komut: Literal["kullanici_ekle"]
     id: str
     ad: str
     rol: str
@@ -23,7 +21,8 @@ class KullaniciEkleCommand(Command):
 # {"komut":"kaynak_ekle","id":"YAZ-1","ad":"3B Yazıcı 1","tur":"YAZICI","izinli_roller":["OGRENCI"]}
 
 
-class KaynakEkleCommand(Command):
+class KaynakEkleCommand(BaseModel):
+    komut: Literal["kaynak_ekle"]
     id: str
     ad: str
     tur: str
@@ -33,7 +32,8 @@ class KaynakEkleCommand(Command):
 # {"komut":"rezervasyon","kullanici":"u1","kaynak":"YAZ-1","baslangic":"2027-03-08T11:00","bitis":"2027-03-08T13:00"}
 
 
-class RezervasyonCommand(Command):
+class RezervasyonCommand(BaseModel):
+    komut: Literal["rezervasyon"]
     kullanici: str
     kaynak: str
     baslangic: datetime
@@ -43,7 +43,8 @@ class RezervasyonCommand(Command):
 # {"komut":"fiyat","kullanici":"u3","kaynak":"CIH-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"}
 
 
-class FiyatCommand(Command):
+class FiyatCommand(BaseModel):
+    komut: Literal["fiyat"]
     kullanici: str
     kaynak: str
     baslangic: datetime
@@ -53,7 +54,8 @@ class FiyatCommand(Command):
 # {"komut":"paket","kullanici":"u3","kalemler":[{"kaynak":"CIH-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"},{"kaynak":"ODA-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"}]}
 
 
-class PaketCommand(Command):
+class PaketCommand(BaseModel):
+    komut: Literal["paket"]
     kullanici: str
     kalemler: list[BakimPencere]
 
@@ -61,7 +63,8 @@ class PaketCommand(Command):
 # {"komut":"bekleme","kullanici":"u2","kaynak":"YAZ-1","baslangic":"2027-03-08T12:00","bitis":"2027-03-08T13:00"}
 
 
-class BeklemeCommand(Command):
+class BeklemeCommand(BaseModel):
+    komut: Literal["bekleme"]
     kullanici: str
     kaynak: str
     baslangic: datetime
@@ -71,27 +74,46 @@ class BeklemeCommand(Command):
 # {"komut":"saat","zaman":"2027-03-08T11:20"}
 
 
-class SaatCommand(Command):
+class SaatCommand(BaseModel):
+    komut: Literal["saat"]
     zaman: datetime
 
 
 # {"komut":"giris","rezervasyon":"r1"}
 
 
-class GirisCommand(Command):
+class GirisCommand(BaseModel):
+    komut: Literal["giris"]
     rezervasyon: str
 
 
 # {"komut":"iptal","rezervasyon":"r4"}
 
 
-class IptalCommand(Command):
+class IptalCommand(BaseModel):
+    komut: Literal["iptal"]
     rezervasyon: str
 
 
 # {"komut":"sorgu","tur":"kullanici","id":"u2"}
 
 
-class SorguCommand(Command):
+class SorguCommand(BaseModel):
+    komut: Literal["sorgu"]
     tur: str
     id: str
+
+
+AnyCommand = Annotated[
+    KullaniciEkleCommand
+    | KaynakEkleCommand
+    | RezervasyonCommand
+    | FiyatCommand
+    | PaketCommand
+    | BeklemeCommand
+    | SaatCommand
+    | GirisCommand
+    | IptalCommand
+    | SorguCommand,
+    Field(discriminator="komut"),
+]
