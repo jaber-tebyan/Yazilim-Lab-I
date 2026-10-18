@@ -3,6 +3,7 @@ from dataclasses import dataclass
 from pydantic import TypeAdapter
 import pathlib
 
+from yazilim_lab_project.models import AnyResult
 from yazilim_lab_project.models.initial_data import InitialData
 from yazilim_lab_project.models.command import AnyCommand
 
@@ -24,5 +25,19 @@ class CommandsFile:
         t = TypeAdapter(AnyCommand)
         with open(path) as f:
             for line in f:
-                commands.append(t.validate_json(line))
+                if line.startswith("//"):
+                    continue
+                commands.append(t.validate_json(line.strip()))
+        return commands
+
+
+class ResultsFile:
+    def read(self, path: pathlib.Path) -> list[AnyResult]:
+        commands: list[AnyResult] = []
+        t = TypeAdapter(AnyResult)
+        with open(path) as f:
+            for line in f:
+                if line.startswith("//"):
+                    continue
+                commands.append(t.validate_json(line.strip()))
         return commands
