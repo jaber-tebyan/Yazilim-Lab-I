@@ -2,13 +2,7 @@ from enum import Enum
 
 from yazilim_lab_project.models.command import AddUserCommand
 from yazilim_lab_project.models.initial_data import InitialData
-
-
-class AddUserErrors(Enum):
-    OK = 0
-    ID_EXISTS = 1
-    UNDEFINED_VALUE = 2
-    INVALID_VALUE = 3
+from yazilim_lab_project.models.results import AddUserResult
 
 
 # Returns true if a user with same id exists
@@ -29,11 +23,13 @@ def rule_user_invalid_value(cmd: AddUserCommand, app_state: InitialData) -> bool
     )
 
 
-def all_rules_user_add(cmd: AddUserCommand, app_state: InitialData) -> AddUserErrors:
+def all_rules_user_add(
+    cmd: AddUserCommand, app_state: InitialData
+) -> AddUserResult.Error | None:
     if rule_user_add_id_exist(cmd, app_state):
-        return AddUserErrors.ID_EXISTS
+        return AddUserResult.Error.ID_EXISTS
     if rule_user_undefined_value(cmd, app_state):
-        return AddUserErrors.UNDEFINED_VALUE
+        return AddUserResult.Error.UNDEFINED_VALUE
     if rule_user_invalid_value(cmd, app_state):
-        return AddUserErrors.INVALID_VALUE
-    return AddUserErrors.OK
+        return AddUserResult.Error.INVALID_VALUE
+    return None
