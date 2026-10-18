@@ -7,10 +7,7 @@ from yazilim_lab_project.interface import AddUser
 from yazilim_lab_project.models.command import AddUserCommand, AnyCommand
 from yazilim_lab_project.models.initial_data import InitialData, User
 from yazilim_lab_project.models.results import AddUserResult
-from yazilim_lab_project.rules import (
-    all_rules_user_add,
-    rule_user_add_id_exist,
-)
+from yazilim_lab_project.rules.add_user_rules import all_rules_user_add
 
 DATA = Path(__file__).parent / "data" / "add_user"
 
@@ -37,11 +34,11 @@ def test_rules_on_kullanici_ekle_command():
             app_state,
             User(
                 id=cmd.id,
-                ad=cmd.name,
-                rol=cmd.role,
-                sertifikalar=cmd.certificates,
-                bakiye=cmd.balance,
-                guvenilirlik=cmd.reliability,
+                name=cmd.name,
+                role=cmd.role,
+                certificates=cmd.certificates,
+                balance=cmd.balance,
+                reliability=cmd.reliability,
             ),
         )
         print(result.model_dump_json(by_alias=True))
