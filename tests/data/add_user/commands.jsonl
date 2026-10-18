@@ -1,15 +1,4 @@
-{"komut":"kullanici_ekle","id":"u1","ad":"Ayse","rol":"OGRENCI","sertifikalar":["LAB_GUVENLIK"],"bakiye":120,"guvenilirlik":0}
-{"komut":"kullanici_ekle","id":"u2","ad":"Ali","rol":"ARASTIRMACI","sertifikalar":[],"bakiye":300,"guvenilirlik":100}
-{"komut":"kullanici_ekle","id":"u4","ad":"Veli","rol":"TEKNISYEN","sertifikalar":[],"bakiye":0,"guvenilirlik":40}
-{"komut":"kullanici_ekle","id":"u1","ad":"Kopya","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
-{"komut":"kullanici_ekle","id":"u3","ad":"Kopya Start","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
-{"komut":"kullanici_ekle","id":"u5","ad":"Hale","rol":"PROFESOR","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
-{"komut":"kullanici_ekle","id":"u6","ad":"Irem","rol":"ogrenci","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
-{"komut":"kullanici_ekle","id":"u7","ad":"Jale","rol":"OGRENCI","sertifikalar":[],"bakiye":121,"guvenilirlik":80}
-{"komut":"kullanici_ekle","id":"u8","ad":"Kemal","rol":"OGRENCI","sertifikalar":[],"bakiye":-1,"guvenilirlik":80}
-{"komut":"kullanici_ekle","id":"u9","ad":"Mert","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":101}
-{"komut":"kullanici_ekle","id":"u10","ad":"Naz","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":-1}
-{"komut":"kullanici_ekle","id":"u1","ad":"Kopya 2","rol":"PROFESOR","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
-{"komut":"kullanici_ekle","id":"u13","ad":"Rana","rol":"PROFESOR","sertifikalar":[],"bakiye":99999,"guvenilirlik":80}
-{"komut":"kullanici_ekle","id":"u1","ad":"Kopya 3","rol":"OGRENCI","sertifikalar":[],"bakiye":-5,"guvenilirlik":80}
-{"komut":"kullanici_ekle","id":"u7","ad":"Jale","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u1","ad":"Ayşe Kaya","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u1","ad":"Tekrar Eden","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u2","ad":"Geçersiz Rol","rol":"BILINMEYEN","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u3","ad":"Negatif Bakiye","rol":"OGRENCI","sertifikalar":[],"bakiye":-10,"guvenilirlik":80}

@@ -1,0 +1,4 @@
+{"no":1,"komut":"kullanici_ekle","durum":"TAMAM"}
+{"no":2,"komut":"kullanici_ekle","durum":"RED","kod":"ID_MEVCUT"}
+{"no":3,"komut":"kullanici_ekle","durum":"RED","kod":"TANIMSIZ_DEGER"}
+{"no":4,"komut":"kullanici_ekle","durum":"RED","kod":"GECERSIZ_DEGER"}

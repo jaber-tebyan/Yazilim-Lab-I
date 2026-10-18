@@ -2,11 +2,12 @@ from pathlib import Path
 
 from pydantic import TypeAdapter
 
-from yazilim_lab_project import APP_STATE, CommandsFile, assets_folder
+from yazilim_lab_project import APP_STATE, CommandsFile, ResultsFile, assets_folder
+from yazilim_lab_project.interface import AddUser
 from yazilim_lab_project.models.command import AddUserCommand, AnyCommand
-from yazilim_lab_project.models.initial_data import InitialData
+from yazilim_lab_project.models.initial_data import InitialData, User
+from yazilim_lab_project.models.results import AddUserResult
 from yazilim_lab_project.rules import (
-    AddUserErrors,
     all_rules_user_add,
     rule_user_add_id_exist,
 )
@@ -23,24 +24,35 @@ def test_rules_on_kullanici_ekle_command():
         for cmd in CommandsFile().read(DATA / "commands.jsonl")
         if isinstance(cmd, AddUserCommand)
     ]
-    results = [
-        AddUserErrors.OK,
-        AddUserErrors.OK,
-        AddUserErrors.OK,
-        AddUserErrors.OK,  # 4: u1 was not saved, so no duplicate
-        AddUserErrors.ID_EXISTS,  # 5: u3 from the start state
-        AddUserErrors.UNDEFINED_VALUE,
-        AddUserErrors.UNDEFINED_VALUE,
-        AddUserErrors.INVALID_VALUE,
-        AddUserErrors.INVALID_VALUE,
-        AddUserErrors.INVALID_VALUE,
-        AddUserErrors.INVALID_VALUE,
-        AddUserErrors.UNDEFINED_VALUE,  # 14
-        AddUserErrors.UNDEFINED_VALUE,  # 15
-        AddUserErrors.INVALID_VALUE,  # 16
-        AddUserErrors.OK,
+
+    results: list[AddUserResult.Any] = [
+        res
+        for res in ResultsFile().read(DATA / "results.jsonl")
+        if isinstance(res, AddUserResult.Variants)
     ]
     for i, cmd in enumerate(commands):
         result = all_rules_user_add(cmd, app_state)
+        if result is None:
+            result = AddUserResult.Ok(
+                no=i + 1, komut="kullanici_ekle", durum=AddUserResult.Status.OK
+            )
+        else:
+            result = AddUserResult.Red(
+                no=i + 1,
+                komut="kullanici_ekle",
+                durum=AddUserResult.Status.RED,
+                kod=result,
+            )
+        AddUser(
+            app_state,
+            User(
+                id=cmd.id,
+                ad=cmd.name,
+                rol=cmd.role,
+                sertifikalar=cmd.certificates,
+                bakiye=cmd.balance,
+                guvenilirlik=cmd.reliability,
+            ),
+        )
+        print(result.model_dump_json(by_alias=True))
         assert result == results[i], f"rule {i} failed"
-        # do three rules and get their results in true or false
