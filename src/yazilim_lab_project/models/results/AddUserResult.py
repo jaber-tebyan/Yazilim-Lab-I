@@ -18,16 +18,20 @@ class Status(StrEnum):
 class _Base(BaseModel):
     model_config: ClassVar[ConfigDict] = ConfigDict(populate_by_name=True)
     no: int
-    command: Literal["kullanici_ekle"] = Field(alias="komut")
+    command: Literal["kullanici_ekle"] = Field(
+        default="kullanici_ekle", validation_alias="komut", serialization_alias="komut"
+    )
 
 
 class Ok(_Base):
-    status: Literal[Status.OK] = Field(default=Status.OK, alias="durum")
+    status: Literal[Status.OK] = Field(
+        default=Status.OK, validation_alias="durum", serialization_alias="durum"
+    )
 
 
 class Red(_Base):
-    status: Literal[Status.RED] = Field(default=Status.RED, alias="durum")
-    error_code: Error = Field(alias="kod")
+    status: Literal[Status.RED] = Field(default=Status.RED, validation_alias="durum")
+    error_code: Error = Field(validation_alias="kod", serialization_alias="kod")
 
 
 Any = Annotated[Ok | Red, Field(discriminator="status")]
