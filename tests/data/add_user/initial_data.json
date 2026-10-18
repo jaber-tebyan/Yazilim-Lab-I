@@ -1,0 +1,25 @@
+{
+  "saat": "2027-03-08T08:00",
+  "kaynak_turleri": {},
+  "roller": {
+    "OGRENCI": { "haftalik_kota": 120, "ileri_gun": 7, "azami_sure_dk": 180 },
+    "ARASTIRMACI": {
+      "haftalik_kota": 300,
+      "ileri_gun": 14,
+      "azami_sure_dk": 480
+    },
+    "TEKNISYEN": { "haftalik_kota": 600, "ileri_gun": 30, "azami_sure_dk": 840 }
+  },
+  "kaynaklar": [],
+  "bakim_pencereleri": [],
+  "kullanicilar": [
+    {
+      "id": "u3",
+      "ad": "Elif Sahin",
+      "rol": "ARASTIRMACI",
+      "sertifikalar": [],
+      "bakiye": 300,
+      "guvenilirlik": 80
+    }
+  ]
+}
