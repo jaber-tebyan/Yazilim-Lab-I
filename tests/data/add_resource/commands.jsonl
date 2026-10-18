@@ -1,0 +1,4 @@
+{"komut":"kaynak_ekle","id":"YAZ-1","ad":"3B Yazıcı 1","tur":"YAZICI","izinli_roller":["OGRENCI"]}
+{"komut":"kaynak_ekle","id":"YAZ-1","ad":"Çakışan Yazıcı","tur":"YAZICI","izinli_roller":["OGRENCI"]}
+{"komut":"kaynak_ekle","id":"YAZ-2","ad":"Tanımsız Tür","tur":"BILINMEYEN","izinli_roller":["OGRENCI"]}
+{"komut":"kaynak_ekle","id":"YAZ-3","ad":"Tanımsız Rol","tur":"YAZICI","izinli_roller":["BILINMEYEN_ROL"]}
