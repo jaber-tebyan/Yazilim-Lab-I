@@ -1,5 +1,5 @@
 from enum import StrEnum
-from typing import Annotated, ClassVar, Literal, get_args
+from typing import Annotated, ClassVar, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -41,7 +41,6 @@ def new(no: int, error_code: Error | None = None) -> Ok | Red:
         return Red(no=no, error_code=error_code)
 
 
+Variants = (Ok, Red)
 Any = Annotated[Ok | Red, Field(discriminator="status")]
-Variants: tuple[type, ...] = get_args(get_args(Any)[0])
-
 __all__ = []
