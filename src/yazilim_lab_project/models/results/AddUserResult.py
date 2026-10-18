@@ -34,6 +34,13 @@ class Red(_Base):
     error_code: Error = Field(validation_alias="kod", serialization_alias="kod")
 
 
+def new(no: int, error_code: Error | None = None) -> Ok | Red:
+    if error_code == None:
+        return Ok(no=no)
+    else:
+        return Red(no=no, error_code=error_code)
+
+
 Any = Annotated[Ok | Red, Field(discriminator="status")]
 Variants: tuple[type, ...] = get_args(get_args(Any)[0])
 

@@ -32,17 +32,7 @@ def test_rules_on_kullanici_ekle_command():
     ]
     for i, cmd in enumerate(commands):
         result = all_rules_user_add(cmd, app_state)
-        if result is None:
-            result = AddUserResult.Ok(
-                no=i + 1, komut="kullanici_ekle", durum=AddUserResult.Status.OK
-            )
-        else:
-            result = AddUserResult.Red(
-                no=i + 1,
-                komut="kullanici_ekle",
-                durum=AddUserResult.Status.RED,
-                kod=result,
-            )
+        result = AddUserResult.new(i + 1, result)
         AddUser(
             app_state,
             User(
