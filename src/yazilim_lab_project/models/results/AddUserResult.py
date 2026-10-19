@@ -30,7 +30,9 @@ class Ok(_Base):
 
 
 class Red(_Base):
-    status: Literal[Status.RED] = Field(default=Status.RED, validation_alias="durum")
+    status: Literal[Status.RED] = Field(
+        default=Status.RED, validation_alias="durum", serialization_alias="durum"
+    )
     error_code: Error = Field(validation_alias="kod", serialization_alias="kod")
 
 
