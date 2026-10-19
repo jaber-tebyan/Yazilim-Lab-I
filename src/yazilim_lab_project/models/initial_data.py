@@ -2,6 +2,8 @@ from datetime import datetime
 from typing import ClassVar
 from pydantic import BaseModel, ConfigDict, Field
 
+from yazilim_lab_project.models.reservation import Reservation
+
 
 class _Base(BaseModel):
     model_config: ClassVar[ConfigDict] = ConfigDict(populate_by_name=True)
@@ -81,6 +83,7 @@ class InitialData(_Base):
     users: list[User] = Field(
         validation_alias="kullanicilar", serialization_alias="kullanicilar"
     )
+    reservations: list[Reservation] = Field(default_factory=list)
 
     @staticmethod
     def empty():
@@ -91,4 +94,5 @@ class InitialData(_Base):
             resources=[],
             maintenance_windows=[],
             users=[],
+            reservations=[],
         )
