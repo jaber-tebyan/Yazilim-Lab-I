@@ -29,8 +29,7 @@ def get_price(cmd: PriceCommand, appstate: InitialData) -> int:
             ):
                 continue
             resource = next(r for r in appstate.resources if r.id == res.resource)
-            resource_type = appstate.resource_types[resource.type]
-            if resource_type != cmd_resource_type:
+            if resource.type != cmd_resource.type:
                 continue
 
             # total occupied minutes for 2 hour band
