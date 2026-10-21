@@ -11,7 +11,7 @@ from yazilim_lab_project.rules.price_rules import all_rules_price
 DATA = Path(__file__).parent / "data" / "price"
 
 
-def test_rules_on_kullanici_ekle_command():
+def test_rules_on_price_command():
     config = InitialData.model_validate_json((DATA / "initial_data.json").read_text())
     state = AppState(config=config)
     commands: list[PriceCommand] = [
