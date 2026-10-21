@@ -1,0 +1,10 @@
+{"no":1,"komut":"fiyat","durum":"TAMAM","ucret":36}
+{"no":2,"komut":"fiyat","durum":"RED","kod":"ZAMAN_ADIMI_HATASI"}
+{"no":3,"komut":"fiyat","durum":"RED","kod":"GECMIS_ZAMAN"}
+{"no":4,"komut":"fiyat","durum":"RED","kod":"CALISMA_SAATI_DISI"}
+{"no":5,"komut":"fiyat","durum":"RED","kod":"SURE_SINIRI"}
+{"no":6,"komut":"fiyat","durum":"RED","kod":"BAKIM"}
+{"no":7,"komut":"fiyat","durum":"TAMAM","ucret":16}
+{"no":8,"komut":"fiyat","durum":"RED","kod":"SERTIFIKA_YOK"}
+{"no":9,"komut":"fiyat","durum":"TAMAM","ucret":48}
+{"no":10,"komut":"fiyat","durum":"TAMAM","ucret":24}
