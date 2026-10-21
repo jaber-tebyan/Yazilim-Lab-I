@@ -8,3 +8,16 @@ def AddUser(state: AppState, user: User) -> None:
 
 def AddResource(state: AppState, resource: Resource) -> None:
     state.config.resources.append(resource)
+
+
+def DecreaseUserBalance(state: AppState, user_id: str, amount: int) -> None:
+    user = next(user for user in state.config.users if user.id == user_id)
+    user.balance -= amount
+    if user.balance < 0:
+        print("This shouldn't have happend.")
+        raise Exception("User balance went below zero.")
+
+
+def get_user(state: AppState, user_id: str) -> User:
+    user = next(user for user in state.config.users if user.id == user_id)
+    return user
