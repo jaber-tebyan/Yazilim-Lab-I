@@ -159,7 +159,7 @@ def rule_reservation_insufficient_balance(
 
     if user.balance < price:
         return None
-    return (price, user.balance)
+    return (price, user.balance - price)
 
 
 def all_rules_reservation(
