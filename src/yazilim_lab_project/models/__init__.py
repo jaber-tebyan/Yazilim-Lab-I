@@ -7,7 +7,6 @@ from yazilim_lab_project.models.results import (
 )
 
 AnyResult = Annotated[
-    AddUserResult.Any | AddResourceResult.Any,
-    PriceResult.Any,
+    AddUserResult.Any | AddResourceResult.Any | PriceResult.Any,
     Field(discriminator="command"),
 ]
