@@ -46,14 +46,6 @@ class Red(_Base):
     error_code: Error = Field(validation_alias="kod", serialization_alias="kod")
 
 
-def new(no: int, error_code: Error | None = None, price: int | None = None) -> Ok | Red:
-    if error_code != None:
-        return Red(no=no, error_code=error_code)
-    if price != None:
-        return Ok(no=no, price=price)
-    raise ValueError("price or error_code must be provided")
-
-
 Variants = (Ok, Red)
 Any = Annotated[Ok | Red, Field(discriminator="status")]
 __all__ = []
