@@ -1,35 +1,33 @@
-from enum import Enum
-
+from yazilim_lab_project.models.app_state import AppState
 from yazilim_lab_project.models.command import AddUserCommand
-from yazilim_lab_project.models.initial_data import InitialData
 from yazilim_lab_project.models.results import AddUserResult
 
 
 # Returns true if a user with same id exists
-def rule_user_add_id_exist(cmd: AddUserCommand, app_state: InitialData) -> bool:
-    return any(user.id == cmd.id for user in app_state.users)
+def rule_user_add_id_exist(cmd: AddUserCommand, state: AppState) -> bool:
+    return any(user.id == cmd.id for user in state.config.users)
 
 
-def rule_user_undefined_value(cmd: AddUserCommand, app_state: InitialData) -> bool:
-    return cmd.role not in app_state.roles
+def rule_user_undefined_value(cmd: AddUserCommand, state: AppState) -> bool:
+    return cmd.role not in state.config.roles
 
 
-def rule_user_invalid_value(cmd: AddUserCommand, app_state: InitialData) -> bool:
+def rule_user_invalid_value(cmd: AddUserCommand, state: AppState) -> bool:
     return (
         cmd.balance < 0
-        or cmd.balance > app_state.roles[cmd.role].weekly_quota
+        or cmd.balance > state.config.roles[cmd.role].weekly_quota
         or cmd.reliability < 0
         or cmd.reliability > 100
     )
 
 
 def all_rules_user_add(
-    cmd: AddUserCommand, app_state: InitialData
+    cmd: AddUserCommand, state: AppState
 ) -> AddUserResult.Error | None:
-    if rule_user_add_id_exist(cmd, app_state):
+    if rule_user_add_id_exist(cmd, state):
         return AddUserResult.Error.ID_EXISTS
-    if rule_user_undefined_value(cmd, app_state):
+    if rule_user_undefined_value(cmd, state):
         return AddUserResult.Error.UNDEFINED_VALUE
-    if rule_user_invalid_value(cmd, app_state):
+    if rule_user_invalid_value(cmd, state):
         return AddUserResult.Error.INVALID_VALUE
     return None

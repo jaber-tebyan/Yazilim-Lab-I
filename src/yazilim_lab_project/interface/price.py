@@ -3,14 +3,16 @@ from decimal import ROUND_HALF_UP, Decimal
 import math
 
 from yazilim_lab_project.models import reservation
-from yazilim_lab_project.models.command import PriceCommand, ReservationRequests
-from yazilim_lab_project.models.initial_data import InitialData, Resource, ResourceType
-from yazilim_lab_project.models.reservation import Reservation
+from yazilim_lab_project.models.app_state import AppState
+from yazilim_lab_project.models.command import (
+    PriceCommand,
+    ReservationCommand,
+)
 
 
-def get_price(cmd: PriceCommand, appstate: InitialData) -> int:
-    cmd_resource = next(res for res in appstate.resources if res.id == cmd.resource)
-    cmd_resource_type = appstate.resource_types[cmd_resource.type]
+def get_price(cmd: PriceCommand | ReservationCommand, state: AppState) -> int:
+    cmd_resource = next(res for res in state.config.resources if res.id == cmd.resource)
+    cmd_resource_type = state.config.resource_types[cmd_resource.type]
     base_fee = cmd_resource_type.base_fee
 
     total = 0
@@ -21,14 +23,14 @@ def get_price(cmd: PriceCommand, appstate: InitialData) -> int:
         )
         band_end = band_start + timedelta(hours=2, minutes=0, seconds=0)
         total_occupied_minutes: int = 0
-        for res in appstate.reservations:
+        for res in state.reservations:
             if not (res.start < band_end and band_start < res.end):
                 continue
             if not (
                 res.state in [reservation.State.IN_USE, reservation.State.APPROVED]
             ):
                 continue
-            resource = next(r for r in appstate.resources if r.id == res.resource)
+            resource = next(r for r in state.config.resources if r.id == res.resource)
             if resource.type != cmd_resource.type:
                 continue
 
@@ -42,7 +44,9 @@ def get_price(cmd: PriceCommand, appstate: InitialData) -> int:
 
         # calculate occupancy for current band
         same_resources_count = (
-            len([res for res in appstate.resources if res.type == cmd_resource.type])
+            len(
+                [res for res in state.config.resources if res.type == cmd_resource.type]
+            )
             * 120
         )
         occupancy = total_occupied_minutes / same_resources_count

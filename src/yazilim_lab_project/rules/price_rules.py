@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from yazilim_lab_project.models import reservation
+from yazilim_lab_project.models.app_state import AppState
 from yazilim_lab_project.models.command import PriceCommand
 from yazilim_lab_project.models.initial_data import InitialData
 from yazilim_lab_project.models.results import PriceResult
@@ -22,9 +23,9 @@ from yazilim_lab_project.models.results import PriceResult
 
 
 # User or resource not found
-def rule_price_not_found(cmd: PriceCommand, app_state: InitialData):
-    user_exists = any(user.id == cmd.user for user in app_state.users)
-    resource_exists = any(res.id == cmd.resource for res in app_state.resources)
+def rule_price_not_found(cmd: PriceCommand, state: AppState):
+    user_exists = any(user.id == cmd.user for user in state.config.users)
+    resource_exists = any(res.id == cmd.resource for res in state.config.resources)
     return not (user_exists and resource_exists)
 
 
@@ -37,8 +38,8 @@ def rule_price_time_step_error(cmd: PriceCommand):
 
 
 # Start date is before simulated time
-def rule_price_past_time(cmd: PriceCommand, app_state: InitialData):
-    return cmd.start < app_state.time
+def rule_price_past_time(cmd: PriceCommand, state: AppState):
+    return cmd.start < state.config.time
 
 
 # start and end not on same day or on opening and closing hours which are between 08:00 and 22:00
@@ -51,46 +52,46 @@ def rule_price_out_of_working_hours(cmd: PriceCommand):
 
 
 # Duration is less than 30 minutes or higher than role's allowed duration
-def rule_price_duration_limit(cmd: PriceCommand, app_state: InitialData):
-    user = next(user for user in app_state.users if user.id == cmd.user)
-    role_duration_mins = app_state.roles[user.role].max_duration_min
+def rule_price_duration_limit(cmd: PriceCommand, state: AppState):
+    user = next(user for user in state.config.users if user.id == cmd.user)
+    role_duration_mins = state.config.roles[user.role].max_duration_min
     current_duration_mins = (cmd.end - cmd.start).total_seconds() / 60
     return current_duration_mins < 30 or current_duration_mins > role_duration_mins
 
 
 # End date is more than 1 day after role's allowed end date
-def rule_price_future_date_limit(cmd: PriceCommand, app_state: InitialData):
-    user = next(user for user in app_state.users if user.id == cmd.user)
-    normal_end_date = app_state.time + timedelta(
-        days=app_state.roles[user.role].future_day
+def rule_price_future_date_limit(cmd: PriceCommand, state: AppState):
+    user = next(user for user in state.config.users if user.id == cmd.user)
+    normal_end_date = state.config.time + timedelta(
+        days=state.config.roles[user.role].future_day
     )
-    low_reliability_end_date = app_state.time + timedelta(days=1)
+    low_reliability_end_date = state.config.time + timedelta(days=1)
     end_date = low_reliability_end_date if user.reliability < 50 else normal_end_date
     return cmd.start > end_date
 
 
 # Role has no permission to use this resource
-def rule_price_no_role_permission(cmd: PriceCommand, app_state: InitialData):
-    user = next(user for user in app_state.users if user.id == cmd.user)
-    res = next(res for res in app_state.resources if res.id == cmd.resource)
+def rule_price_no_role_permission(cmd: PriceCommand, state: AppState):
+    user = next(user for user in state.config.users if user.id == cmd.user)
+    res = next(res for res in state.config.resources if res.id == cmd.resource)
     return user.role not in res.allowed_roles
 
 
 # Required certificate is not present
-def rule_price_no_certificate(cmd: PriceCommand, app_state: InitialData):
-    user = next(user for user in app_state.users if user.id == cmd.user)
-    resource = next(res for res in app_state.resources if res.id == cmd.resource)
-    res_type = app_state.resource_types[resource.type]
+def rule_price_no_certificate(cmd: PriceCommand, state: AppState):
+    user = next(user for user in state.config.users if user.id == cmd.user)
+    resource = next(res for res in state.config.resources if res.id == cmd.resource)
+    res_type = state.config.resource_types[resource.type]
     return res_type.certificate != None and all(
         cert != res_type.certificate for cert in user.certificates
     )
 
 
 # Reservation collision with maintenance window
-def rule_price_maintenance(cmd: PriceCommand, app_state: InitialData):
+def rule_price_maintenance(cmd: PriceCommand, state: AppState):
     return any(
         maint
-        for maint in app_state.maintenance_windows
+        for maint in state.config.maintenance_windows
         if maint.resource == cmd.resource
         and maint.start < cmd.end
         and cmd.start < maint.end
@@ -98,10 +99,10 @@ def rule_price_maintenance(cmd: PriceCommand, app_state: InitialData):
 
 
 # Reservation collision with other reservations
-def rule_price_intersection(cmd: PriceCommand, app_state: InitialData):
+def rule_price_intersection(cmd: PriceCommand, state: AppState):
     return any(
         resv
-        for resv in app_state.reservations
+        for resv in state.reservations
         if resv.resource == cmd.resource
         and resv.state in [reservation.State.IN_USE, reservation.State.APPROVED]
         and resv.start < cmd.end
@@ -110,13 +111,13 @@ def rule_price_intersection(cmd: PriceCommand, app_state: InitialData):
 
 
 # Preparation time violation
-def rule_price_preparation_violation(cmd: PriceCommand, app_state: InitialData):
-    resource = next(res for res in app_state.resources if res.id == cmd.resource)
-    res_type = app_state.resource_types[resource.type]
+def rule_price_preparation_violation(cmd: PriceCommand, state: AppState):
+    resource = next(res for res in state.config.resources if res.id == cmd.resource)
+    res_type = state.config.resource_types[resource.type]
     preparation_delta = timedelta(minutes=res_type.preparation_min)
     return any(
         res
-        for res in app_state.reservations
+        for res in state.reservations
         if res.resource == cmd.resource
         and res.state
         in [
@@ -130,11 +131,11 @@ def rule_price_preparation_violation(cmd: PriceCommand, app_state: InitialData):
 
 
 # Same user cannot use same resource in a duration less than 60 minutes
-def rule_price_consecutive_use(cmd: PriceCommand, app_state: InitialData):
+def rule_price_consecutive_use(cmd: PriceCommand, state: AppState):
     delta = timedelta(minutes=60)
     return any(
         res
-        for res in app_state.reservations
+        for res in state.reservations
         if res.resource == cmd.resource
         and res.state
         in [
@@ -148,31 +149,29 @@ def rule_price_consecutive_use(cmd: PriceCommand, app_state: InitialData):
     )
 
 
-def all_rules_price(
-    cmd: PriceCommand, app_state: InitialData
-) -> PriceResult.Error | None:
-    if rule_price_not_found(cmd, app_state):
+def all_rules_price(cmd: PriceCommand, state: AppState) -> PriceResult.Error | None:
+    if rule_price_not_found(cmd, state):
         return PriceResult.Error.NOT_FOUND
     if rule_price_time_step_error(cmd):
         return PriceResult.Error.TIME_STEP_ERROR
-    if rule_price_past_time(cmd, app_state):
+    if rule_price_past_time(cmd, state):
         return PriceResult.Error.PAST_TIME
     if rule_price_out_of_working_hours(cmd):
         return PriceResult.Error.OUT_OF_WORKING_HOURS
-    if rule_price_duration_limit(cmd, app_state):
+    if rule_price_duration_limit(cmd, state):
         return PriceResult.Error.DURATION_LIMIT
-    if rule_price_future_date_limit(cmd, app_state):
+    if rule_price_future_date_limit(cmd, state):
         return PriceResult.Error.FUTURE_DATE_LIMIT
-    if rule_price_no_role_permission(cmd, app_state):
+    if rule_price_no_role_permission(cmd, state):
         return PriceResult.Error.NO_ROLE_PERMISSION
-    if rule_price_no_certificate(cmd, app_state):
+    if rule_price_no_certificate(cmd, state):
         return PriceResult.Error.NO_CERTIFICATE
-    if rule_price_maintenance(cmd, app_state):
+    if rule_price_maintenance(cmd, state):
         return PriceResult.Error.MAINTENANCE
-    if rule_price_intersection(cmd, app_state):
+    if rule_price_intersection(cmd, state):
         return PriceResult.Error.INTERSECTION
-    if rule_price_preparation_violation(cmd, app_state):
+    if rule_price_preparation_violation(cmd, state):
         return PriceResult.Error.PREPARATION_VIOLATION
-    if rule_price_consecutive_use(cmd, app_state):
+    if rule_price_consecutive_use(cmd, state):
         return PriceResult.Error.CONSECUTIVE_USE
     return None

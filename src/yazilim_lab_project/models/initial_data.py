@@ -83,7 +83,6 @@ class InitialData(_Base):
     users: list[User] = Field(
         validation_alias="kullanicilar", serialization_alias="kullanicilar"
     )
-    reservations: list[Reservation] = Field(default_factory=list)
 
     @staticmethod
     def empty():
@@ -94,5 +93,4 @@ class InitialData(_Base):
             resources=[],
             maintenance_windows=[],
             users=[],
-            reservations=[],
         )

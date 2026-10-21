@@ -3,6 +3,7 @@ from pathlib import Path
 
 from yazilim_lab_project import CommandsFile, ResultsFile
 from yazilim_lab_project.interface import AddResource
+from yazilim_lab_project.models.app_state import AppState
 from yazilim_lab_project.models.command import (
     AddResourceCommand,
 )
@@ -14,9 +15,8 @@ DATA = Path(__file__).parent / "data" / "add_resource"
 
 
 def test_rules_on_add_resource_command():
-    app_state = InitialData.model_validate_json(
-        (DATA / "initial_data.json").read_text()
-    )
+    config = InitialData.model_validate_json((DATA / "initial_data.json").read_text())
+    state = AppState(config=config)
     commands: list[AddResourceCommand] = [
         cmd
         for cmd in CommandsFile().read(DATA / "commands.jsonl")
@@ -29,10 +29,10 @@ def test_rules_on_add_resource_command():
         if isinstance(res, AddResourceResult.Variants)
     ]
     for i, cmd in enumerate(commands):
-        result = all_rules_resource_add(cmd, app_state)
+        result = all_rules_resource_add(cmd, state)
         result = AddResourceResult.new(i + 1, result)
         AddResource(
-            app_state,
+            state,
             Resource(
                 id=cmd.id,
                 name=cmd.name,

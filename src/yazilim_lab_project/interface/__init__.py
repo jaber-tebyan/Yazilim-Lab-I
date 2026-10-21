@@ -1,9 +1,10 @@
-from yazilim_lab_project.models.initial_data import InitialData, Resource, User
+from yazilim_lab_project.models.app_state import AppState
+from yazilim_lab_project.models.initial_data import Resource, User
 
 
-def AddUser(app_state: InitialData, user: User) -> None:
-    app_state.users.append(user)
+def AddUser(state: AppState, user: User) -> None:
+    state.config.users.append(user)
 
 
-def AddResource(app_state: InitialData, resource: Resource) -> None:
-    app_state.resources.append(resource)
+def AddResource(state: AppState, resource: Resource) -> None:
+    state.config.resources.append(resource)

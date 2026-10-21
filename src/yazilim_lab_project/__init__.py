@@ -1,15 +1,16 @@
-from dataclasses import dataclass
-
 from pydantic import TypeAdapter
 import pathlib
 
 from yazilim_lab_project.models import AnyResult
+from yazilim_lab_project.models.app_state import AppState
 from yazilim_lab_project.models.initial_data import InitialData
 from yazilim_lab_project.models.command import AnyCommand
 
 assets_folder = pathlib.Path(__file__).parent / "assets"
-APP_STATE: InitialData = InitialData.model_validate_json(
-    pathlib.Path(assets_folder / "baslangic.json").read_text()
+APP_STATE: AppState = AppState(
+    config=InitialData.model_validate_json(
+        pathlib.Path(assets_folder / "baslangic.json").read_text()
+    )
 )
 
 
