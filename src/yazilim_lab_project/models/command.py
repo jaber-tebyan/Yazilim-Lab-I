@@ -1,3 +1,4 @@
+from datetime import date
 from typing import Annotated, Literal
 from pydantic import BaseModel, Field
 
@@ -66,7 +67,7 @@ class WaitingListCommand(BaseModel):
 
 
 # {"komut":"saat","zaman":"2027-03-08T11:20"}
-class TimeCommand(BaseModel):
+class ClockCommand(BaseModel):
     command: Literal["saat"] = Field(alias="komut")
     time: Timestamp = Field(alias="zaman")
 
@@ -94,6 +95,7 @@ class QueryResourceCommand(BaseModel):
     command: Literal["sorgu"] = Field(alias="komut")
     type: Literal["kullanici"] = Field(alias="tur")
     id: str
+    day: date = Field(alias="gun")
 
 
 AnyCommand = Annotated[
@@ -103,7 +105,7 @@ AnyCommand = Annotated[
     | PriceCommand
     | PackageCommand
     | WaitingListCommand
-    | TimeCommand
+    | ClockCommand
     | CheckInCommand
     | CancelCommand
     | QueryUserCommand
