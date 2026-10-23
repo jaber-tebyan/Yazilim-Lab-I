@@ -157,7 +157,6 @@ AnyCommand = Annotated[
     | ClockCommand
     | CheckInCommand
     | CancelCommand
-    | QueryUserCommand
-    | QueryResourceCommand,
+    | QueryCommand,
     Field(discriminator="command"),
 ]
