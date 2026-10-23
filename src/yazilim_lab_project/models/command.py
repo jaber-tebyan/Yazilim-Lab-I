@@ -84,9 +84,15 @@ class CancelCommand(BaseModel):
 
 
 # {"komut":"sorgu","tur":"kullanici","id":"u2"}
-class QueryCommand(BaseModel):
+class QueryUserCommand(BaseModel):
     command: Literal["sorgu"] = Field(alias="komut")
-    type: str = Field(alias="tur")
+    type: Literal["kaynak"] = Field(alias="tur")
+    id: str
+
+
+class QueryResourceCommand(BaseModel):
+    command: Literal["sorgu"] = Field(alias="komut")
+    type: Literal["kullanici"] = Field(alias="tur")
     id: str
 
 
@@ -100,6 +106,7 @@ AnyCommand = Annotated[
     | TimeCommand
     | CheckInCommand
     | CancelCommand
-    | QueryCommand,
+    | QueryUserCommand
+    | QueryResourceCommand,
     Field(discriminator="command"),
 ]
