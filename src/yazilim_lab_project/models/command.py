@@ -8,94 +8,143 @@ from yazilim_lab_project.models.config import Timestamp
 
 
 class AddUserCommand(BaseModel):
-    command: Literal["kullanici_ekle"] = Field(alias="komut")
+    command: Literal["kullanici_ekle"] = Field(
+        validation_alias="komut", serialization_alias="komut"
+    )
     id: str
-    name: str = Field(alias="ad")
-    role: str = Field(alias="rol")
-    certificates: list[str] = Field(alias="sertifikalar")
-    balance: int = Field(alias="bakiye")
-    reliability: int = Field(alias="guvenilirlik")
+    name: str = Field(validation_alias="ad", serialization_alias="ad")
+    role: str = Field(validation_alias="rol", serialization_alias="rol")
+    certificates: list[str] = Field(
+        validation_alias="sertifikalar", serialization_alias="sertifikalar"
+    )
+    balance: int = Field(validation_alias="bakiye", serialization_alias="bakiye")
+    reliability: int = Field(
+        validation_alias="guvenilirlik", serialization_alias="guvenilirlik"
+    )
 
 
 # {"komut":"kaynak_ekle","id":"YAZ-1","ad":"3B Yazıcı 1","tur":"YAZICI","izinli_roller":["OGRENCI"]}
 class AddResourceCommand(BaseModel):
-    command: Literal["kaynak_ekle"] = Field(alias="komut")
+    command: Literal["kaynak_ekle"] = Field(
+        validation_alias="komut", serialization_alias="komut"
+    )
     id: str
-    name: str = Field(alias="ad")
-    type: str = Field(alias="tur")
-    allowed_roles: list[str] = Field(alias="izinli_roller")
+    name: str = Field(validation_alias="ad", serialization_alias="ad")
+    type: str = Field(validation_alias="tur", serialization_alias="tur")
+    allowed_roles: list[str] = Field(
+        validation_alias="izinli_roller", serialization_alias="izinli_roller"
+    )
 
 
 # {"komut":"rezervasyon","kullanici":"u1","kaynak":"YAZ-1","baslangic":"2027-03-08T11:00","bitis":"2027-03-08T13:00"}
 class ReservationCommand(BaseModel):
-    command: Literal["rezervasyon"] = Field(alias="komut")
-    user: str = Field(alias="kullanici")
-    resource: str = Field(alias="kaynak")
-    start: Timestamp = Field(alias="baslangic")
-    end: Timestamp = Field(alias="bitis")
+    command: Literal["rezervasyon"] = Field(
+        validation_alias="komut", serialization_alias="komut"
+    )
+    user: str = Field(validation_alias="kullanici", serialization_alias="kullanici")
+    resource: str = Field(validation_alias="kaynak", serialization_alias="kaynak")
+    start: Timestamp = Field(
+        validation_alias="baslangic", serialization_alias="baslangic"
+    )
+    end: Timestamp = Field(validation_alias="bitis", serialization_alias="bitis")
 
 
 # {"komut":"fiyat","kullanici":"u3","kaynak":"CIH-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"}
 class PriceCommand(BaseModel):
-    command: Literal["fiyat"] = Field(alias="komut")
-    user: str = Field(alias="kullanici")
-    resource: str = Field(alias="kaynak")
-    start: Timestamp = Field(alias="baslangic")
-    end: Timestamp = Field(alias="bitis")
+    command: Literal["fiyat"] = Field(
+        validation_alias="komut", serialization_alias="komut"
+    )
+    user: str = Field(validation_alias="kullanici", serialization_alias="kullanici")
+    resource: str = Field(validation_alias="kaynak", serialization_alias="kaynak")
+    start: Timestamp = Field(
+        validation_alias="baslangic", serialization_alias="baslangic"
+    )
+    end: Timestamp = Field(validation_alias="bitis", serialization_alias="bitis")
 
 
 # {"komut":"paket","kullanici":"u3","kalemler":[{"kaynak":"CIH-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"},{"kaynak":"ODA-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"}]}
 class ReservationRequests(BaseModel):
-    resource: str = Field(alias="kaynak")
-    start: Timestamp = Field(alias="baslangic")
-    end: Timestamp = Field(alias="bitis")
+    resource: str = Field(validation_alias="kaynak", serialization_alias="kaynak")
+    start: Timestamp = Field(
+        validation_alias="baslangic", serialization_alias="baslangic"
+    )
+    end: Timestamp = Field(validation_alias="bitis", serialization_alias="bitis")
 
 
 class PackageCommand(BaseModel):
-    command: Literal["paket"] = Field(alias="komut")
-    user: str = Field(alias="kullanici")
-    items: list[ReservationRequests] = Field(alias="kalemler")
+    command: Literal["paket"] = Field(
+        validation_alias="komut", serialization_alias="komut"
+    )
+    user: str = Field(validation_alias="kullanici", serialization_alias="kullanici")
+    items: list[ReservationRequests] = Field(
+        validation_alias="kalemler", serialization_alias="kalemler"
+    )
 
 
 # {"komut":"bekleme","kullanici":"u2","kaynak":"YAZ-1","baslangic":"2027-03-08T12:00","bitis":"2027-03-08T13:00"}
 class WaitingListCommand(BaseModel):
-    command: Literal["bekleme"] = Field(alias="komut")
-    user: str = Field(alias="kullanici")
-    resource: str = Field(alias="kaynak")
-    start: Timestamp = Field(alias="baslangic")
-    end: Timestamp = Field(alias="bitis")
+    command: Literal["bekleme"] = Field(
+        validation_alias="komut", serialization_alias="komut"
+    )
+    user: str = Field(validation_alias="kullanici", serialization_alias="kullanici")
+    resource: str = Field(validation_alias="kaynak", serialization_alias="kaynak")
+    start: Timestamp = Field(
+        validation_alias="baslangic", serialization_alias="baslangic"
+    )
+    end: Timestamp = Field(validation_alias="bitis", serialization_alias="bitis")
 
 
 # {"komut":"saat","zaman":"2027-03-08T11:20"}
 class ClockCommand(BaseModel):
-    command: Literal["saat"] = Field(alias="komut")
-    time: Timestamp = Field(alias="zaman")
+    command: Literal["saat"] = Field(
+        validation_alias="komut", serialization_alias="komut"
+    )
+    time: Timestamp = Field(validation_alias="zaman", serialization_alias="zaman")
 
 
 # {"komut":"giris","rezervasyon":"r1"}
 class CheckInCommand(BaseModel):
-    command: Literal["giris"] = Field(alias="komut")
-    reservation: str = Field(alias="rezervasyon")
+    command: Literal["giris"] = Field(
+        validation_alias="komut", serialization_alias="komut"
+    )
+    reservation: str = Field(
+        validation_alias="rezervasyon", serialization_alias="rezervasyon"
+    )
 
 
 # {"komut":"iptal","rezervasyon":"r4"}
 class CancelCommand(BaseModel):
-    command: Literal["iptal"] = Field(alias="komut")
-    reservation: str = Field(alias="rezervasyon")
+    command: Literal["iptal"] = Field(
+        validation_alias="komut", serialization_alias="komut"
+    )
+    reservation: str = Field(
+        validation_alias="rezervasyon", serialization_alias="rezervasyon"
+    )
 
 
 # {"komut":"sorgu","tur":"kullanici","id":"u2"}
 class QueryUserCommand(BaseModel):
-    command: Literal["sorgu"] = Field(alias="komut")
-    type: Literal["kaynak"] = Field(alias="tur")
+    command: Literal["sorgu"] = Field(
+        validation_alias="komut", serialization_alias="komut"
+    )
+    type: Literal["kullanici"] = Field(
+        validation_alias="tur", serialization_alias="tur"
+    )
     id: str
 
 
 class QueryResourceCommand(BaseModel):
-    command: Literal["sorgu"] = Field(alias="komut")
-    type: Literal["kullanici"] = Field(alias="tur")
+    command: Literal["sorgu"] = Field(
+        validation_alias="komut", serialization_alias="komut"
+    )
+    type: Literal["kaynak"] = Field(validation_alias="tur", serialization_alias="tur")
     id: str
-    day: date = Field(alias="gun")
+    day: date = Field(validation_alias="gun", serialization_alias="gun")
+
+
+QueryCommand = Annotated[
+    QueryUserCommand | QueryResourceCommand, Field(discriminator="type")
+]
 
 
 AnyCommand = Annotated[
