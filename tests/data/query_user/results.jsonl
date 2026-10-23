@@ -1,0 +1,5 @@
+{"no":1,"komut":"sorgu","durum":"TAMAM","bakiye":120,"guvenilirlik":80,"rezervasyonlar":[]}
+{"no":2,"komut":"sorgu","durum":"TAMAM","bakiye":17,"guvenilirlik":50,"rezervasyonlar":[]}
+{"no":3,"komut":"sorgu","durum":"TAMAM","bakiye":0,"guvenilirlik":0,"rezervasyonlar":[]}
+{"no":4,"komut":"sorgu","durum":"RED","kod":"BULUNAMADI"}
+{"no":5,"komut":"sorgu","durum":"RED","kod":"BULUNAMADI"}
