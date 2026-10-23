@@ -2,7 +2,7 @@ from datetime import date
 from typing import Annotated, Literal
 from pydantic import BaseModel, Field
 
-from yazilim_lab_project.models import Timestamp
+from yazilim_lab_project.models.config import Timestamp
 
 # {"komut":"kullanici_ekle","id":"u1","ad":"Ayşe Kaya","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
 

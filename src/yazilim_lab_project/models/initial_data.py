@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import ClassVar
 from pydantic import BaseModel, ConfigDict, Field
 
-from yazilim_lab_project.models import Timestamp
+from yazilim_lab_project.models.config import Timestamp
 
 
 class _Base(BaseModel):

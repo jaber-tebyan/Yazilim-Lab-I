@@ -3,7 +3,7 @@ from typing import ClassVar
 
 from pydantic import BaseModel, ConfigDict, Field
 
-from yazilim_lab_project.models import Timestamp
+from yazilim_lab_project.models.config import Timestamp
 
 
 # TODO: Change State name to something else for possible name collisions with App_State
