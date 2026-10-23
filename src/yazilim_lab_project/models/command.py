@@ -1,6 +1,7 @@
-from datetime import datetime
 from typing import Annotated, Literal
 from pydantic import BaseModel, Field
+
+from yazilim_lab_project.models.app_state import Timestamp
 
 # {"komut":"kullanici_ekle","id":"u1","ad":"Ayşe Kaya","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
 
@@ -29,8 +30,8 @@ class ReservationCommand(BaseModel):
     command: Literal["rezervasyon"] = Field(alias="komut")
     user: str = Field(alias="kullanici")
     resource: str = Field(alias="kaynak")
-    start: datetime = Field(alias="baslangic")
-    end: datetime = Field(alias="bitis")
+    start: Timestamp = Field(alias="baslangic")
+    end: Timestamp = Field(alias="bitis")
 
 
 # {"komut":"fiyat","kullanici":"u3","kaynak":"CIH-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"}
@@ -38,15 +39,15 @@ class PriceCommand(BaseModel):
     command: Literal["fiyat"] = Field(alias="komut")
     user: str = Field(alias="kullanici")
     resource: str = Field(alias="kaynak")
-    start: datetime = Field(alias="baslangic")
-    end: datetime = Field(alias="bitis")
+    start: Timestamp = Field(alias="baslangic")
+    end: Timestamp = Field(alias="bitis")
 
 
 # {"komut":"paket","kullanici":"u3","kalemler":[{"kaynak":"CIH-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"},{"kaynak":"ODA-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"}]}
 class ReservationRequests(BaseModel):
     resource: str = Field(alias="kaynak")
-    start: datetime = Field(alias="baslangic")
-    end: datetime = Field(alias="bitis")
+    start: Timestamp = Field(alias="baslangic")
+    end: Timestamp = Field(alias="bitis")
 
 
 class PackageCommand(BaseModel):
@@ -60,14 +61,14 @@ class WaitingListCommand(BaseModel):
     command: Literal["bekleme"] = Field(alias="komut")
     user: str = Field(alias="kullanici")
     resource: str = Field(alias="kaynak")
-    start: datetime = Field(alias="baslangic")
-    end: datetime = Field(alias="bitis")
+    start: Timestamp = Field(alias="baslangic")
+    end: Timestamp = Field(alias="bitis")
 
 
 # {"komut":"saat","zaman":"2027-03-08T11:20"}
 class TimeCommand(BaseModel):
     command: Literal["saat"] = Field(alias="komut")
-    time: datetime = Field(alias="zaman")
+    time: Timestamp = Field(alias="zaman")
 
 
 # {"komut":"giris","rezervasyon":"r1"}

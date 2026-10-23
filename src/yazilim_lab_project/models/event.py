@@ -3,6 +3,8 @@ from typing import Annotated, ClassVar, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from yazilim_lab_project.models.app_state import Timestamp
+
 
 class EventType(StrEnum):
     WEEKLY_RESET = "HAFTALIK_SIFIRLAMA"
@@ -13,7 +15,7 @@ class EventType(StrEnum):
 
 class _EventBase(BaseModel):
     model_config: ClassVar[ConfigDict] = ConfigDict(populate_by_name=True)
-    time: str = Field(validation_alias="zaman", serialization_alias="zaman")
+    time: Timestamp = Field(validation_alias="zaman", serialization_alias="zaman")
 
 
 class _ReservationEvent(BaseModel):

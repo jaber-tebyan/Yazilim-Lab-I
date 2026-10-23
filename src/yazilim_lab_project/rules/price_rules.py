@@ -3,7 +3,6 @@ from datetime import timedelta
 from yazilim_lab_project.models import reservation
 from yazilim_lab_project.models.app_state import AppState
 from yazilim_lab_project.models.command import PriceCommand
-from yazilim_lab_project.models.initial_data import InitialData
 from yazilim_lab_project.models.results import PriceResult
 
 """

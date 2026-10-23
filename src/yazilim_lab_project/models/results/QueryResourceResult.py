@@ -3,6 +3,8 @@ from typing import Annotated, ClassVar, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
+from yazilim_lab_project.models.app_state import Timestamp
+
 
 class Error(StrEnum):
     NOT_FOUND = "BULUNAMADI"
@@ -20,8 +22,10 @@ class OccupancyType(StrEnum):
 
 class OccupancyRow(BaseModel):
     model_config: ClassVar[ConfigDict] = ConfigDict(populate_by_name=True)
-    start: str = Field(validation_alias="baslangic", serialization_alias="baslangic")
-    end: str = Field(validation_alias="bitis", serialization_alias="bitis")
+    start: Timestamp = Field(
+        validation_alias="baslangic", serialization_alias="baslangic"
+    )
+    end: Timestamp = Field(validation_alias="bitis", serialization_alias="bitis")
     type: OccupancyType = Field(validation_alias="tur", serialization_alias="tur")
     reservation: str | None = Field(
         default=None,

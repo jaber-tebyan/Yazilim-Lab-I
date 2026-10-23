@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import ClassVar
 from pydantic import BaseModel, ConfigDict, Field
 
-from yazilim_lab_project.models.reservation import Reservation
+from yazilim_lab_project.models.app_state import Timestamp
 
 
 class _Base(BaseModel):
@@ -47,10 +47,10 @@ class Resource(_Base):
 
 class MaintenanceWindow(_Base):
     resource: str = Field(validation_alias="kaynak", serialization_alias="kaynak")
-    start: datetime = Field(
+    start: Timestamp = Field(
         validation_alias="baslangic", serialization_alias="baslangic"
     )
-    end: datetime = Field(validation_alias="bitis", serialization_alias="bitis")
+    end: Timestamp = Field(validation_alias="bitis", serialization_alias="bitis")
 
 
 class User(_Base):
@@ -67,7 +67,7 @@ class User(_Base):
 
 
 class InitialData(_Base):
-    time: datetime = Field(validation_alias="saat", serialization_alias="saat")
+    time: Timestamp = Field(validation_alias="saat", serialization_alias="saat")
     resource_types: dict[str, ResourceType] = Field(
         validation_alias="kaynak_turleri", serialization_alias="kaynak_turleri"
     )

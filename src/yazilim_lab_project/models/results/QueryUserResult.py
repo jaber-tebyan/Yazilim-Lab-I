@@ -4,6 +4,7 @@ from typing import Annotated, ClassVar, Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from yazilim_lab_project.models import reservation
+from yazilim_lab_project.models.app_state import Timestamp
 
 
 class Error(StrEnum):
@@ -19,8 +20,10 @@ class ReservationRow(BaseModel):
     model_config: ClassVar[ConfigDict] = ConfigDict(populate_by_name=True)
     id: str
     resource: str = Field(validation_alias="kaynak", serialization_alias="kaynak")
-    start: str = Field(validation_alias="baslangic", serialization_alias="baslangic")
-    end: str = Field(validation_alias="bitis", serialization_alias="bitis")
+    start: Timestamp = Field(
+        validation_alias="baslangic", serialization_alias="baslangic"
+    )
+    end: Timestamp = Field(validation_alias="bitis", serialization_alias="bitis")
     status: reservation.State = Field(
         validation_alias="durum", serialization_alias="durum"
     )
