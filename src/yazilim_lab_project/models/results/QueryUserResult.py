@@ -4,7 +4,7 @@ from typing import Annotated, ClassVar, Literal
 from pydantic import BaseModel, ConfigDict, Field
 
 from yazilim_lab_project.models import reservation
-from yazilim_lab_project.models.app_state import Timestamp
+from yazilim_lab_project.models import Timestamp
 
 
 class Error(StrEnum):

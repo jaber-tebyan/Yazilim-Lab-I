@@ -1,5 +1,6 @@
+from datetime import datetime
 from typing import Annotated
-from pydantic import Field
+from pydantic import Field, PlainSerializer
 from yazilim_lab_project.models.results import (
     AddResourceResult,
     AddUserResult,
@@ -10,4 +11,9 @@ from yazilim_lab_project.models.results import (
 AnyResult = Annotated[
     AddUserResult.Any | AddResourceResult.Any | PriceResult.Any | ReservationResult.Any,
     Field(discriminator="command"),
+]
+
+Timestamp = Annotated[
+    datetime,
+    PlainSerializer(lambda d: d.strftime("%Y-%m-%dT%H:%M"), return_type=str),
 ]
