@@ -98,9 +98,10 @@ def all_rules_waiting(
             return Err(WaitingResult.Error.CONSECUTIVE_USE)
         return Err(WaitingResult.Error.WAITING_UNNECESSARY)
 
-    last_waitlist_id = max(
+    highest_active_waitlist_id = max(
         (parse_waitlist_id(entry.id) for entry in state.waiting_list), default=0
     )
+    last_waitlist_id = max(state.next_waiting_id, highest_active_waitlist_id)
     waitlist_id = f"b{last_waitlist_id + 1}"
     entry = WaitingEntry(
         id=waitlist_id,

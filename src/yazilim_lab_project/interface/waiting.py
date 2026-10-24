@@ -11,6 +11,9 @@ from yazilim_lab_project.rules.reservation_rules import all_rules_reservation
 
 def add_waiting_entry(state: AppState, entry: WaitingEntry) -> None:
     state.waiting_list.append(entry)
+    state.next_waiting_id = max(
+        state.next_waiting_id, parse_waitlist_id(entry.id)
+    )
 
 
 def parse_waitlist_id(w_id: str) -> int:

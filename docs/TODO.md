@@ -222,7 +222,7 @@ duplication makes an incomplete fix easy.
 
 ## 12. Waiting-list IDs are still reused after removal
 
-- [ ] Fix
+- [x] Fix
 
 **Where**
 - `src/yazilim_lab_project/rules/waiting_rules.py` →
@@ -562,7 +562,7 @@ Design-level — this is the root cause of repeated validation mismatches.
 - [ ] Items 11–20 are fixed or explicitly accepted.
 - [x] Zero-length intervals return `ZAMAN_ADIMI_HATASI` in reservation, waiting,
       price and package paths.
-- [ ] Waiting ids are never reused during a run.
+- [x] Waiting ids are never reused during a run.
 - [ ] A fractional numeric command produces RED `GECERSIZ_DEGER` and does not
       stop the run.
 - [ ] JSONL readers skip blank lines and use UTF-8 on every platform.

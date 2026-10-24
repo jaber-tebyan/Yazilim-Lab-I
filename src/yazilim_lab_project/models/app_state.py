@@ -10,3 +10,4 @@ class AppState(BaseModel):
 
     reservations: list[Reservation] = Field(default_factory=list)
     waiting_list: list[WaitingEntry] = Field(default_factory=list)
+    next_waiting_id: int = 0

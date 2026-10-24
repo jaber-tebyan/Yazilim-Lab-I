@@ -94,3 +94,17 @@ def test_waiting_ids_do_not_collide_after_removal():
     )
 
     run(state, DATA / "commands_ids.jsonl", DATA / "results_ids.jsonl")
+
+
+def test_waiting_ids_are_not_reused_after_removal():
+    config = InitialData.model_validate_json((DATA / "initial_data.json").read_text())
+    # b1 existed and was removed; the counter must still remember it.
+    state = AppState(config=config, next_waiting_id=1)
+
+    S = reservation.State
+    state.reservations.append(
+        seed("r1", "ODA-1", "2027-03-08T13:00", "2027-03-08T15:00", S.APPROVED)
+    )
+
+    run(state, DATA / "commands_reuse.jsonl", DATA / "results_reuse.jsonl")
+    assert state.next_waiting_id == 2
