@@ -117,7 +117,7 @@ def _apply_completion(state: AppState, res: Reservation, t: datetime) -> Complet
     # Delegate the actual state change to the shared interface function so the
     # clock and the exit command cannot develop two different definitions of
     # "completed". +2 is capped so reliability never exceeds 100.
-    exit_reservation(res, state, min(100, user.reliability + 2))
+    exit_reservation(res, state, min(100, user.reliability + 2), scan=False)
     # Read back from the user so the event reports the value the interface
     # actually applied, not a second copy of the formula.
     return Completed(

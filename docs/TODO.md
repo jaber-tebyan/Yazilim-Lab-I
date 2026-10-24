@@ -11,7 +11,7 @@ Reference document: `Yaz_Lab_I.txt` (the project description is authoritative).
 
 ## 6. `cikis` does not trigger the waiting-list scan (K9)
 
-- [ ] Fix
+- [x] Fix
 
 **Where**
 - `src/yazilim_lab_project/interface/reservation.py` → `exit_reservation`

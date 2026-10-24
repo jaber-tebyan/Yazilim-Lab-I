@@ -11,12 +11,18 @@ def entry_reservation(res: Reservation) -> None:
     res.state = reservation.State.IN_USE
 
 
-def exit_reservation(res: Reservation, state: AppState, new_reliability: int) -> None:
+def exit_reservation(
+    res: Reservation, state: AppState, new_reliability: int, *, scan: bool = True
+) -> list[AutoAssign]:
     res.state = reservation.State.COMPLETED
     if state.config.time < res.end:
         res.end = state.config.time
     user = next(u for u in state.config.users if u.id == res.user)
     user.reliability = new_reliability
+
+    if not scan:
+        return []
+    return process_waiting_list_for_resource(state, res.resource)
 
 
 def no_show_reservation(res: Reservation, state: AppState) -> None:
