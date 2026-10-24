@@ -4,3 +4,4 @@
 {"no":4,"komut":"bekleme","durum":"TAMAM","bekleme_id":"b1","sira":1}
 {"no":5,"komut":"bekleme","durum":"TAMAM","bekleme_id":"b2","sira":1}
 {"no":6,"komut":"bekleme","durum":"RED","kod":"ZAMAN_ADIMI_HATASI"}
+{"no":7,"komut":"bekleme","durum":"TAMAM","bekleme_id":"b3","sira":3}

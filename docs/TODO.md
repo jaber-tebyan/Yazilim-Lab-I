@@ -51,7 +51,7 @@ iptal, gelmeme, çıkış). Either:
 
 ## 7. Waiting-list IDs can collide
 
-- [ ] Fix
+- [x] Fix
 
 **Where**
 - `src/yazilim_lab_project/rules/waiting_rules.py` →
@@ -105,7 +105,7 @@ the same `results.jsonl` still passes.
 
 ## 9. Waiting validation order deviates from K10
 
-- [ ] Fix
+- [x] Fix
 
 **Where**
 - `src/yazilim_lab_project/rules/waiting_rules.py` → `all_rules_waiting`

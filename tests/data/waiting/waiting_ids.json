@@ -1,0 +1,18 @@
+[
+  {
+    "id": "b2",
+    "kullanici": "u2",
+    "kaynak": "ODA-1",
+    "baslangic": "2027-03-08T13:00",
+    "bitis": "2027-03-08T14:00",
+    "kayit_saati": "2027-03-08T10:00"
+  },
+  {
+    "id": "b3",
+    "kullanici": "u3",
+    "kaynak": "ODA-1",
+    "baslangic": "2027-03-08T13:00",
+    "bitis": "2027-03-08T14:00",
+    "kayit_saati": "2027-03-08T10:00"
+  }
+]

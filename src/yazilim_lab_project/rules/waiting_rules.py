@@ -82,12 +82,8 @@ def all_rules_waiting(
     if atomic_rule_reservation_maintenance(cmd.resource, cmd.start, cmd.end, state):
         return Err(WaitingResult.Error.MAINTENANCE)
 
-    if atomic_rule_reservation_consecutive_use(
-        cmd.user, cmd.resource, cmd.start, cmd.end, state
-    ):
-        return Err(WaitingResult.Error.CONSECUTIVE_USE)
-
-    # Must fail due to intersection or preparation violation to be eligible for waitlist
+    # Must fail due to intersection or preparation violation to be eligible for waitlist.
+    # These checks come before consecutive use in K10, so the first failure decides.
     has_intersection = atomic_rule_reservation_intersection(
         cmd.resource, cmd.start, cmd.end, state
     )
@@ -96,9 +92,16 @@ def all_rules_waiting(
     )
 
     if not (has_intersection or has_prep_violation):
+        if atomic_rule_reservation_consecutive_use(
+            cmd.user, cmd.resource, cmd.start, cmd.end, state
+        ):
+            return Err(WaitingResult.Error.CONSECUTIVE_USE)
         return Err(WaitingResult.Error.WAITING_UNNECESSARY)
 
-    waitlist_id = f"b{len(state.waiting_list) + 1}"
+    last_waitlist_id = max(
+        (parse_waitlist_id(entry.id) for entry in state.waiting_list), default=0
+    )
+    waitlist_id = f"b{last_waitlist_id + 1}"
     entry = WaitingEntry(
         id=waitlist_id,
         user=cmd.user,
