@@ -9,7 +9,12 @@ from yazilim_lab_project.models.waiting import WaitingEntry
 from yazilim_lab_project.rules.reservation_rules import all_rules_reservation
 
 
+def add_waiting_entry(state: AppState, entry: WaitingEntry) -> None:
+    state.waiting_list.append(entry)
+
+
 def parse_waitlist_id(w_id: str) -> int:
+
     return int(w_id.lstrip("b")) if w_id.startswith("b") else int(w_id)
 
 

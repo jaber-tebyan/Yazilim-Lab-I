@@ -1,0 +1,6 @@
+{"no":1,"komut":"bekleme","durum":"RED","kod":"BULUNAMADI"}
+{"no":2,"komut":"bekleme","durum":"RED","kod":"BAKIM"}
+{"no":3,"komut":"bekleme","durum":"RED","kod":"BEKLEME_GEREKSIZ"}
+{"no":4,"komut":"bekleme","durum":"TAMAM","bekleme_id":"b1","sira":1}
+{"no":5,"komut":"bekleme","durum":"TAMAM","bekleme_id":"b2","sira":1}
+{"no":6,"komut":"bekleme","durum":"RED","kod":"ZAMAN_ADIMI_HATASI"}
