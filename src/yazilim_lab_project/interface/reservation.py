@@ -1,12 +1,10 @@
+from yazilim_lab_project.interface import generate_reservation_id  # re-export for backwards compatibility
+from yazilim_lab_project.interface.waiting import process_waiting_list_for_resource
 from yazilim_lab_project.models import reservation
 from yazilim_lab_project.models.app_state import AppState
+from yazilim_lab_project.models.event import AutoAssign
 from yazilim_lab_project.models.reservation import Reservation
-
-
-# This assumes the reservations will never be deleted.
-def generate_reservation_id(state: AppState):
-    count = len(state.reservations) + 1
-    return f"r{count}"
+from yazilim_lab_project.rules.cancel_rules import CancelData
 
 
 def entry_reservation(res: Reservation) -> None:

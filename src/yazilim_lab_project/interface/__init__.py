@@ -21,3 +21,10 @@ def DecreaseUserBalance(state: AppState, user_id: str, amount: int) -> None:
 def get_user(state: AppState, user_id: str) -> User:
     user = next(user for user in state.config.users if user.id == user_id)
     return user
+
+
+# This assumes the reservations will never be deleted.
+def generate_reservation_id(state: AppState) -> str:
+    count = len(state.reservations) + 1
+    return f"r{count}"
+
