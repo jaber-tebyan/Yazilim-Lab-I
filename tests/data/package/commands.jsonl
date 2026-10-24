@@ -1,0 +1,7 @@
+{"komut":"paket","kullanici":"u999","kalemler":[{"kaynak":"ODA-1","baslangic":"2027-03-08T10:00","bitis":"2027-03-08T11:00"},{"kaynak":"ODA-2","baslangic":"2027-03-08T10:00","bitis":"2027-03-08T11:00"}]}
+{"komut":"paket","kullanici":"u1","kalemler":[{"kaynak":"ODA-1","baslangic":"2027-03-08T10:00","bitis":"2027-03-08T11:00"}]}
+{"komut":"paket","kullanici":"u3","kalemler":[{"kaynak":"ODA-1","baslangic":"2027-03-08T10:00","bitis":"2027-03-08T11:00"},{"kaynak":"ODA-2","baslangic":"2027-03-08T10:00","bitis":"2027-03-08T11:00"}]}
+{"komut":"paket","kullanici":"u2","kalemler":[{"kaynak":"ODA-1","baslangic":"2027-03-08T10:00","bitis":"2027-03-08T11:00"},{"kaynak":"CIH-1","baslangic":"2027-03-08T10:00","bitis":"2027-03-08T11:00"}]}
+{"komut":"paket","kullanici":"u1","kalemler":[{"kaynak":"ODA-1","baslangic":"2027-03-08T10:00","bitis":"2027-03-08T12:00"},{"kaynak":"ODA-1","baslangic":"2027-03-08T11:00","bitis":"2027-03-08T13:00"}]}
+{"komut":"paket","kullanici":"u2","kalemler":[{"kaynak":"ODA-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"},{"kaynak":"ODA-2","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"}]}
+{"komut":"paket","kullanici":"u1","kalemler":[{"kaynak":"CIH-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"},{"kaynak":"ODA-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"}]}
