@@ -28,13 +28,12 @@ def rule_price_not_found(cmd: PriceCommand, state: AppState):
     return not (user_exists and resource_exists)
 
 
-# Start or end date doesn't sit on 15 minutes or end date is before start date
+# Start or end date doesn't sit on 15 minutes or end date is not after start date
 def rule_price_time_step_error(cmd: PriceCommand):
     start_not_on_15_minutes = cmd.start.minute % 15 != 0
     end_not_on_15_minutes = cmd.end.minute % 15 != 0
-    # TODO: apparently it should be cmd.end <= cmd.start
-    end_before_start = cmd.end < cmd.start
-    return start_not_on_15_minutes or end_not_on_15_minutes or end_before_start
+    end_not_after_start = cmd.end <= cmd.start
+    return start_not_on_15_minutes or end_not_on_15_minutes or end_not_after_start
 
 
 # Start date is before simulated time

@@ -181,7 +181,7 @@ to the `sorgu kullanici` scenario and assert the numeric order.
 
 ## 11. `start == end` is accepted by the time-step check
 
-- [ ] Fix
+- [x] Fix
 
 **Where**
 - `src/yazilim_lab_project/rules/atomic/reservation.py` →
@@ -560,7 +560,7 @@ Design-level — this is the root cause of repeated validation mismatches.
 ## Definition of done for the second review
 
 - [ ] Items 11–20 are fixed or explicitly accepted.
-- [ ] Zero-length intervals return `ZAMAN_ADIMI_HATASI` in reservation, waiting,
+- [x] Zero-length intervals return `ZAMAN_ADIMI_HATASI` in reservation, waiting,
       price and package paths.
 - [ ] Waiting ids are never reused during a run.
 - [ ] A fractional numeric command produces RED `GECERSIZ_DEGER` and does not

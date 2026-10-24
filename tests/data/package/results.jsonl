@@ -10,3 +10,4 @@
 {"no":10,"komut":"paket","durum":"RED","kod":"PAKET_ICI_KESISME","kalemler":[{"sira":0,"durum":"TAMAM"},{"sira":1,"durum":"TAMAM"}]}
 {"no":11,"komut":"paket","durum":"RED","kod":"PAKET_ICI_KESISME","kalemler":[{"sira":0,"durum":"TAMAM"},{"sira":1,"durum":"TAMAM"}]}
 {"no":12,"komut":"paket","durum":"RED","kod":"BAKIYE_YETERSIZ","kalemler":[{"sira":0,"durum":"TAMAM"},{"sira":1,"durum":"TAMAM"}]}
+{"no":13,"komut":"paket","durum":"RED","kod":"PAKET_RED","kalemler":[{"sira":0,"durum":"RED","kod":"ZAMAN_ADIMI_HATASI"},{"sira":1,"durum":"RED","kod":"ZAMAN_ADIMI_HATASI"}]}

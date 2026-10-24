@@ -41,8 +41,8 @@ def rule_package_item_time_step_error(item: ReservationRequests) -> bool:
     """Checks if start/end times sit on 15-minute intervals and end is after start."""
     start_not_on_15 = item.start.minute % 15 != 0
     end_not_on_15 = item.end.minute % 15 != 0
-    end_before_start = item.end < item.start
-    return start_not_on_15 or end_not_on_15 or end_before_start
+    end_not_after_start = item.end <= item.start
+    return start_not_on_15 or end_not_on_15 or end_not_after_start
 
 
 def rule_package_item_past_time(item: ReservationRequests, state: AppState) -> bool:

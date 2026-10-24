@@ -4,3 +4,4 @@
 {"no":4,"komut":"rezervasyon","durum":"RED","kod":"SURE_SINIRI"}
 {"no":5,"komut":"rezervasyon","durum":"TAMAM","rezervasyon_id":"r2","ucret":16,"bakiye":4}
 {"no":6,"komut":"rezervasyon","durum":"RED","kod":"BAKIYE_YETERSIZ"}
+{"no":7,"komut":"rezervasyon","durum":"RED","kod":"ZAMAN_ADIMI_HATASI"}

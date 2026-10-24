@@ -19,8 +19,8 @@ def atomic_rule_reservation_not_found(
 def atomic_rule_reservation_time_step_error(start: datetime, end: datetime) -> bool:
     start_not_on_15_minutes = start.minute % 15 != 0
     end_not_on_15_minutes = end.minute % 15 != 0
-    end_before_start = end < start
-    return start_not_on_15_minutes or end_not_on_15_minutes or end_before_start
+    end_not_after_start = end <= start
+    return start_not_on_15_minutes or end_not_on_15_minutes or end_not_after_start
 
 
 def atomic_rule_reservation_past_time(start: datetime, sim_time: datetime) -> bool:
