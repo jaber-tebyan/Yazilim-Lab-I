@@ -1,5 +1,6 @@
-from yazilim_lab_project.models.app_state import AppState, Timestamp
+from yazilim_lab_project.models.app_state import AppState
 from yazilim_lab_project.models.command import ClockCommand
+from yazilim_lab_project.models.config import Timestamp
 from yazilim_lab_project.models.generic import Err, Ok, Result
 from yazilim_lab_project.models.results import ClockResult
 
