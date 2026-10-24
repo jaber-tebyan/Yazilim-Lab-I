@@ -20,3 +20,17 @@ def exit_reservation(res: Reservation, state: AppState, new_reliability: int) ->
     user = next(u for u in state.config.users if u.id == res.user)
     user.reliability = new_reliability
 
+
+def cancel_reservation(
+    res: Reservation, state: AppState, cancel_data: CancelData
+) -> list[AutoAssign]:
+    res.state = reservation.State.CANCELLED
+    user = next(u for u in state.config.users if u.id == res.user)
+    user.balance = cancel_data.new_balance
+    user.reliability = cancel_data.new_reliability
+
+    events = process_waiting_list_for_resource(state, res.resource)
+    return events
+
+
+

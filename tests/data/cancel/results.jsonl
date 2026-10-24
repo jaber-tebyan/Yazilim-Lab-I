@@ -1,0 +1,6 @@
+{"no":1,"komut":"iptal","durum":"RED","kod":"BULUNAMADI"}
+{"no":2,"komut":"iptal","durum":"RED","kod":"DURUM_HATASI"}
+{"no":3,"komut":"iptal","durum":"TAMAM","iade":0,"bakiye":115,"guvenilirlik":75,"olaylar":[]}
+{"no":4,"komut":"iptal","durum":"TAMAM","iade":5,"bakiye":120,"guvenilirlik":75,"olaylar":[]}
+{"no":5,"komut":"iptal","durum":"TAMAM","iade":0,"bakiye":120,"guvenilirlik":75,"olaylar":[]}
+{"no":6,"komut":"iptal","durum":"TAMAM","iade":0,"bakiye":120,"guvenilirlik":75,"olaylar":[{"zaman":"2027-03-08T10:00","tur":"OTOMATIK_ATAMA","bekleme":"b1","rezervasyon":"r6","kullanici":"u2","ucret":16,"bakiye":84}]}
