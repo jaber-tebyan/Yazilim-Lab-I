@@ -1,6 +1,8 @@
 from datetime import datetime
 from pathlib import Path
 
+from pydantic import TypeAdapter
+
 from yazilim_lab_project import CommandsFile, ResultsFile
 from yazilim_lab_project.interface.reservation import exit_reservation
 from yazilim_lab_project.models import reservation
@@ -10,6 +12,7 @@ from yazilim_lab_project.models.generic import Err, Ok
 from yazilim_lab_project.models.initial_data import InitialData
 from yazilim_lab_project.models.reservation import Reservation
 from yazilim_lab_project.models.results import ExitResult
+from yazilim_lab_project.models.waiting import WaitingEntry
 from yazilim_lab_project.rules.exit_rules import all_rules_exit
 
 DATA = Path(__file__).parent / "data" / "exit"
@@ -50,6 +53,11 @@ def test_rules_on_exit_command():
         seed("r3", "2027-03-08T11:00", "2027-03-08T13:00", S.IN_USE),
     ]
     state.reservations.extend(seeds)
+    state.waiting_list.extend(
+        TypeAdapter(list[WaitingEntry]).validate_json(
+            (DATA / "waiting.json").read_text()
+        )
+    )
 
     for i, cmd in enumerate(commands):
         rule_error = all_rules_exit(cmd, state)
@@ -57,11 +65,11 @@ def test_rules_on_exit_command():
             case Err(err):
                 result = ExitResult.Red(no=i + 1, error_code=err)
             case Ok((res, new_reliability)):
-                exit_reservation(res, state, new_reliability)
+                events = exit_reservation(res, state, new_reliability)
                 result = ExitResult.Ok(
                     no=i + 1,
                     new_status=res.state,
                     reliability=new_reliability,
-                    events=[],
+                    events=events,
                 )
         assert result == results[i], f"rule {i} failed"

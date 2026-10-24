@@ -35,7 +35,6 @@ class Ok(_Base):
     reliability: int = Field(
         validation_alias="guvenilirlik", serialization_alias="guvenilirlik"
     )
-    # TODO: This doesn't seem right and the document doesn't mention it
     events: list[AutoAssign] = Field(
         default_factory=list,
         validation_alias="olaylar",

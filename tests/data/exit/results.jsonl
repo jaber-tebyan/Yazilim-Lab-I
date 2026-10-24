@@ -1,4 +1,4 @@
 {"no":1,"komut":"cikis","durum":"RED","kod":"BULUNAMADI"}
 {"no":2,"komut":"cikis","durum":"RED","kod":"DURUM_HATASI"}
 {"no":3,"komut":"cikis","durum":"TAMAM","yeni_durum":"TAMAMLANDI","guvenilirlik":82,"olaylar":[]}
-{"no":4,"komut":"cikis","durum":"TAMAM","yeni_durum":"TAMAMLANDI","guvenilirlik":82,"olaylar":[]}
+{"no":4,"komut":"cikis","durum":"TAMAM","yeni_durum":"TAMAMLANDI","guvenilirlik":82,"olaylar":[{"zaman":"2027-03-08T12:00","tur":"OTOMATIK_ATAMA","bekleme":"b1","rezervasyon":"r4","kullanici":"u2","ucret":8,"bakiye":112}]}

@@ -287,12 +287,12 @@ class Engine:
             case Err(error):
                 return ExitResult.Red(no=no, error_code=error)
             case Ok((res, new_reliability)):
-                exit_reservation(res, self.state, new_reliability)
+                events = exit_reservation(res, self.state, new_reliability)
                 return ExitResult.Ok(
                     no=no,
                     new_status=res.state,
                     reliability=new_reliability,
-                    events=[],
+                    events=events,
                 )
 
     def _cancel(self, cmd: CancelCommand, no: int) -> CancelResult.Any:

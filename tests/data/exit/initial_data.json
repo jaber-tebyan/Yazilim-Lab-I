@@ -18,6 +18,14 @@
       "sertifikalar": [],
       "bakiye": 120,
       "guvenilirlik": 80
+    },
+    {
+      "id": "u2",
+      "ad": "Mehmet Demir",
+      "rol": "OGRENCI",
+      "sertifikalar": [],
+      "bakiye": 120,
+      "guvenilirlik": 80
     }
   ]
 }
