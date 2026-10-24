@@ -1,0 +1,1145 @@
+Kocaeli Üniversitesi Bilgisayar Mühendisli§i Bölümü
+
+Yazlm Laboratuvar I, 20262027 Güz, Proje I
+
+Kampüs Kaynak Rezervasyon Sistemi
+Rezervasyon Modülü ve Masaüstü Uygulamas
+Ba³langç tarihi
+
+5 Ekim 2026
+
+Teslim tarihi
+
+25 Ekim 2026
+
+Grup
+
+En fazla 2 ki³i
+
+Programlama dili
+
+Python 3.11 ve üzeri, Java 17 ve üzeri veya C# (.NET 8 ve üzeri)
+
+1
+
+Senaryo
+
+Yeni kurulan bir üniversitede snrl saydaki toplant odas, laboratuvar, üç boyutlu yazc
+ve GPU sunucusu ö§renciler, ara³trmaclar ve teknisyenler tarafndan ortak kullanlmaktadr.
+Üniversite yönetimi bu kaynaklarn payla³m için kendi kurallarn belirlemi³tir.
+
+ Kaynak Puan ekonomisi. Ödemeler Kaynak Puan (KP) ile yaplmaktadr. Her üyeye
+haftalk KP kotas verilmektedir.
+
+Bir saat aral§nda doluluk arttkça o aral§n yat
+
+artmaktadr. Enerji yo§un cihazlar pik saatlerde daha pahaldr.
+
+ Türe göre de§i³en kullanm kurallar.
+
+Üç boyutlu yazcnn iki i³ arasnda so§u-
+
+mas gerekmektedir. Laboratuvarn iki kullanm arasnda havalandrlmas gerekmektedir.
+Toplant odas hemen devredilebilir.
+
+ Güvenilirlik puan. Rezervasyon alp gelmemenin bedeli vardr. Güvenilirlik puan bekleme listesindeki sray ve ne kadar ileriye rezervasyon yaplabilece§ini belirlemektedir.
+Sizden istenen, bu kurallar uygulayan ve arayüzden ba§msz çal³an bir rezervasyon modülü
+ile bu modülü do§rudan kullanan bir masaüstü uygulamas geli³tirmenizdir.
+
+Arayüz için
+
+kullanlacak kütüphane serbesttir.
+Modül bir ba³langç dosyasn okur, ardndan bir komut dosyasndaki komutlar srayla i³ler ve
+her komut için bir sonuç satr yazar. Masaüstü uygulamas ayn i³lemleri ekrandan yaptrr.
+
+2
+
+Temel kavramlar
+
+Kavram
+
+Anlam
+
+Kaynak
+
+Rezerve edilebilen oda veya cihaz. Türü ODA, LAB, YAZICI veya CIHAZ'dr.
+
+Talep
+
+Kullancnn bir kaynak ve saat aral§ için yapt§ istek. Kurallara uyan
+
+Kaynak Puan (KP)
+
+Rezervasyon ücretlerinin ödendi§i puan (K5).
+
+Haftalk kota
+
+Her Pazartesi yenilenen KP miktar (K6).
+
+Simüle saat
+
+Modülün kendi saati. Tüm ³imdi hesaplar bu saate göre yaplr (K11).
+
+Hazrlk süresi
+
+Ayn kaynakta iki kullanm arasnda kayna§n bo³ kalmas gereken süre
+
+talep rezervasyon olur (K10).
+
+(K3).
+Art
+
+arda
+
+kullanm
+
+Ayn ki³inin ayn kayna§ arka arkaya almasn engelleyen kural (K4).
+
+snr
+Bakm penceresi
+
+Kayna§n kullanma kapal oldu§u zaman aral§ (K2).
+
+1
+
+Kavram
+
+Anlam
+
+Dilim
+
+Ücret hesabndaki 15 dakikalk birim (K5).
+
+Bant
+
+Günün iki saatlik bölümü. Fiyat banttaki dolulu§a göre de§i³ir (K5).
+
+Doluluk
+
+Bir bantta ayn türdeki kaynaklarn dolu olan oran, 0 ile 1 aras (K5).
+
+Pik saat
+
+10:0016:00 aras. Enerji yo§un cihazlar bu saatlerde daha pahaldr (K5).
+
+Güvenilirlik puan
+
+Kullancnn rezervasyonlarna ne kadar uydu§unu gösteren 0100 aras
+puan (K8).
+
+leri tarih snr
+
+En fazla kaç gün sonras için rezervasyon yaplabilece§i (K1).
+
+Giri³ ve çk³
+
+Kullancnn rezervasyonu kullanmaya ba³lamas ve erken bitirmesi (K8).
+
+Gelmeme
+
+Kullancnn rezervasyonuna gelmemesi. Rezervasyon GELMEDI durumuna
+geçer (K8).
+
+Paket ve kalem
+
+Birden fazla kayna§n tek talepte istenmesi. Paketteki her iste§e kalem
+denir (K7).
+
+Bekleme kayd
+
+Dolu bir aralk için sraya girme.
+
+Yer bo³alnca sradaki kullancya
+
+otomatik rezervasyon yaplr (K9).
+
+3
+
+Alan modeli
+
+Kaynak türleri, roller, kaynaklar, bakm pencereleri ve kullanclar ba³langç dosyasndan okunur.
+Simüle saatin ba³langç de§eri de bu dosyadadr.
+
+Bu de§erler kodun içine sabit olarak yazl-
+
+mamaldr. Çal³ma srasnda kullanici_ekle ve kaynak_ekle komutlaryla yeni kullanc ve
+kaynak eklenebilir (Bölüm 5). A³a§daki tablolar örnek dosyadaki de§erleri göstermektedir.
+
+hazirlik_dk hazrlk süresini (dakika), temel_ucret saatlik ücreti (KP),
+enerji_yogun pik çarpannn uygulanp uygulanmayaca§n, sertifika gereken sertikay beKaynak türleri.
+
+lirtmektedir.
+
+hazirlik_dk
+
+temel_ucret
+
+ODA
+
+0
+
+LAB
+YAZICI
+CIHAZ
+
+Tür
+
+Kaynak.
+Roller.
+
+enerji_yogun
+
+sertifika
+
+4
+
+hayr
+
+yok
+
+10
+
+8
+
+hayr
+
+LAB_GUVENLIK
+
+20
+
+12
+
+evet
+
+yok
+
+15
+
+16
+
+evet
+
+CIHAZ_EGITIMI
+
+id, ad, tur, izinli_roller (bu kayna§ rezerve edebilecek roller).
+
+haftalik_kota haftalk kotay (KP), ileri_gun ileri tarih snrn (gün), azami_sure_dk
+
+tek rezervasyonun en uzun süresini (dakika) belirtmektedir.
+
+Rol
+
+Kullanc.
+
+haftalik_kota
+
+ileri_gun
+
+azami_sure_dk
+
+OGRENCI
+
+120
+
+7
+
+180
+
+ARASTIRMACI
+
+300
+
+14
+
+480
+
+TEKNISYEN
+
+600
+
+30
+
+840
+
+id, ad, rol, sertifikalar, bakiye (KP), guvenilirlik (0 ile 100 arasnda tam
+
+say).
+
+id (r1, r2, . . . olu³turulma srasyla), kullanici, kaynak, baslangic, bitis,
+ucret, durum, varsa paket. Bir rezervasyon ³u durumlardan birindedir:
+Rezervasyon.
+
+2
+
+Durum
+
+Anlam
+
+ONAYLI
+KULLANIMDA
+TAMAMLANDI
+IPTAL
+GELMEDI
+Bakm penceresi.
+Bekleme kayd.
+
+4
+
+Rezervasyon alnm³tr, kullanc henüz giri³ yapmam³tr.
+Kullanc giri³ yapm³tr, kaynak kullanlmaktadr.
+Biti³ saati gelmi³tir veya kullanc çk³ yapm³tr.
+Kullanc rezervasyonu iptal etmi³tir.
+Kullanc ba³langçtan sonraki 15 dakika içinde giri³ yapmam³tr.
+
+kaynak, baslangic, bitis.
+
+id (b1, b2, . . . ), kullanici, kaynak, baslangic, bitis, kayit_saati.
+
+Kurallar
+
+Zaman gösterimi YYYY-AA-GGTSS:DD biçimindedir. Tüm aralklarda ba³langç dahil, biti³ hariçtir.
+
+K1. Temel kontroller
+
+ Ba³langç ve biti³ 15 dakikalk admlara oturmaldr (:00, :15, :30, :45). Biti³ ba³langçtan
+sonra olmaldr.
+
+ Ba³langç simüle saatten önce olamaz.
+ Rezervasyon ayn gün içinde, 08:00 ile 22:00 arasnda kalmaldr.
+ Süre en az 30 dakika, en fazla rolün azami_sure_dk de§eri kadardr.
+ Ba³langç, simüle saat + ileri_gun × 24 saat snrn a³amaz.
+ Kullancnn rolü kayna§n izinli_roller listesinde olmaldr.
+ Kayna§n türü bir sertika gerektiriyorsa bu sertika kullancda bulunmaldr.
+K2. Bakm pencereleri
+Talep edilen aralk bir bakm penceresiyle kesi³emez. Bakm kullanm saylmad§ndan bakmdan sonra hazrlk süresi uygulanmaz. Bakm 10:00'da bitiyorsa 10:00'da ba³layan rezervasyon
+geçerlidir.
+
+K3. Kesi³me ve hazrlk süresi
+Yeni talep ayn kaynaktaki di§er rezervasyonlarla kar³la³trlr.
+
+′
+
+Talebin ba³langc b, biti³i e,
+
+′
+
+mevcut rezervasyonun ba³langc b , biti³i e , türün hazrlk süresi h olsun:
+
+ Rezervasyon ONAYLI veya KULLANIMDA durumundaysa ve aralklar kesi³iyorsa (b < e′ ve
+e > b′ ): KESISME.
+ Rezervasyon ONAYLI, KULLANIMDA veya TAMAMLANDI durumundaysa, aralklar kesi³miyor
+′
+′
+ancak aradaki bo³luk h'den küçükse (b < e + h ve e + h > b ): HAZIRLIK_IHLALI.
+YAZICI türünde (h = 20) 14:0016:00 rezervasyonu vardr. 16:15 ba³langçl talep
+HAZIRLIK_IHLALI ile reddedilir, çünkü hazrlk süresi 16:20'de biter. Ba³ka bir kullancnn 16:30
+Örnek:
+
+ba³langçl talebi kabul edilir; ayn kullanc için K4 gere§i en erken ba³langç 17:00'dir. 16:10 veya
+16:20 gibi 15 dakikalk admlara oturmayan saatler ise K10'un 2. admnda ZAMAN_ADIMI_HATASI
+ile reddedilir. ODA türünde (h = 0) 16:00 ba³langçl talep kabul edilir.
+
+3
+
+Kaynak kullanldktan sonra so§uma veya havalandrma gerekti§inden tamamlanan rezervasyon
+hazrlk kontrolünde saylr.
+
+GELMEDI ve IPTAL durumundaki rezervasyonlar hiçbir kontrolde
+
+saylmaz.
+
+K4. Art arda kullanm snr
+Ayn kullancnn ayn kaynaktaki ard³k iki rezervasyonu arasnda en az 60 dakika bo³luk olmaldr. ONAYLI, KULLANIMDA ve TAMAMLANDI rezervasyonlar saylr.
+
+K5. Ücretlendirme
+Ücret 15 dakikalk dilimler üzerinden hesaplanr:
+
+!
+X
+
+ücret = yuvarla
+
+temel_ucret × 0,25 × bant_çarpan × pik_çarpan
+
+dilim
+Bantlar. Gün iki saatlik bantlara ayrlr: 0810, 1012, 1214, 1416, 1618, 1820, 2022. Her
+
+dilim dü³tü§ü bandn çarpann kullanr.
+Doluluk. Her bant için ayr hesaplanr:
+
+doluluk =
+
+o bantta dolu olan dakika
+türdeki kaynak says × 120
+
+Dolu dakika, ayn türdeki kaynaklarda ayn gün ve o bant içinde kalan rezervasyon dakikalarnn
+toplamdr.
+
+Yalnzca ONAYLI ve KULLANIMDA rezervasyonlar saylr.
+
+Talebin kendisi ve bakm
+
+pencereleri saylmaz. Doluluk talep anndaki duruma göre hesaplanr. Türdeki kaynak says da
+talep anndaki saydr; kaynak_ekle ile eklenen kaynak eklendi§i andan itibaren saylr.
+Bant çarpan. 1 + 0,25 × ⌊4 × doluluk⌋ formülüyle hesaplanr:
+
+Doluluk
+Bant çarpan
+
+0,25'ten az
+
+0,250,50
+
+0,500,75
+
+0,751
+
+1
+
+1,00
+
+1,25
+
+1,50
+
+1,75
+
+2,00
+
+Aralklarda alt snr dahil, üst snr hariçtir. Örne§in doluluk tam 0,25 ise çarpan 1,25'tir.
+Pik çarpan. 10:0016:00 pik saatlerdir. Tür
+
+enerji_yogun ise pik saatteki dilimlerin çarpan
+
+1,5, di§erlerinin 1,0'dr. Enerji yo§un olmayan türlerde çarpan her zaman 1,0'dr.
+Yuvarlama. Dilimlerin toplam en yakn tam sayya yuvarlanr. Kesirli ksm tam 0,5 ise yukar
+
+yuvarlanr.
+
+K6. Bakiye ve haftalk kota
+Ücret rezervasyon annda bakiyeden dü³er.
+
+Bakiye yetmiyorsa talep reddedilir.
+
+Simüle saat
+
+bir Pazartesi 00:00 ann geçti§inde her kullancnn bakiyesi rolünün haftalik_kota de§erine
+e³itlenir. Kullanlmayan KP sonraki haftaya aktarlmaz. adeler bakiyeye eklenir. Bakiye hiçbir
+zaman haftalk kotay a³amaz, kotay a³an ksm iade edilmez. Sonuç dosyasndaki iade alan
+bakiyeye gerçekte eklenen miktardr.
+
+4
+
+K7. Paket rezervasyon
+Bir kullanc 2 ile 4 arasnda kalemi tek talepte ister. Ya tüm kalemler alnr ya da hiçbiri alnmaz.
+Her kalem, K10'daki kontrollerden bakiye d³ndakilerle ayr ayr do§rulanr. Do§rulama ve ücret
+hesab paket istenmeden önceki duruma göre yaplr. Paketteki di§er kalemler dolulu§a katlmaz.
+Alnan kalemler sonradan tek tek iptal edilebilir. Paket ³u srayla denetlenir:
+
+BULUNAMADI: kullanc yok.
+2. PAKET_BOYUTU: kalem says 2'den az veya 4'ten fazla.
+3. GUVENILIRLIK_DUSUK: güvenilirlik 50'nin altnda.
+4. PAKET_RED: en az bir kalem do§rulamadan geçemedi.
+1.
+
+Tüm kalemler do§rulanr ve her
+
+birinin sonucu listelenir.
+5.
+
+PAKET_ICI_KESISME: ayn kaynaktaki kalemler kesi³iyor, hazrlk süresini veya art arda
+kullanm snrn ihlal ediyor.
+
+6.
+
+BAKIYE_YETERSIZ: toplam ücret bakiyeyi a³yor.
+
+K8. Durum makinesi
+
+ ONAYLI durumundan KULLANIMDA durumuna geçi³ giri³le olur.
+
+Giri³ yalnzca ba³langç-
+
+tan 10 dakika önce ile 15 dakika sonra arasndaki pencerede yaplabilir. Pencere d³nda
+
+GIRIS_PENCERESI_DISI döner.
+ KULLANIMDA durumundan TAMAMLANDI durumuna geçi³, biti³ saati gelince veya çk³
+yaplnca olur. Erken çk³ta rezervasyonun biti³i çk³ saati olarak güncellenir, kalan süre
+serbest kalr ve iade yoktur.
+
+ ONAYLI durumundan GELMEDI durumuna geçi³, ba³langçtan 15 dakika sonrasna kadar giri³
+yaplmazsa olur. ade yoktur, kalan süre serbest kalr.
+
+ ONAYLI durumundan IPTAL durumuna geçi³ iptalle olur.
+
+ade, iptal anndan ba³langca
+
+kalan süreye göre belirlenir.
+
+Ba³langca kalan süre
+
+ade
+
+Güvenilirlik
+
+24 saat ve üzeri
+
+%100
+
+de§i³mez
+
+2 saat ve üzeri, 24 saatten az
+
+%50, a³a§ yuvarlanr
+
+de§i³mez
+
+2 saatten az (ba³langç geçmi³ dahil)
+
+%0
+
+−5
+
+GELMEDI için −15, geç iptal için −5, biti³ saatinde tamamlanan rezervasyon için
++2. Erken çk³ta güvenilirlik de§i³mez. De§er 0 ile 100 arasnda tutulur. Güvenilirlik 50'nin
+
+Güvenilirlik.
+
+altndaysa ileri tarih snr 1 güne iner ve paket rezervasyon yaplamaz.
+
+K9. Bekleme listesi
+
+ Bir talep yalnzca ba³ka bir rezervasyon nedeniyle KESISME veya HAZIRLIK_IHLALI ile reddediliyorsa kullanc ayn aralk için bekleme kayd açtrabilir.
+
+Talep ba³ka bir nedenle
+
+geçersizse o hata kodu döner. Talep zaten geçerliyse BEKLEME_GEREKSIZ döner. Bekleme
+kayd açlrken bakiye kontrol edilmez.
+
+ Bir kaynakta yer bo³ald§nda (iptal, gelmeme veya çk³) o kayna§n bekleme kaytlar
+taranr. Önce güvenilirli§i yüksek olan kayt gelir. Güvenilirlik e³itse önce kaydolan, o da
+e³itse numaras küçük olan gelir (b2 önce, b10 sonra).
+ Her kayt o anki saat ve bakiyeyle K10'daki tüm kontrollerden geçirilir.
+
+Geçen kayt
+
+otomatik olarak rezervasyona dönü³ür ve ücreti o anki dolulu§a göre hesaplanr.
+meyen kayt listede kalr. Tarama listenin sonuna kadar devam eder.
+
+5
+
+Geçe-
+
+ Ba³langc simüle saatten önceye dü³en bekleme kaytlar silinir.
+K10. Do§rulama sras
+Bir rezervasyon talebi a³a§daki srayla denetlenir. lk ba³arsz admn kodu döner.
+
+Sra
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+
+Kod
+
+BULUNAMADI
+ZAMAN_ADIMI_HATASI
+GECMIS_ZAMAN
+CALISMA_SAATI_DISI
+SURE_SINIRI
+ILERI_TARIH_SINIRI
+ROL_IZNI_YOK
+SERTIFIKA_YOK
+BAKIM
+KESISME
+HAZIRLIK_IHLALI
+ARDISIK_KULLANIM
+BAKIYE_YETERSIZ
+
+Kontrol
+Kullanc veya kaynak yok
+15 dakikalk admlara oturmuyor veya biti³ ba³langçtan önce
+Ba³langç < simüle saat
+08:0022:00 d³ veya gün a³m
+30 dakikadan ksa veya rolün azami süresinden uzun
+Rolün ileri tarih snr (güvenilirlik dü³ükse 1 gün)
+Rol kayna§n izinli listesinde yok
+Gerekli sertika yok
+Bakm penceresiyle kesi³me
+Rezervasyonla kesi³me
+Hazrlk süresi ihlali
+Ayn kullanc, ayn kaynak, 60 dakikadan az bo³luk
+Ücret > bakiye
+
+Giri³, çk³ ve iptal için sra: BULUNAMADI, DURUM_HATASI, ardndan GIRIS_PENCERESI_DISI.
+Kullanc ve kaynak ekleme için sra:
+1.
+
+ID_MEVCUT: ayn id ile bir kullanc (kullanici_ekle) veya kaynak (kaynak_ekle) zaten
+var.
+
+TANIMSIZ_DEGER: rol, tür veya izinli rollerden biri ba³langç dosyasnda tanml de§il.
+3. GECERSIZ_DEGER: bakiye 0'dan küçük veya rolün haftalik_kota de§erinden büyük ya da
+güvenilirlik 0 ile 100 arasnda bir tam say de§il. Yalnzca kullanici_ekle için denetlenir.
+2.
+
+K11. Saat ilerletme ve olay sras
+
+saat komutu simüle saati ileri alr. Eski saatten sonraki ve yeni saate kadar olan tüm olaylar
+zaman srasyla i³lenir ve raporlanr. Tam yeni saatte gerçekle³en olay da dahildir. Yeni saat
+mevcut saatten önceyse SAAT_GERI döner.
+Ayn anda birden fazla olay varsa ³u srayla i³lenir:
+1.
+
+HAFTALIK_SIFIRLAMA
+
+2. Tüm TAMAMLANDI olaylar, rezervasyon numaras küçükten büyü§e
+3. Tüm GELMEDI olaylar, rezervasyon numaras küçükten büyü§e
+
+4. Bo³alan her kaynak için bekleme listesi taramas (OTOMATIK_ATAMA), gelmeme olaylarnn
+srasyla
+
+5
+
+Dosya biçimleri
+
+Modül girdi olarak bir ba³langç dosyas ve bir komut dosyas alr. Çkt olarak her komut için
+bir sonuç satr üretir. Proje klasörünün kökündeki calistir.sh ve calistir.bat betikleri ³u
+biçimde ça§rlr:
+
+6
+
+./calistir.sh baslangic.json komutlar.jsonl > sonuclar.jsonl
+Ba³langç dosyas JSON biçimindedir. Alanlar: saat, kaynak_turleri, roller, kaynaklar,
+bakim_pencereleri, kullanicilar. A³a§daki ksaltlm³ örnekte her listeden yalnzca bir ö§e
+gösterilmi³tir. Tam örnek e-destek'ten baslangic.json eri³ilecektir.
+
+{ "saat": "2027-03-08T08:00",
+"kaynak_turleri": { "YAZICI": { "hazirlik_dk": 20, "temel_ucret": 12,
+"enerji_yogun": true, "sertifika": null }, ... },
+"roller": { "OGRENCI": { "haftalik_kota": 120, "ileri_gun": 7, "azami_sure_dk": 180 }, ... },
+"kaynaklar": [ { "id": "YAZ-2", "ad": "3B Yazc 2", "tur": "YAZICI",
+"izinli_roller": ["OGRENCI"] }, ... ],
+"bakim_pencereleri": [ { "kaynak": "YAZ-2",
+"baslangic": "2027-03-08T08:00", "bitis": "2027-03-08T10:00" } ],
+"kullanicilar": [ { "id": "u3", "ad": "Elif ahin", "rol": "ARASTIRMACI",
+"sertifikalar": ["CIHAZ_EGITIMI"], "bakiye": 300,
+"guvenilirlik": 80 }, ... ] }
+
+Komut dosyas JSON Lines biçimindedir. Her satr bir komuttur ve komutlar srayla i³lenir.
+
+Komut
+
+Alanlar
+
+saat
+rezervasyon
+paket
+fiyat
+
+zaman
+kullanici, kaynak, baslangic, bitis
+kullanici, kalemler: [{kaynak, baslangic, bitis}, . . . ]
+rezervasyon ile ayn alanlar. Bakiye d³ndaki tüm kontrolleri yapar, durum de§i³tirmez. Talep geçerliyse ücret, geçersizse ilgili hata kodu döner.
+
+iptal,
+giris,
+cikis
+bekleme
+sorgu
+kullanici_ekle
+
+rezervasyon
+kullanici, kaynak, baslangic, bitis
+tur (kullanici veya kaynak), id, kaynak için ek olarak gun (YYYY-AA-GG)
+id, ad, rol, sertifikalar, bakiye, guvenilirlik (ba³langç dosyasndaki
+kullanc alanlar)
+
+kaynak_ekle
+
+id, ad, tur, izinli_roller (ba³langç dosyasndaki kaynak alanlar)
+
+{"komut":"kullanici_ekle","id":"u1","ad":"Ay³e Kaya","rol":"OGRENCI","sertifikalar":[],
+"bakiye":120,"guvenilirlik":80}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"YAZ-1","baslangic":"2027-03-08T11:00",
+"bitis":"2027-03-08T13:00"}
+{"komut":"saat","zaman":"2027-03-08T11:20"}
+
+Sonuç dosyas JSON Lines biçimindedir.
+
+Komut ba³na bir satr, ayn srada üretilir.
+
+satrda no (1'den ba³layan komut sras), komut ve durum (TAMAM veya RED) bulunur.
+larnda kod bulunur. TAMAM satrlarndaki ek alanlar:
+
+Her
+
+RED satr-
+
+Komut
+
+Alanlar
+
+saat
+
+olaylar: [{zaman, tur, . . . }] kronolojik srada. GELMEDI ve TAMAMLANDI
+rezervasyon, kullanici, guvenilirlik. OTOMATIK_ATAMA için
+bekleme, rezervasyon, kullanici, ucret, bakiye.
+rezervasyon_id, ucret, bakiye
+paket_id, rezervasyonlar, ucretler, toplam, bakiye
+için
+
+rezervasyon
+paket
+
+7
+
+Komut
+
+Alanlar
+
+fiyat
+iptal
+
+ucret
+iade, bakiye, guvenilirlik, olaylar (bo³alan yer için OTOMATIK_ATAMA
+olaylar, yoksa bo³ liste)
+
+giris
+cikis
+bekleme
+sorgu kullanici
+
+yeni_durum
+yeni_durum, guvenilirlik, olaylar
+bekleme_id, sira (o kayna§n listesindeki sras, 1'den ba³lar)
+bakiye, guvenilirlik, rezervasyonlar: [{id, kaynak, baslangic,
+bitis, durum, ucret}] ba³langca göre, e³itlikte rezervasyon numarasna
+göre sral
+
+sorgu kaynak
+kullanici_ekle,
+kaynak_ekle
+
+doluluk: [{baslangic, bitis, tur (REZERVASYON veya BAKIM), varsa
+rezervasyon}] o gün için ba³langca göre sral. Yalnzca ONAYLI ve
+KULLANIMDA rezervasyonlar ile bakm pencereleri listelenir.
+Ek alan yoktur.
+
+PAKET_RED satrnda ek olarak kalemler: [{sira (0'dan ba³lar), durum, varsa kod}] bulunur.
+PAKET_BOYUTU ve GUVENILIRLIK_DUSUK hatalarnda kalemler bo³ listedir. PAKET_ICI_KESISME ve BAKIYE_YETERSIZ hatalarnda tüm kalemler TAMAM olarak listelenir.
+Paket düzeyi hatalarda kod alan o hatay ta³r.
+
+{"no":5,"komut":"rezervasyon","durum":"TAMAM","rezervasyon_id":"r1","ucret":36,"bakiye":84}
+{"no":10,"komut":"rezervasyon","durum":"RED","kod":"HAZIRLIK_IHLALI"}
+
+Eklenen kullanc ve kaynaklar yalnzca o çal³ma boyunca bellekte tutulur; ba³langç dosyas
+de§i³tirilmez.
+Gizli testler (proje sunumu için) farkl parametre ve komutlarla hazrlanacaktr.
+satr beklenen satrla alan alan kar³la³trlacaktr.
+
+Fazladan alan hata saylmaz.
+
+Üretilen her
+Eksik veya
+
+farkl alan hata saylr.
+
+6
+
+Örnek senaryo
+
+E-destek'te payla³lacak örnek klasöründe ba³langç dosyas, 19 komutluk dosya ve beklenen
+sonuçlar bulunmaktadr. Simüle saat 8 Mart 2027 Pazartesi 08:00'de ba³lar. Uygulamanz bu
+senaryoyu birebir geçmelidir. Ba³langç dosyasnda u1, u2, YAZ-1 ve LAB-1 bulunmaz; senaryonun ilk dört komutu bunlar ekler. YAZ-1 eklendikten sonra YAZICI türünde iki kaynak (YAZ-1,
+YAZ-2) olur.
+
+No
+1
+
+2
+
+Komut
+
+Sonuç
+
+Gerekçe
+
+kullanici_ekle: u1,
+Ay³e Kaya, ö§renci,
+sertika yok, bakiye
+120, güvenilirlik 80
+kullanici_ekle: u2,
+Mehmet Demir,
+ö§renci, sertika yok,
+bakiye 120, güvenilirlik
+80
+
+TAMAM
+
+Ba³langç dosyasnda u1 yoktur. Rol
+tanml, bakiye kotay a³maz.
+
+TAMAM
+
+De§erler geçerlidir.
+
+8
+
+No
+3
+4
+
+5
+
+Komut
+
+Sonuç
+
+Gerekçe
+
+kaynak_ekle: YAZ-1,
+3B Yazc 1, YAZICI,
+izinli: OGRENCI
+kaynak_ekle: LAB-1,
+Laboratuvar 1, LAB,
+izinli: OGRENCI,
+ARASTIRMACI,
+TEKNISYEN
+u1 (ö§renci), YAZ-1,
+11:0013:00
+
+TAMAM
+
+YAZICI türünde kaynak says 2 olur.
+Henüz rezervasyon olmad§ndan hiçbir
+ücret etkilenmez.
+Tür ve roller tanmldr.
+
+TAMAM
+
+TAMAM r1, ücret 36,
+bakiye 84
+
+6
+
+u2 (ö§renci), YAZ-2,
+10:0012:00
+
+TAMAM r2, ücret 45,
+bakiye 75
+
+7
+
+u2, YAZ-2, 12:3013:30
+
+RED ARDISIK_KULLANIM
+
+8
+9
+
+u2, LAB-1, 14:0015:00
+u1, YAZ-1, 13:1014:00
+
+10
+
+u1, YAZ-1, 13:1514:00
+
+RED SERTIFIKA_YOK
+RED
+ZAMAN_ADIMI_HATASI
+RED HAZIRLIK_IHLALI
+
+11
+
+yat: u3 (ara³trmac),
+CIH-1, 14:0016:00
+paket: u3, CIH-1
+14:0016:00 ve ODA-1
+14:0016:00
+u1, CIH-1, 16:3017:30
+
+12
+13
+14
+
+TAMAM ücret 48
+
+r1 13:00'da biter, 13:20 gerekir. Art arda
+kullanm snr da ihlal edilmi³tir ancak
+hazrlk önce kontrol edilir.
+8 × 4 × 1,0 × 1,5. Durum de§i³mez.
+
+TAMAM p1, [r3, r4], [48,
+8], toplam 56, bakiye 244
+
+ODA enerji yo§un de§ildir, pik
+uygulanmaz. 8 × 1 = 8.
+
+RED ROL_IZNI_YOK
+
+Sertika da yoktur ancak rol önce kontrol
+edilir.
+Ö§renci için ileri tarih snr 7 gündür. En
+geç 15 Mart 08:00.
+r1 ile kesi³ir. Bekleme açlabilir.
+
+RED
+ILERI_TARIH_SINIRI
+TAMAM b1, sra 1
+
+16
+
+u1, ODA-2, 16 Mart
+09:0010:00
+bekleme: u2, YAZ-1,
+12:0013:00
+saat 11:20
+
+17
+18
+
+giris r1
+iptal r4
+
+19
+
+sorgu: kullanc u2
+
+RED DURUM_HATASI
+TAMAM iade 4, bakiye
+248, güvenilirlik 80, olay
+yok
+bakiye 57, güvenilirlik 65,
+[r2 GELMEDI 45, r5
+ONAYLI 18]
+
+15
+
+Sekiz dilim, dilim ba³na 12 × 0,25 = 3 KP.
+Bantlar bo³, çarpan 1,0. Tüm dilimler pik,
+1,5. 8 × 3 × 1,0 × 1,5 = 36.
+Bakm 0810 hazrlk gerektirmez. 1012
+bandnda r1'in 60 dakikas vardr. Doluluk
+60/240 = 0,25, çarpan 1,25.
+8 × 3 × 1,25 × 1,5 = 45.
+Hazrlk 12:20'de biter. Ayn kullanc ayn
+kaynakta 30 dakika bo³luk brakm³tr, 60
+gerekir.
+LAB_GUVENLIK sertikas yoktur.
+13:10 15 dakikalk admlara oturmaz.
+
+TAMAM, 3 olay
+
+9
+
+10:15 r2 GELMEDI (u2 güvenilirlik 65).
+11:15 r1 GELMEDI (u1 güvenilirlik 65).
+11:15 OTOMATIK_ATAMA: b1 kayd r5
+rezervasyonuna dönü³ür, ücret 18, u2
+bakiye 57. 1214 band bo³tur, gelinmeyen
+rezervasyonlar saylmaz.
+4 × 3 × 1,0 × 1,5 = 18.
+r1 GELMEDI durumundadr.
+Ba³langca 2 saat 40 dakika vardr, %50
+iade. ODA-1 için bekleme kayd yoktur.
+Ba³langca göre sraldr.
+
+7
+
+Masaüstü uygulamas
+
+Modül ile arayüzün ili³kisi
+Rezervasyon modülü iki yoldan kullanlmaktadr. ki yolda da ayn modül ve ayn kurallar çal³r.
+1. Komut satrndan. calistir beti§i ba³langç dosyasn ve komut dosyasn modüle verir.
+Modül sonuç dosyasn yazar. Gizli testler bu yolla çal³trlacaktr.
+2. Masaüstü uygulamasndan. Uygulama açlrken bir ba³langç dosyas seçilir ve modüle yüklenir. Kullancnn ekranda yapt§ her i³lem, modülün ilgili fonksiyonu ça§rlarak
+yaplr. Uygulama komut dosyas okumaz ve sonuç dosyas yazmaz.
+Örne§in kullanc talep formundan bir rezervasyon istedi§inde uygulama, rezervasyon komutunun kar³l§ olan modül fonksiyonunu ça§rr ve dönen sonucu ekranda gösterir. Örnek senaryodaki 19 i³lem arayüzden ayn srayla yapld§nda ekranda ayn sonuçlar görülmelidir.
+Uygulamann verileri bellekte tutmas yeterlidir.
+
+Veritaban kullanlmas veya uygulama kap-
+
+atld§nda verilerin saklanmas beklenmemektedir.
+
+Arayüzden beklenenler
+Bu bölüm arayüzün ne yapabilmesi gerekti§ini tanmlar. Ekran düzeni, renk paleti, yaz tipleri
+ve etkile³im biçimi size braklm³tr; tasarm kararlarnz raporun tasarm kararlar bölümünde
+gerekçelendiriniz.
+1. Ba³langç dosyas seçimi. Uygulama açl³ta bir ba³langç dosyas seçebilmelidir. Yeni
+bir dosya seçildi§inde tüm durum bu dosyaya göre yeniden kurulmaldr.
+2. Kaynak takvimi.
+
+Seçilen gün için her kaynak ayr bir satrda gösterilmelidir.
+
+Satrn
+
+yatay ekseni 08:0022:00 saatleridir. Her rezervasyon, kendi kayna§nn satrnda ba³langç
+ile biti³ saati arasn kaplayan bir kutu olarak çizilmelidir. Kutular rezervasyonun durumuna göre renklendirilmelidir. Bakm pencereleri ve hazrlk süreleri de ayn satrda ayr
+görünümle gösterilmelidir.
+
+Gösterilen gün de§i³tirilebilmeli, 15 dakikalk admlar ayrt
+
+edilebilmeli ve simüle saatin takvimdeki konumu görülebilmelidir.
+veya
+
+Ayn kaynakta IPTAL
+
+GELMEDI durumundaki bir rezervasyon ile ayn aral§a alnan yeni bir rezervasyon
+
+çak³t§nda, ikisi üst üste binmeden, kayna§n satr içinde ayr bir alt satrda birlikte
+gösterilmelidir. Her rezervasyonun ayrntlarna (numara, kullanc, aralk, ücret, durum,
+varsa paket) takvimden ula³labilmelidir.
+3. Talep formu. Kullanc tek rezervasyon veya paket talebi olu³turabilmelidir. Talep gönderilmeden önce
+
+fiyat komutunun kar³l§yla ücret gösterilmelidir.
+
+Talep reddedilirse
+
+hata kodu ve Türkçe açklamas gösterilmelidir. Talep kabul edilirse rezervasyon numaras,
+ücret ve yeni bakiye gösterilmelidir. Paket PAKET_RED ile reddedilirse hangi kalemin geçti§i
+ve hangisinin neden reddedildi§i her kalemin kendi satrnda gösterilmelidir.
+4. Kullanc paneli. Seçilen kullancnn bakiyesi, güvenilirli§i, rezervasyonlar ve bekleme
+kaytlar görülebilmelidir. Kullanc listeden seçilerek de§i³tirilebilmelidir. Oturum açma
+ekran bulunmamaldr.
+5. Eylemler.
+
+Seçilen rezervasyon için giri³, çk³ ve iptal yaplabilmelidir.
+
+için bekleme kayd açlabilmelidir.
+
+Dolu bir aralk
+
+Giri³, çk³ ve iptal, rezervasyonun göründü§ü yer-
+
+den do§rudan yaplmal; kullanc rezervasyon numarasn yazmamaldr.
+bakiye, güvenilirlik ve varsa OTOMATIK_ATAMA olaylar gösterilmelidir.
+
+Sonuçta iade,
+
+Bir talep KESISME
+
+veya HAZIRLIK_IHLALI ile reddedildi§inde, kullancya ayn talep için bekleme kayd açma
+seçene§i sunulmal; bilgiler yeniden girilmemelidir.
+
+6. Simüle saat denetimi. Saat ileri alnabilmeli ve bu srada olu³an olaylar listelenmelidir.
+
+10
+
+Simüle saat ekranda her zaman görünmelidir.
+7. Olay günlü§ü.
+
+Oturum boyunca modülün döndürdü§ü tüm sonuçlar srayla listelen-
+
+melidir. Günlükteki bir satr seçildi§inde, o i³lemin komut kar³l§ ve modülün döndürdü§ü
+sonuç, Bölüm 5'teki JSON biçimiyle görülebilmelidir.
+8. Yeni
+
+üye
+
+ekleme.
+
+Arayüzden
+
+yeni
+
+bir
+
+kullanc
+
+eklenebilmelidir.
+
+Uygulama
+
+kullanici_ekle komutunun kar³l§ olan modül fonksiyonunu ça§rr. Rol ve sertikalar
+ba³langç dosyasndaki de§erler arasndan seçilir. Ekleme reddedilirse hata kodu ve Türkçe
+açklamas gösterilmelidir. Eklenen kullanc hemen kullanc listesinde yer almaldr.
+9. Yeni
+
+kaynak
+
+ekleme.
+
+Arayüzden
+
+yeni
+
+bir
+
+kaynak
+
+eklenebilmelidir.
+
+kaynak_ekle komutunun kar³l§ olan modül fonksiyonunu ça§rr.
+
+Uygulama
+
+Tür ve izinli roller
+
+ba³langç dosyasndaki de§erler arasndan seçilir. Ekleme reddedilirse hata kodu ve Türkçe
+açklamas gösterilmelidir. Eklenen kaynak hemen takvimde görünmelidir.
+Arayüzde i³ kural bulunmamaldr. Arayüz bir talebi kendisi engellemez; geçersiz bir talep de
+gönderilebilir ve reddi ile kodunu modül verir. Durumu de§i³tiren her i³lemden sonra takvim,
+kullanc paneli ve simüle saat, kullanc ayrca bir ³ey yapmadan güncellenmelidir.
+
+Ba³langç
+
+dosyasnda bir parametre de§i³ti§inde uygulama kod de§i³ikli§i olmadan yeni kurala göre davranmaldr. Bu durum demoda denetlenecektir.
+
+Arayüzün de§erlendirilmesi
+Arayüz tasarm projenin ayrt edici ksmdr; belirli bir görünüm beklenmez. Demoda arayüz
+ayrca ³u ölçütlerle de§erlendirilir:
+1. ³lem kolayl§: sk yaplan i³lemler az admla, ekranlar arasnda gidip gelmeden yaplr.
+2. Kompaktlk: bir i³lem için gereken bilgi ve eylemler ayn anda eri³ilebilir; gereksiz pencere
+ve kaydrma yoktur.
+3. U§ra³trmama: de§erler yazlmak yerine seçilir, varsaylanlar anlamldr, gereksiz onay
+pencereleri yoktur.
+4. Geri bildirim: her i³lemin sonucu, yapld§ yerin yaknnda hemen görünür.
+5. Görsel kalite ve özen: hiyerar³i, hizalama, tipogra, renk uyumu, tutarllk; yo§un bir
+günde takvimin okunabilirli§i.
+
+8
+
+Teslim ve de§erlendirme
+
+Teslim e-destek üzerinden, belirtilen tarihe kadar yaplacaktr. Geç teslim kabul edilmeyecektir.
+Teslim edilecekler:
+
+ Rezervasyon modülü ve masaüstü uygulamasnn kaynak kodu, calistir.sh ve
+calistir.bat betikleri, çal³trma için gereken admlarn açklamas.
+ Kendi test senaryolarnz: komut dosyalar ve beklenen sonuçlar.
+ Rapor: IEEE formatnda 4 sayfa olmaldr. Özet, giri³, yöntem (mimari, veri modeli,
+kurallarn uygulan³, ak³ diyagram veya sözde kod), deneysel sonuçlar, tasarm kararlar,
+sonuç ve kaynakça bölümlerinden olu³maldr.
+Demo yüz yüze yaplacaktr. Gizli testler demo srasnda çal³trlacaktr. Kodunuzun herhangi
+bir satrn açklamanz istenebilir. Demo haftasnda tüm ö§renciler yüz yüze, bireysel
+bir pro je snavna girecektir.
+
+Snav sorular bu dokümandaki kurallardan hazrlanacaktr.
+
+De§erlendirme demo, rapor ve proje snav birlikte dikkate alnarak yaplacaktr. Snava girmeyen
+ö§rencilerin proje notu de§erlendirmeye alnmayacaktr.
+
+11
+
+9
+
+leti³im
+
+Proje ile ilgili sorular e-destek forumu üzerinden Ar³. Gör. Muhammed Ali Irmak veya Ar³. Gör.
+Kadir Kesimal'a sorulabilir. Proje tantm toplants (duyurulacak) yaplacaktr. Grup bilgileri
+12 Ekim 2026 tarihine kadar e-destek'teki ba§lantdan girilmelidir. Bu tarihten sonra gruplarda
+de§i³iklik yaplmayacaktr.
+
+12
+
+
