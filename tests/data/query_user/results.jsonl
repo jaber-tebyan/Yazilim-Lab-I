@@ -1,4 +1,4 @@
-{"no":1,"komut":"sorgu","durum":"TAMAM","bakiye":120,"guvenilirlik":80,"rezervasyonlar":[]}
+{"no":1,"komut":"sorgu","durum":"TAMAM","bakiye":120,"guvenilirlik":80,"rezervasyonlar":[{"id":"r2","kaynak":"ODA-1","baslangic":"2027-03-08T09:00","bitis":"2027-03-08T10:00","durum":"ONAYLI","ucret":4},{"id":"r10","kaynak":"ODA-1","baslangic":"2027-03-08T09:00","bitis":"2027-03-08T10:00","durum":"ONAYLI","ucret":4}]}
 {"no":2,"komut":"sorgu","durum":"TAMAM","bakiye":17,"guvenilirlik":50,"rezervasyonlar":[]}
 {"no":3,"komut":"sorgu","durum":"TAMAM","bakiye":0,"guvenilirlik":0,"rezervasyonlar":[]}
 {"no":4,"komut":"sorgu","durum":"RED","kod":"BULUNAMADI"}

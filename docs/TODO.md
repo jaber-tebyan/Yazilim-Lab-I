@@ -166,7 +166,7 @@ to the `sorgu kullanici` scenario and assert the numeric order.
 ## Definition of done for this file
 
 - [ ] All five items above are fixed.
-- [ ] `uv run pytest -q` passes.
+- [x] `uv run pytest -q` passes.
 - [ ] No test contains duplicated module logic that belongs in `src/`.
-- [ ] The clock test still proves that time-driven completion does **not** scan
+- [x] The clock test still proves that time-driven completion does **not** scan
       the waiting list.
