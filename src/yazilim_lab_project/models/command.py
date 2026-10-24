@@ -103,8 +103,18 @@ class ClockCommand(BaseModel):
 
 
 # {"komut":"giris","rezervasyon":"r1"}
-class CheckInCommand(BaseModel):
+class EntryCommand(BaseModel):
     command: Literal["giris"] = Field(
+        validation_alias="komut", serialization_alias="komut"
+    )
+    reservation: str = Field(
+        validation_alias="rezervasyon", serialization_alias="rezervasyon"
+    )
+
+
+# {"komut":"cikis","rezervasyon":"r1"}
+class ExitCommand(BaseModel):
+    command: Literal["cikis"] = Field(
         validation_alias="komut", serialization_alias="komut"
     )
     reservation: str = Field(
@@ -155,7 +165,8 @@ AnyCommand = Annotated[
     | PackageCommand
     | WaitingListCommand
     | ClockCommand
-    | CheckInCommand
+    | EntryCommand
+    | ExitCommand
     | CancelCommand
     | QueryCommand,
     Field(discriminator="command"),
