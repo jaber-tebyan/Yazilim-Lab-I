@@ -1,2 +1,5 @@
-{"no":1,"komut":"saat","durum":"TAMAM","olaylar":[]}
+{"no":1,"komut":"saat","durum":"TAMAM","olaylar":[{"zaman":"2027-03-08T09:00","tur":"TAMAMLANDI","rezervasyon":"r1","kullanici":"u1","guvenilirlik":82},{"zaman":"2027-03-08T10:15","tur":"GELMEDI","rezervasyon":"r2","kullanici":"u2","guvenilirlik":65},{"zaman":"2027-03-08T10:15","tur":"OTOMATIK_ATAMA","bekleme":"b1","rezervasyon":"r3","kullanici":"u2","ucret":10,"bakiye":20}]}
 {"no":2,"komut":"saat","durum":"RED","kod":"SAAT_GERI"}
+{"no":3,"komut":"saat","durum":"TAMAM","olaylar":[{"zaman":"2027-03-08T12:15","tur":"GELMEDI","rezervasyon":"r3","kullanici":"u2","guvenilirlik":50},{"zaman":"2027-03-15T00:00","tur":"HAFTALIK_SIFIRLAMA"}]}
+{"no":4,"komut":"saat","durum":"TAMAM","olaylar":[]}
+{"no":5,"komut":"saat","durum":"TAMAM","olaylar":[{"zaman":"2027-03-22T00:00","tur":"HAFTALIK_SIFIRLAMA"}]}

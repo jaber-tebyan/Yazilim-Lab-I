@@ -19,6 +19,12 @@ def exit_reservation(res: Reservation, state: AppState, new_reliability: int) ->
     user.reliability = new_reliability
 
 
+def no_show_reservation(res: Reservation, state: AppState) -> None:
+    res.state = reservation.State.DID_NOT_ARRIVE
+    user = next(u for u in state.config.users if u.id == res.user)
+    user.reliability = max(0, user.reliability - 15)
+
+
 def cancel_reservation(
     res: Reservation, state: AppState, cancel_data: CancelData
 ) -> list[AutoAssign]:
@@ -29,6 +35,3 @@ def cancel_reservation(
 
     events = process_waiting_list_for_resource(state, res.resource)
     return events
-
-
-

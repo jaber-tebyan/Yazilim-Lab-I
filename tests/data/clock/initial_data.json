@@ -1,8 +1,51 @@
 {
   "saat": "2027-03-08T08:00",
-  "kaynak_turleri": {},
-  "roller": {},
-  "kaynaklar": [],
+  "kaynak_turleri": {
+    "YAZICI": {
+      "hazirlik_dk": 0,
+      "temel_ucret": 10,
+      "enerji_yogun": false,
+      "sertifika": null
+    }
+  },
+  "roller": {
+    "OGRENCI": {
+      "haftalik_kota": 100,
+      "ileri_gun": 7,
+      "azami_sure_dk": 180
+    }
+  },
+  "kaynaklar": [
+    {
+      "id": "YAZ-1",
+      "ad": "Yazici 1",
+      "tur": "YAZICI",
+      "izinli_roller": ["OGRENCI"]
+    },
+    {
+      "id": "YAZ-2",
+      "ad": "Yazici 2",
+      "tur": "YAZICI",
+      "izinli_roller": ["OGRENCI"]
+    }
+  ],
   "bakim_pencereleri": [],
-  "kullanicilar": []
+  "kullanicilar": [
+    {
+      "id": "u1",
+      "ad": "U1",
+      "rol": "OGRENCI",
+      "sertifikalar": [],
+      "bakiye": 40,
+      "guvenilirlik": 80
+    },
+    {
+      "id": "u2",
+      "ad": "U2",
+      "rol": "OGRENCI",
+      "sertifikalar": [],
+      "bakiye": 30,
+      "guvenilirlik": 80
+    }
+  ]
 }
