@@ -32,7 +32,7 @@ def rule_query_user_not_found(
         return None
     rows = sorted(
         (r for r in state.reservations if r.user == user.id),
-        key=lambda r: (r.start, r.id),
+        key=lambda r: (r.start, int(r.id.removeprefix("r"))),
     )
     return QueryUserData(
         balance=user.balance,

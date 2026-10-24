@@ -143,7 +143,7 @@ entry to be created (not `ARDISIK_KULLANIM`).
 
 ## 10. `sorgu kullanici` sorts reservation ids as strings
 
-- [ ] Fix
+- [x] Fix
 
 **Where**
 - `src/yazilim_lab_project/rules/query_user_rules.py` →
