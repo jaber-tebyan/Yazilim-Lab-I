@@ -1,0 +1,23 @@
+{
+  "saat": "2027-03-08T12:00",
+  "kaynak_turleri": {
+    "ODA": { "hazirlik_dk": 0, "temel_ucret": 8, "enerji_yogun": false, "sertifika": null }
+  },
+  "roller": {
+    "OGRENCI": { "haftalik_kota": 120, "ileri_gun": 7, "azami_sure_dk": 180 }
+  },
+  "kaynaklar": [
+    { "id": "ODA-1", "ad": "Toplanti Odasi 1", "tur": "ODA", "izinli_roller": ["OGRENCI"] }
+  ],
+  "bakim_pencereleri": [],
+  "kullanicilar": [
+    {
+      "id": "u1",
+      "ad": "Ayse Kaya",
+      "rol": "OGRENCI",
+      "sertifikalar": [],
+      "bakiye": 120,
+      "guvenilirlik": 80
+    }
+  ]
+}
