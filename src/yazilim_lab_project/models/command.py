@@ -86,7 +86,7 @@ class PackageCommand(_Base):
 
 
 # {"komut":"bekleme","kullanici":"u2","kaynak":"YAZ-1","baslangic":"2027-03-08T12:00","bitis":"2027-03-08T13:00"}
-class WaitingListCommand(_Base):
+class WaitingCommand(_Base):
     command: Literal["bekleme"] = Field(
         validation_alias="komut", serialization_alias="komut"
     )
@@ -167,7 +167,7 @@ AnyCommand = Annotated[
     | ReservationCommand
     | PriceCommand
     | PackageCommand
-    | WaitingListCommand
+    | WaitingCommand
     | ClockCommand
     | EntryCommand
     | ExitCommand
