@@ -1,9 +1,10 @@
 # TODO — known problems in already-implemented parts
 
-Scope of this file: only the issues found in code that is already written and
-tested (P1 items 6–10 from the review). The command execution layer, `main()`,
-result writing, the desktop app and the report are **not** in this file; they
-will be discussed separately.
+Scope of this file: issues found in code that is already written and tested.
+It covers P1 items 6–10 from the first review and items 11–20 from the second
+review. Some second-review fixes land in the command layer, `main()` or file
+I/O; they are recorded here because they affect the existing execution path.
+The desktop app and the report are still out of scope.
 
 Reference document: `Yaz_Lab_I.txt` (the project description is authoritative).
 
@@ -71,6 +72,9 @@ Use a monotonic counter, for example:
 - a dedicated counter on `AppState`.
 
 Keep `parse_waitlist_id` numeric (`b2` before `b10`).
+
+This fixed collisions with entries still in the list, but it still reuses an
+id after that entry is removed. See item 12.
 
 **Tests**
 Add a case where an earlier entry is promoted/expired and a new waiting entry
@@ -170,3 +174,400 @@ to the `sorgu kullanici` scenario and assert the numeric order.
 - [ ] No test contains duplicated module logic that belongs in `src/`.
 - [x] The clock test still proves that time-driven completion does **not** scan
       the waiting list.
+
+---
+
+# Second review — additional issues
+
+## 11. `start == end` is accepted by the time-step check
+
+- [ ] Fix
+
+**Where**
+- `src/yazilim_lab_project/rules/atomic/reservation.py` →
+  `atomic_rule_reservation_time_step_error`
+- `src/yazilim_lab_project/rules/price_rules.py` →
+  `rule_price_time_step_error` (the TODO comment here already admits the issue)
+- `src/yazilim_lab_project/rules/package_rules.py` →
+  `rule_package_item_time_step_error`
+- Reservation and waiting rules call the atomic version; price and package have
+  their own copies. This is four affected paths.
+
+**Problem**
+All copies use `end < start`. That rejects a reversed interval, but it accepts
+`start == end` because the timestamps are equal. The request then reaches the
+duration rule, sees zero minutes, and returns `SURE_SINIRI`.
+
+The specification requires the end to be strictly after the start. A request
+with `start == end` is therefore a time-step error, not a duration error.
+
+**Expected**
+- Require `end > start` in every path.
+- Both `start == end` and `end < start` must return `ZAMAN_ADIMI_HATASI` before
+  the minimum-duration check.
+- Reservation, waiting, price preview and package item validation must all
+  return the same code for the same input.
+- Remove the stale TODO comment in `price_rules.py`.
+
+**Tests**
+- Add `start == end` cases to reservation, waiting, price and package scenario
+  data; expect `ZAMAN_ADIMI_HATASI`.
+- Keep the existing off-grid and reversed-interval cases.
+
+**Severity**
+High — deterministic wrong error code, likely hidden-test target, and the
+duplication makes an incomplete fix easy.
+
+---
+
+## 12. Waiting-list IDs are still reused after removal
+
+- [ ] Fix
+
+**Where**
+- `src/yazilim_lab_project/rules/waiting_rules.py` →
+  `last_waitlist_id = max(...)`
+- `src/yazilim_lab_project/models/app_state.py` → no persistent counter
+
+**Problem**
+The item 7 fix prevents a collision with entries that are still in the list,
+but it is not monotonic. If `b2` is auto-assigned and removed, the next waiting
+entry becomes `b2` again.
+
+If waiting ids are historical identifiers used in results, events or logs,
+reuse makes the history ambiguous. The intended behavior is creation order
+(`b1, b2, ...`), which implies a persistent counter.
+
+**Expected**
+- Add a persistent counter to `AppState`, for example `next_waiting_id`,
+  initialized to 0.
+- Advance the counter only when a waiting entry is actually added, so a rejected
+  waiting command does not consume an id.
+- A new entry gets `b{counter + 1}` and an id is never reused during a run.
+- Keep `parse_waitlist_id` numeric for ordering and position calculations.
+
+**Tests**
+- Create `b1`, remove/promote it, then create another entry; expect `b2`, not
+  `b1`.
+- Keep the existing `b2`/`b3` case and expect the next id to be `b4`.
+- A rejected waiting command must not advance the counter.
+
+**Severity**
+Medium-high — depends on the exact id contract, but the persistent counter is
+the safer and more consistent interpretation.
+
+---
+
+## 13. Non-integer command values abort the whole run
+
+- [ ] Fix
+
+**Where**
+- `src/yazilim_lab_project/models/command.py` →
+  `AddUserCommand.balance`, `AddUserCommand.reliability`, and any other numeric
+  command fields
+- `src/yazilim_lab_project/models/initial_data.py` → `User` if the same model
+  is reused for command input
+- `src/yazilim_lab_project/__init__.py` → `CommandsFile.read`
+
+**Problem**
+Pydantic validates command models before any rule runs. An `int` field rejects
+a value such as `guvenilirlik: 80.5` with a `ValidationError`. That exception
+escapes the command loop and aborts the entire run.
+
+The specification explicitly puts “not an integer” under `GECERSIZ_DEGER`, so
+the command must reach the rule layer and produce a RED result instead.
+
+The same failure mode applies to malformed JSON, wrong shapes and other
+unparseable command lines: one bad line currently stops all later commands.
+
+**Expected**
+- Command models accept any JSON number for fields whose integrality is a rule
+  concern (`int | float`, or `Decimal`).
+- `kullanici_ekle` / `kaynak_ekle` rules validate integrality and range and
+  return `GECERSIZ_DEGER` for fractional or otherwise invalid numbers.
+- Parse and validation errors are caught per line. One bad command must not
+  stop the run.
+- Distinguish `TANIMSIZ_DEGER` (unknown role/type/etc.) from `GECERSIZ_DEGER`
+  (wrong value or wrong numeric type).
+- Initial data may remain strict and fail fast; commands must be permissive
+  enough to produce a result.
+
+**Tests**
+- `guvenilirlik: 80.5` and `bakiye: 10.5` produce RED `GECERSIZ_DEGER`.
+- A following valid command is still processed.
+- A non-numeric string and a malformed JSON line produce a RED result instead
+  of a traceback.
+
+**Severity**
+High — a single malformed command currently takes down the whole run.
+
+---
+
+## 14. JSONL readers crash on blank lines
+
+- [ ] Fix
+
+**Where**
+- `src/yazilim_lab_project/__init__.py` → `CommandsFile.read`
+- `src/yazilim_lab_project/__init__.py` → `ResultsFile.read`
+
+**Problem**
+The readers only skip lines starting with `//`. A blank or whitespace-only line
+is passed to `validate_json`, which raises and aborts the run. JSONL files
+often contain blank lines between records or at the end.
+
+**Expected**
+- Skip empty and whitespace-only lines before parsing.
+- Preserve the existing `//` comment behavior.
+- Handle CRLF input.
+- Apply the same behavior to both commands and results readers.
+
+**Tests**
+- Add blank lines between commands and at the end of the file; the same results
+  must be produced.
+
+**Severity**
+Medium-high — easy to trigger with a hand-edited input file.
+
+---
+
+## 15. File I/O does not force UTF-8
+
+- [ ] Fix
+
+**Where**
+- `src/yazilim_lab_project/__init__.py` → `read_text()` for bundled initial
+  data and `open()` in both readers
+- future result writer and `main()` output
+- `calistir.sh` / `calistir.bat` → console encoding
+
+**Problem**
+`open()` and `read_text()` without `encoding="utf-8"` use the system locale.
+On Linux this usually works. On Windows, especially with a Turkish code page,
+characters such as `ş`, `ğ`, `ı`, `ö` and `ü` can be corrupted or raise a
+decoding error.
+
+Since `calistir.bat` is a Windows deliverable, this is a real portability bug,
+not a theoretical one. It affects both input and output.
+
+**Expected**
+- Every file read and write specifies `encoding="utf-8"`.
+- JSON output remains readable UTF-8 (use `ensure_ascii=False` if output is
+  written manually).
+- The Windows launcher selects a UTF-8 console (for example `chcp 65001`) or an
+  equivalent mechanism.
+- Round-trip Turkish names and text without loss.
+
+**Tests**
+- Read and write a file containing `Ayşe`, `Şahin`, `ı` and `ğ` on Windows.
+- Verify the output file is valid UTF-8 and the characters are unchanged.
+
+**Severity**
+High for the Windows deliverable; invisible on Linux.
+
+---
+
+## 16. `APP_STATE` is built at import time
+
+- [ ] Fix
+
+**Where**
+- `src/yazilim_lab_project/__init__.py` → module-level `APP_STATE`
+- `src/yazilim_lab_project/__init__.py` → `main()` currently reads the bundled
+  `komutlar_1.jsonl` and has no argument handling
+
+**Problem**
+`APP_STATE` is created when the package is imported, using the bundled
+`assets/baslangic.json`. The CLI therefore cannot honor the initial-data file
+passed on the command line; it may silently use the wrong file.
+
+The global is also mutable and shared across runs in the same process, which is
+dangerous for tests and for the desktop app.
+
+**Expected**
+- `main()` parses the initial-data and commands paths and constructs a fresh
+  `AppState` and `Engine` for that invocation.
+- No import-time state is required for normal execution.
+- `APP_STATE` is removed or clearly restricted to sample/demo use.
+- Two runs in the same process do not share reservations, waiting entries,
+  balances or reliability.
+- The CLI uses exactly the files given on the command line.
+
+**Tests**
+- Run the CLI with two different initial-data files and verify the outputs
+  differ according to those files.
+- Run twice in one process and verify there is no state leakage.
+- Verify `./calistir.sh baslangic.json komutlar.jsonl` uses those arguments.
+
+**Severity**
+High — the CLI can silently ignore its input file.
+
+---
+
+## 17. `sorgu kaynak` misses maintenance windows spanning midnight
+
+- [ ] Fix
+
+**Where**
+- `src/yazilim_lab_project/rules/query_resource_rules.py` →
+  `maint.start.date() == cmd.day`
+
+**Problem**
+The query includes a maintenance window only if its start date equals the
+queried day. A window from `23:00` to `01:00` starts on day 1 and ends on day 2;
+it appears on day 1 but is missing from day 2.
+
+The query must test whether the interval overlaps the requested day, not
+whether it starts on that day.
+
+**Expected**
+- Include a window when `maint.start < day_end` and `maint.end > day_start`.
+- Clip the displayed start/end to the queried day (for example, day 2 shows
+  `00:00–01:00`) or document the chosen representation.
+- Keep the result sorted by start time.
+- Apply the same overlap principle to any interval-based query. Reservations
+  are normally within 08:00–22:00, but maintenance windows can cross midnight.
+
+**Tests**
+- Add a window `2027-03-08T23:00`–`2027-03-09T01:00`.
+- Query both days; expect a BAKIM row on both, clipped to each day.
+- Verify the window is not duplicated on the first day.
+
+**Severity**
+High — realistic scheduling case and an easy hidden-test target.
+
+---
+
+## 18. Early exit can produce `end < start`
+
+- [ ] Fix
+
+**Where**
+- `src/yazilim_lab_project/rules/entry_rules.py` →
+  `rule_entry_outside_window` allows entry from `start - 10 minutes`
+- `src/yazilim_lab_project/interface/reservation.py` → `exit_reservation`
+  updates `res.end` to the current time when the current time is before the
+  scheduled end
+
+**Problem**
+A reservation starting at `10:00` may be entered at `09:50`. If the user exits
+immediately at `09:51`, `exit_reservation` sets `end = 09:51`, which is earlier
+than `start = 10:00`.
+
+That creates a negative-length reservation. It corrupts duration, price,
+occupancy, query output and any later calculation.
+
+The specification says early exit updates the end to the exit time, but a
+reservation with a negative duration is not a valid state.
+
+**Expected**
+- Choose and document one policy:
+  - reject exit before the reservation start with the appropriate error, or
+  - clamp the end to at least the start, producing a zero-length reservation.
+- The clamp is the less surprising option unless the specification explicitly
+  requires a rejection.
+- Never write `end < start`.
+- Ensure price, refund and query handling remain valid for a zero-length
+  reservation.
+
+**Tests**
+- Enter 10 minutes early, exit immediately, and assert the resulting interval
+  is not negative.
+- If clamping is chosen, assert `end == start`.
+- If rejection is chosen, assert the documented error code and that the
+  reservation remains in a valid state.
+
+**Severity**
+Medium-high — reachable through a legal early-entry window.
+
+---
+
+## 19. Cancellation refund can be negative
+
+- [ ] Fix
+
+**Where**
+- `src/yazilim_lab_project/rules/cancel_rules.py` →
+  `new_balance = min(role.weekly_quota, user.balance + refund_amount)`
+- `src/yazilim_lab_project/rules/cancel_rules.py` →
+  `actual_refund = new_balance - user.balance`
+
+**Problem**
+If the user's balance is already above the role's weekly quota, the `min`
+lowers `new_balance` below the current balance. `actual_refund` then becomes
+negative.
+
+A cancellation would reduce the user's balance, which is the opposite of a
+refund and violates the money invariant.
+
+**Expected**
+- `actual_refund` is never negative; at minimum use
+  `max(0, actual_refund)`.
+- Cancellation must not lower the balance when the user is already above quota.
+  For example, balance 150 with quota 120 and refund 0 must leave the balance
+  at 150.
+- When the balance is below quota, keep the existing cap at the quota.
+- Add a test for both the above-quota and normal cases.
+
+**Tests**
+- User balance 150, quota 120, cancellation with no refund: balance stays 150,
+  refund 0.
+- User balance 100, quota 120, refund 30: actual refund 20, new balance 120.
+
+**Severity**
+Medium — an edge case, but it violates a basic balance invariant.
+
+---
+
+## 20. Validation logic is duplicated across four paths
+
+- [ ] Fix
+
+**Where**
+- `src/yazilim_lab_project/rules/atomic/reservation.py`
+- `src/yazilim_lab_project/rules/price_rules.py`
+- `src/yazilim_lab_project/rules/package_rules.py`
+- `src/yazilim_lab_project/rules/reservation_rules.py` and
+  `src/yazilim_lab_project/rules/waiting_rules.py` call the atomic version
+
+**Problem**
+The time-step check is copied in several places. The `start == end` bug is a
+direct example of the copies drifting: a fix in one path can leave the price
+preview, waiting entry or package item accepting a different input.
+
+The same risk applies to interval overlap, numeric validation and other shared
+predicates.
+
+**Expected**
+- One shared predicate for time-grid validity and start/end ordering.
+- One shared predicate for interval overlap.
+- Reservation, waiting, price and package paths call the shared code.
+- Add a table-driven test that exercises the same invalid intervals through all
+  four commands.
+- Keep `engine.py` as the single execution path; do not create behavior forks.
+
+**Tests**
+- The same `start == end`, off-grid and reversed-interval cases through all
+  four paths.
+- A regression test that fails if one path diverges from the others.
+
+**Severity**
+Design-level — this is the root cause of repeated validation mismatches.
+
+---
+
+## Definition of done for the second review
+
+- [ ] Items 11–20 are fixed or explicitly accepted.
+- [ ] Zero-length intervals return `ZAMAN_ADIMI_HATASI` in reservation, waiting,
+      price and package paths.
+- [ ] Waiting ids are never reused during a run.
+- [ ] A fractional numeric command produces RED `GECERSIZ_DEGER` and does not
+      stop the run.
+- [ ] JSONL readers skip blank lines and use UTF-8 on every platform.
+- [ ] The CLI uses the initial-data and command files passed on the command line.
+- [ ] Maintenance windows spanning midnight appear on both days.
+- [ ] Early exit cannot create `end < start`.
+- [ ] Cancellation refund is never negative and never lowers the balance.
+- [ ] `uv run pytest -q` passes.
