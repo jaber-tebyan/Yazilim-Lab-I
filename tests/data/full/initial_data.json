@@ -1,0 +1,70 @@
+{
+  "saat": "2027-03-08T08:00",
+  "kaynak_turleri": {
+    "ODA": {
+      "hazirlik_dk": 0,
+      "temel_ucret": 4,
+      "enerji_yogun": false,
+      "sertifika": null
+    },
+    "LAB": {
+      "hazirlik_dk": 10,
+      "temel_ucret": 8,
+      "enerji_yogun": false,
+      "sertifika": "LAB_GUVENLIK"
+    },
+    "YAZICI": {
+      "hazirlik_dk": 20,
+      "temel_ucret": 12,
+      "enerji_yogun": true,
+      "sertifika": null
+    },
+    "CIHAZ": {
+      "hazirlik_dk": 15,
+      "temel_ucret": 16,
+      "enerji_yogun": true,
+      "sertifika": "CIHAZ_EGITIMI"
+    }
+  },
+  "roller": {
+    "OGRENCI": {
+      "haftalik_kota": 120,
+      "ileri_gun": 7,
+      "azami_sure_dk": 180
+    },
+    "ARASTIRMACI": {
+      "haftalik_kota": 300,
+      "ileri_gun": 14,
+      "azami_sure_dk": 480
+    },
+    "TEKNISYEN": {
+      "haftalik_kota": 600,
+      "ileri_gun": 30,
+      "azami_sure_dk": 840
+    }
+  },
+  "kaynaklar": [],
+  "bakim_pencereleri": [
+    {
+      "kaynak": "ODA-1",
+      "baslangic": "2027-03-08T12:00",
+      "bitis": "2027-03-08T13:00"
+    },
+    {
+      "kaynak": "CIH-1",
+      "baslangic": "2027-03-09T08:00",
+      "bitis": "2027-03-09T09:00"
+    },
+    {
+      "kaynak": "LAB-1",
+      "baslangic": "2027-03-10T08:00",
+      "bitis": "2027-03-10T09:00"
+    },
+    {
+      "kaynak": "ODA-1",
+      "baslangic": "2027-03-16T12:00",
+      "bitis": "2027-03-16T13:00"
+    }
+  ],
+  "kullanicilar": []
+}

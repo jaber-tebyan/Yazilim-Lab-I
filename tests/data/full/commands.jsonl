@@ -1,0 +1,116 @@
+{"komut":"kullanici_ekle","id":"u1","ad":"Ayşe Kaya","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u2","ad":"Mehmet Demir","rol":"OGRENCI","sertifikalar":["LAB_GUVENLIK"],"bakiye":120,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u3","ad":"Elif Şahin","rol":"ARASTIRMACI","sertifikalar":["LAB_GUVENLIK","CIHAZ_EGITIMI"],"bakiye":300,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u4","ad":"Bakiye Yok","rol":"OGRENCI","sertifikalar":[],"bakiye":0,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u5","ad":"Düşük Güvenilirlik","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":40}
+{"komut":"kullanici_ekle","id":"u6","ad":"Teknisyen","rol":"TEKNISYEN","sertifikalar":["LAB_GUVENLIK","CIHAZ_EGITIMI"],"bakiye":600,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u7","ad":"Yedinci Kullanıcı","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u8","ad":"Sekizinci Kullanıcı","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u1","ad":"Tekrar Eden","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u9","ad":"Tanımsız Rol","rol":"BILINMEYEN","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u9","ad":"Negatif Bakiye","rol":"OGRENCI","sertifikalar":[],"bakiye":-1,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u9","ad":"Aşırı Güvenilirlik","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":101}
+{"komut":"kaynak_ekle","id":"ODA-1","ad":"Toplantı Odası 1","tur":"ODA","izinli_roller":["OGRENCI","ARASTIRMACI","TEKNISYEN"]}
+{"komut":"kaynak_ekle","id":"ODA-2","ad":"Toplantı Odası 2","tur":"ODA","izinli_roller":["OGRENCI","ARASTIRMACI","TEKNISYEN"]}
+{"komut":"kaynak_ekle","id":"LAB-1","ad":"Laboratuvar 1","tur":"LAB","izinli_roller":["OGRENCI","ARASTIRMACI","TEKNISYEN"]}
+{"komut":"kaynak_ekle","id":"YAZ-1","ad":"3B Yazıcı 1","tur":"YAZICI","izinli_roller":["OGRENCI"]}
+{"komut":"kaynak_ekle","id":"YAZ-2","ad":"3B Yazıcı 2","tur":"YAZICI","izinli_roller":["OGRENCI"]}
+{"komut":"kaynak_ekle","id":"CIH-1","ad":"GPU Sunucusu 1","tur":"CIHAZ","izinli_roller":["ARASTIRMACI","TEKNISYEN"]}
+{"komut":"kaynak_ekle","id":"ODA-1","ad":"Çakışan Oda","tur":"ODA","izinli_roller":["OGRENCI"]}
+{"komut":"kaynak_ekle","id":"XXX","ad":"Tanımsız Tür","tur":"BILINMEYEN","izinli_roller":["OGRENCI"]}
+{"komut":"kaynak_ekle","id":"XXX","ad":"Tanımsız Rol","tur":"ODA","izinli_roller":["BILINMEYEN_ROL"]}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-08T09:00","bitis":"2027-03-08T10:00"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"YAZ-1","baslangic":"2027-03-08T10:00","bitis":"2027-03-08T11:00"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"ODA-2","baslangic":"2027-03-08T09:00","bitis":"2027-03-08T10:00"}
+{"komut":"rezervasyon","kullanici":"u2","kaynak":"ODA-1","baslangic":"2027-03-08T13:00","bitis":"2027-03-08T14:00"}
+{"komut":"rezervasyon","kullanici":"u2","kaynak":"LAB-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T15:00"}
+{"komut":"rezervasyon","kullanici":"u3","kaynak":"CIH-1","baslangic":"2027-03-09T10:00","bitis":"2027-03-09T12:00"}
+{"komut":"rezervasyon","kullanici":"u6","kaynak":"ODA-2","baslangic":"2027-03-09T09:00","bitis":"2027-03-09T10:00"}
+{"komut":"rezervasyon","kullanici":"u7","kaynak":"YAZ-2","baslangic":"2027-03-08T09:30","bitis":"2027-03-08T10:30"}
+{"komut":"rezervasyon","kullanici":"u99","kaynak":"ODA-1","baslangic":"2027-03-09T09:00","bitis":"2027-03-09T10:00"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-08T14:10","bitis":"2027-03-08T15:00"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-08T07:00","bitis":"2027-03-08T08:00"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-08T21:00","bitis":"2027-03-08T22:30"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"ODA-2","baslangic":"2027-03-08T15:00","bitis":"2027-03-08T15:15"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-16T09:00","bitis":"2027-03-16T10:00"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"CIH-1","baslangic":"2027-03-09T13:00","bitis":"2027-03-09T14:00"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"LAB-1","baslangic":"2027-03-10T10:00","bitis":"2027-03-10T11:00"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-08T12:00","bitis":"2027-03-08T13:00"}
+{"komut":"rezervasyon","kullanici":"u2","kaynak":"ODA-1","baslangic":"2027-03-08T09:30","bitis":"2027-03-08T10:30"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"YAZ-1","baslangic":"2027-03-08T11:15","bitis":"2027-03-08T12:00"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"ODA-2","baslangic":"2027-03-08T10:30","bitis":"2027-03-08T11:30"}
+{"komut":"rezervasyon","kullanici":"u4","kaynak":"ODA-1","baslangic":"2027-03-09T09:00","bitis":"2027-03-09T10:00"}
+{"komut":"bekleme","kullanici":"u8","kaynak":"ODA-1","baslangic":"2027-03-08T13:00","bitis":"2027-03-08T14:00"}
+{"komut":"bekleme","kullanici":"u5","kaynak":"ODA-1","baslangic":"2027-03-08T13:00","bitis":"2027-03-08T14:00"}
+{"komut":"bekleme","kullanici":"u2","kaynak":"YAZ-1","baslangic":"2027-03-08T10:30","bitis":"2027-03-08T11:00"}
+{"komut":"bekleme","kullanici":"u5","kaynak":"YAZ-1","baslangic":"2027-03-08T10:30","bitis":"2027-03-08T11:00"}
+{"komut":"bekleme","kullanici":"u99","kaynak":"ODA-1","baslangic":"2027-03-08T13:00","bitis":"2027-03-08T14:00"}
+{"komut":"bekleme","kullanici":"u8","kaynak":"ODA-1","baslangic":"2027-03-08T13:10","bitis":"2027-03-08T14:00"}
+{"komut":"bekleme","kullanici":"u8","kaynak":"ODA-1","baslangic":"2027-03-08T07:00","bitis":"2027-03-08T08:00"}
+{"komut":"bekleme","kullanici":"u8","kaynak":"ODA-1","baslangic":"2027-03-08T21:00","bitis":"2027-03-08T22:30"}
+{"komut":"bekleme","kullanici":"u8","kaynak":"ODA-1","baslangic":"2027-03-08T13:00","bitis":"2027-03-08T13:15"}
+{"komut":"bekleme","kullanici":"u5","kaynak":"ODA-1","baslangic":"2027-03-09T10:00","bitis":"2027-03-09T11:00"}
+{"komut":"bekleme","kullanici":"u1","kaynak":"CIH-1","baslangic":"2027-03-09T13:00","bitis":"2027-03-09T14:00"}
+{"komut":"bekleme","kullanici":"u1","kaynak":"LAB-1","baslangic":"2027-03-10T10:00","bitis":"2027-03-10T11:00"}
+{"komut":"bekleme","kullanici":"u8","kaynak":"ODA-1","baslangic":"2027-03-08T12:00","bitis":"2027-03-08T13:00"}
+{"komut":"bekleme","kullanici":"u1","kaynak":"ODA-2","baslangic":"2027-03-08T10:30","bitis":"2027-03-08T11:30"}
+{"komut":"bekleme","kullanici":"u8","kaynak":"ODA-2","baslangic":"2027-03-08T15:00","bitis":"2027-03-08T16:00"}
+{"komut":"paket","kullanici":"u99","kalemler":[{"kaynak":"ODA-1","baslangic":"2027-03-10T10:00","bitis":"2027-03-10T11:00"},{"kaynak":"ODA-2","baslangic":"2027-03-10T10:00","bitis":"2027-03-10T11:00"}]}
+{"komut":"paket","kullanici":"u3","kalemler":[{"kaynak":"ODA-1","baslangic":"2027-03-10T10:00","bitis":"2027-03-10T11:00"}]}
+{"komut":"paket","kullanici":"u5","kalemler":[{"kaynak":"ODA-1","baslangic":"2027-03-10T10:00","bitis":"2027-03-10T11:00"},{"kaynak":"ODA-2","baslangic":"2027-03-10T10:00","bitis":"2027-03-10T11:00"}]}
+{"komut":"paket","kullanici":"u3","kalemler":[{"kaynak":"XXX","baslangic":"2027-03-08T10:00","bitis":"2027-03-08T11:00"},{"kaynak":"ODA-2","baslangic":"2027-03-08T10:10","bitis":"2027-03-08T11:00"},{"kaynak":"ODA-2","baslangic":"2027-03-08T07:00","bitis":"2027-03-08T08:00"},{"kaynak":"ODA-2","baslangic":"2027-03-08T21:00","bitis":"2027-03-08T22:30"}]}
+{"komut":"paket","kullanici":"u3","kalemler":[{"kaynak":"ODA-2","baslangic":"2027-03-08T09:00","bitis":"2027-03-08T09:15"},{"kaynak":"ODA-2","baslangic":"2027-03-23T09:00","bitis":"2027-03-23T10:00"},{"kaynak":"YAZ-1","baslangic":"2027-03-08T12:00","bitis":"2027-03-08T13:00"},{"kaynak":"ODA-1","baslangic":"2027-03-08T12:00","bitis":"2027-03-08T13:00"}]}
+{"komut":"paket","kullanici":"u1","kalemler":[{"kaynak":"ODA-1","baslangic":"2027-03-08T09:30","bitis":"2027-03-08T10:30"},{"kaynak":"YAZ-1","baslangic":"2027-03-08T11:15","bitis":"2027-03-08T12:00"},{"kaynak":"ODA-2","baslangic":"2027-03-08T10:30","bitis":"2027-03-08T11:30"},{"kaynak":"LAB-1","baslangic":"2027-03-10T10:00","bitis":"2027-03-10T11:00"}]}
+{"komut":"paket","kullanici":"u3","kalemler":[{"kaynak":"ODA-2","baslangic":"2027-03-10T10:00","bitis":"2027-03-10T11:00"},{"kaynak":"ODA-2","baslangic":"2027-03-10T10:30","bitis":"2027-03-10T11:30"}]}
+{"komut":"paket","kullanici":"u4","kalemler":[{"kaynak":"ODA-2","baslangic":"2027-03-10T12:00","bitis":"2027-03-10T13:00"},{"kaynak":"ODA-1","baslangic":"2027-03-10T12:00","bitis":"2027-03-10T13:00"}]}
+{"komut":"paket","kullanici":"u3","kalemler":[{"kaynak":"CIH-1","baslangic":"2027-03-09T14:00","bitis":"2027-03-09T16:00"},{"kaynak":"ODA-1","baslangic":"2027-03-09T14:00","bitis":"2027-03-09T16:00"}]}
+{"komut":"sorgu","tur":"kaynak","id":"ODA-1","gun":"2027-03-08"}
+{"komut":"sorgu","tur":"kullanici","id":"u1"}
+{"komut":"sorgu","tur":"kullanici","id":"u2"}
+{"komut":"sorgu","tur":"kullanici","id":"u9"}
+{"komut":"sorgu","tur":"kaynak","id":"XXX","gun":"2027-03-08"}
+{"komut":"iptal","rezervasyon":"r999"}
+{"komut":"iptal","rezervasyon":"r4"}
+{"komut":"iptal","rezervasyon":"r4"}
+{"komut":"iptal","rezervasyon":"r5"}
+{"komut":"iptal","rezervasyon":"r7"}
+{"komut":"iptal","rezervasyon":"r8"}
+{"komut":"iptal","rezervasyon":"r3"}
+{"komut":"saat","zaman":"2027-03-08T09:00"}
+{"komut":"giris","rezervasyon":"r1"}
+{"komut":"cikis","rezervasyon":"r1"}
+{"komut":"giris","rezervasyon":"r1"}
+{"komut":"giris","rezervasyon":"r999"}
+{"komut":"giris","rezervasyon":"r6"}
+{"komut":"cikis","rezervasyon":"r999"}
+{"komut":"cikis","rezervasyon":"r6"}
+{"komut":"iptal","rezervasyon":"r6"}
+{"komut":"saat","zaman":"2027-03-08T10:15"}
+{"komut":"saat","zaman":"2027-03-08T10:30"}
+{"komut":"giris","rezervasyon":"r12"}
+{"komut":"saat","zaman":"2027-03-08T11:00"}
+{"komut":"saat","zaman":"2027-03-08T10:00"}
+{"komut":"sorgu","tur":"kullanici","id":"u2"}
+{"komut":"sorgu","tur":"kullanici","id":"u1"}
+{"komut":"sorgu","tur":"kaynak","id":"ODA-1","gun":"2027-03-08"}
+{"komut":"sorgu","tur":"kaynak","id":"ODA-1","gun":"2027-03-09"}
+{"komut":"saat","zaman":"2027-03-15T00:00"}
+{"komut":"saat","zaman":"2027-03-14T00:00"}
+{"komut":"sorgu","tur":"kullanici","id":"u3"}
+{"komut":"sorgu","tur":"kullanici","id":"u8"}
+{"komut":"fiyat","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-15T08:00","bitis":"2027-03-15T09:00"}
+{"komut":"fiyat","kullanici":"u99","kaynak":"ODA-1","baslangic":"2027-03-15T08:00","bitis":"2027-03-15T09:00"}
+{"komut":"fiyat","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-15T08:10","bitis":"2027-03-15T09:00"}
+{"komut":"fiyat","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-14T08:00","bitis":"2027-03-14T09:00"}
+{"komut":"fiyat","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-15T21:00","bitis":"2027-03-15T22:30"}
+{"komut":"fiyat","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-15T08:00","bitis":"2027-03-15T08:15"}
+{"komut":"fiyat","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-23T08:00","bitis":"2027-03-23T09:00"}
+{"komut":"fiyat","kullanici":"u1","kaynak":"CIH-1","baslangic":"2027-03-15T08:00","bitis":"2027-03-15T09:00"}
+{"komut":"fiyat","kullanici":"u1","kaynak":"LAB-1","baslangic":"2027-03-15T08:00","bitis":"2027-03-15T09:00"}
+{"komut":"fiyat","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-16T12:00","bitis":"2027-03-16T13:00"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-15T10:00","bitis":"2027-03-15T11:00"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"YAZ-1","baslangic":"2027-03-15T10:00","bitis":"2027-03-15T11:00"}
+{"komut":"rezervasyon","kullanici":"u1","kaynak":"ODA-2","baslangic":"2027-03-15T10:00","bitis":"2027-03-15T11:00"}
+{"komut":"fiyat","kullanici":"u1","kaynak":"ODA-1","baslangic":"2027-03-15T10:30","bitis":"2027-03-15T11:30"}
+{"komut":"fiyat","kullanici":"u1","kaynak":"YAZ-1","baslangic":"2027-03-15T11:15","bitis":"2027-03-15T12:00"}
+{"komut":"fiyat","kullanici":"u1","kaynak":"ODA-2","baslangic":"2027-03-15T11:30","bitis":"2027-03-15T12:30"}
