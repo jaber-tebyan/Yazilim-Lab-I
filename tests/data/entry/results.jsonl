@@ -1,0 +1,5 @@
+{"no":1,"komut":"giris","durum":"RED","kod":"BULUNAMADI"}
+{"no":2,"komut":"giris","durum":"RED","kod":"DURUM_HATASI"}
+{"no":3,"komut":"giris","durum":"RED","kod":"GIRIS_PENCERESI_DISI"}
+{"no":4,"komut":"giris","durum":"RED","kod":"GIRIS_PENCERESI_DISI"}
+{"no":5,"komut":"giris","durum":"TAMAM","yeni_durum":"KULLANIMDA"}
