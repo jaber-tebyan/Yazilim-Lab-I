@@ -1,13 +1,17 @@
 from datetime import date
 from typing import Annotated, Literal
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 from yazilim_lab_project.models.config import Timestamp
 
 # {"komut":"kullanici_ekle","id":"u1","ad":"Ayşe Kaya","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
 
 
-class AddUserCommand(BaseModel):
+class _Base(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+
+class AddUserCommand(_Base):
     command: Literal["kullanici_ekle"] = Field(
         validation_alias="komut", serialization_alias="komut"
     )
@@ -24,7 +28,7 @@ class AddUserCommand(BaseModel):
 
 
 # {"komut":"kaynak_ekle","id":"YAZ-1","ad":"3B Yazıcı 1","tur":"YAZICI","izinli_roller":["OGRENCI"]}
-class AddResourceCommand(BaseModel):
+class AddResourceCommand(_Base):
     command: Literal["kaynak_ekle"] = Field(
         validation_alias="komut", serialization_alias="komut"
     )
@@ -37,7 +41,7 @@ class AddResourceCommand(BaseModel):
 
 
 # {"komut":"rezervasyon","kullanici":"u1","kaynak":"YAZ-1","baslangic":"2027-03-08T11:00","bitis":"2027-03-08T13:00"}
-class ReservationCommand(BaseModel):
+class ReservationCommand(_Base):
     command: Literal["rezervasyon"] = Field(
         validation_alias="komut", serialization_alias="komut"
     )
@@ -50,7 +54,7 @@ class ReservationCommand(BaseModel):
 
 
 # {"komut":"fiyat","kullanici":"u3","kaynak":"CIH-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"}
-class PriceCommand(BaseModel):
+class PriceCommand(_Base):
     command: Literal["fiyat"] = Field(
         validation_alias="komut", serialization_alias="komut"
     )
@@ -63,7 +67,7 @@ class PriceCommand(BaseModel):
 
 
 # {"komut":"paket","kullanici":"u3","kalemler":[{"kaynak":"CIH-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"},{"kaynak":"ODA-1","baslangic":"2027-03-08T14:00","bitis":"2027-03-08T16:00"}]}
-class ReservationRequests(BaseModel):
+class ReservationRequests(_Base):
     resource: str = Field(validation_alias="kaynak", serialization_alias="kaynak")
     start: Timestamp = Field(
         validation_alias="baslangic", serialization_alias="baslangic"
@@ -71,7 +75,7 @@ class ReservationRequests(BaseModel):
     end: Timestamp = Field(validation_alias="bitis", serialization_alias="bitis")
 
 
-class PackageCommand(BaseModel):
+class PackageCommand(_Base):
     command: Literal["paket"] = Field(
         validation_alias="komut", serialization_alias="komut"
     )
@@ -82,7 +86,7 @@ class PackageCommand(BaseModel):
 
 
 # {"komut":"bekleme","kullanici":"u2","kaynak":"YAZ-1","baslangic":"2027-03-08T12:00","bitis":"2027-03-08T13:00"}
-class WaitingListCommand(BaseModel):
+class WaitingListCommand(_Base):
     command: Literal["bekleme"] = Field(
         validation_alias="komut", serialization_alias="komut"
     )
@@ -95,7 +99,7 @@ class WaitingListCommand(BaseModel):
 
 
 # {"komut":"saat","zaman":"2027-03-08T11:20"}
-class ClockCommand(BaseModel):
+class ClockCommand(_Base):
     command: Literal["saat"] = Field(
         validation_alias="komut", serialization_alias="komut"
     )
@@ -103,7 +107,7 @@ class ClockCommand(BaseModel):
 
 
 # {"komut":"giris","rezervasyon":"r1"}
-class EntryCommand(BaseModel):
+class EntryCommand(_Base):
     command: Literal["giris"] = Field(
         validation_alias="komut", serialization_alias="komut"
     )
@@ -113,7 +117,7 @@ class EntryCommand(BaseModel):
 
 
 # {"komut":"cikis","rezervasyon":"r1"}
-class ExitCommand(BaseModel):
+class ExitCommand(_Base):
     command: Literal["cikis"] = Field(
         validation_alias="komut", serialization_alias="komut"
     )
@@ -123,7 +127,7 @@ class ExitCommand(BaseModel):
 
 
 # {"komut":"iptal","rezervasyon":"r4"}
-class CancelCommand(BaseModel):
+class CancelCommand(_Base):
     command: Literal["iptal"] = Field(
         validation_alias="komut", serialization_alias="komut"
     )
@@ -133,7 +137,7 @@ class CancelCommand(BaseModel):
 
 
 # {"komut":"sorgu","tur":"kullanici","id":"u2"}
-class QueryUserCommand(BaseModel):
+class QueryUserCommand(_Base):
     command: Literal["sorgu"] = Field(
         validation_alias="komut", serialization_alias="komut"
     )
@@ -143,7 +147,7 @@ class QueryUserCommand(BaseModel):
     id: str
 
 
-class QueryResourceCommand(BaseModel):
+class QueryResourceCommand(_Base):
     command: Literal["sorgu"] = Field(
         validation_alias="komut", serialization_alias="komut"
     )
