@@ -4,8 +4,10 @@ Advances the simulated clock and processes every event that occurs in the
 interval, in chronological order.
 """
 
+import heapq
 from dataclasses import dataclass
 from datetime import datetime, timedelta
+from itertools import count
 
 from yazilim_lab_project.interface.reservation import (
     exit_reservation,
@@ -156,11 +158,21 @@ def advance_clock(state: AppState, new_time: datetime) -> list[Event]:
 
     old_time = state.config.time
     events: list[Event] = []
-    jobs = _collect_jobs(state, old_time, new_time)
 
-    i = 0
-    while i < len(jobs):
-        t = jobs[i].time
+    # A heap keyed by (time, priority, sequence) so events are always popped in
+    # chronological order, with K11's priority breaking ties. The sequence is a
+    # tie-break that keeps equal (time, priority) jobs in the order they were
+    # collected, and stops heapq from ever comparing Reservation objects.
+    heap: list[tuple[datetime, int, int, str, Reservation | None]] = []
+    sequence = count()
+
+    for job in _collect_jobs(state, old_time, new_time):
+        heapq.heappush(
+            heap, (job.time, job.priority, next(sequence), job.kind, job.reservation)
+        )
+
+    while heap and heap[0][0] <= new_time:
+        t = heap[0][0]
         # Move the simulated clock to this instant *before* applying anything:
         # the waitlist scan timestamps its events from the clock and filters
         # expired entries against it. A stale clock would give wrong timestamps
@@ -168,23 +180,33 @@ def advance_clock(state: AppState, new_time: datetime) -> list[Event]:
         state.config.time = t
         freed: list[str] = []
 
-        # Consume every job at this instant in sorted (priority, id) order.
-        # Completions and no-shows must run before the waitlist scan so the
-        # scan sees the slot already freed.
-        while i < len(jobs) and jobs[i].time == t:
-            job = jobs[i]
-            if job.kind == "weekly":
+        # Drain every job at this instant. Heap order gives weekly -> completed
+        # -> no-show, so the waitlist scan below sees slots already freed.
+        while heap and heap[0][0] == t:
+            _, _, _, kind, res = heapq.heappop(heap)
+            if kind == "weekly":
                 events.append(_apply_weekly_reset(state, t))
-            elif job.kind == "completed":
-                events.append(_apply_completion(state, job.reservation, t))
+            elif kind == "completed":
+                events.append(_apply_completion(state, res, t))
             else:
-                events.append(_apply_no_show(state, job.reservation, t))
-                freed.append(job.reservation.resource)
-            i += 1
+                events.append(_apply_no_show(state, res, t))
+                freed.append(res.resource)
 
         # Auto-assignment only exists because a slot just freed, so it runs
-        # after the whole instant, not inside the loop above.
+        # after the whole instant. Any reservation it creates did not exist
+        # during _collect_jobs, so put its own no-show back into the timeline:
+        # that no-show may still fall inside this same advance window.
+        before = len(state.reservations)
         events.extend(_apply_auto_assign(state, freed))
+
+        for res in state.reservations[before:]:
+            no_show = res.start + NO_SHOW_GRACE
+            # start >= t (the scan drops stale entries), so no_show > t always.
+            if no_show <= new_time:
+                heapq.heappush(
+                    heap,
+                    (no_show, PRIORITY_NOSHOW, next(sequence), "noshow", res),
+                )
 
     # Drop entries whose start has already passed; leaving them would let stale
     # requests linger and be re-evaluated in a later advance.

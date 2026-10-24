@@ -6,6 +6,12 @@
       "temel_ucret": 10,
       "enerji_yogun": false,
       "sertifika": null
+    },
+    "ODA": {
+      "hazirlik_dk": 0,
+      "temel_ucret": 8,
+      "enerji_yogun": false,
+      "sertifika": null
     }
   },
   "roller": {
@@ -27,6 +33,18 @@
       "ad": "Yazici 2",
       "tur": "YAZICI",
       "izinli_roller": ["OGRENCI"]
+    },
+    {
+      "id": "ODA-1",
+      "ad": "Oda 1",
+      "tur": "ODA",
+      "izinli_roller": ["OGRENCI"]
+    },
+    {
+      "id": "ODA-2",
+      "ad": "Oda 2",
+      "tur": "ODA",
+      "izinli_roller": ["OGRENCI"]
     }
   ],
   "bakim_pencereleri": [],
@@ -45,6 +63,38 @@
       "rol": "OGRENCI",
       "sertifikalar": [],
       "bakiye": 30,
+      "guvenilirlik": 80
+    },
+    {
+      "id": "u3",
+      "ad": "U3",
+      "rol": "OGRENCI",
+      "sertifikalar": [],
+      "bakiye": 20,
+      "guvenilirlik": 99
+    },
+    {
+      "id": "u4",
+      "ad": "U4",
+      "rol": "OGRENCI",
+      "sertifikalar": [],
+      "bakiye": 10,
+      "guvenilirlik": 5
+    },
+    {
+      "id": "u5",
+      "ad": "U5",
+      "rol": "OGRENCI",
+      "sertifikalar": [],
+      "bakiye": 50,
+      "guvenilirlik": 80
+    },
+    {
+      "id": "u6",
+      "ad": "U6",
+      "rol": "OGRENCI",
+      "sertifikalar": [],
+      "bakiye": 60,
       "guvenilirlik": 80
     }
   ]
