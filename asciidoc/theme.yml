@@ -1,0 +1,6 @@
+extends: default
+
+page:
+  columns: 2
+  column-gap: 0.5in
+

@@ -26,9 +26,10 @@ class CommandsFile:
         t = TypeAdapter(AnyCommand)
         with open(path) as f:
             for line in f:
-                if line.startswith("//"):
+                stripped = line.strip()
+                if not stripped or stripped.startswith("//"):
                     continue
-                commands.append(t.validate_json(line.strip()))
+                commands.append(t.validate_json(stripped))
         return commands
 
 
@@ -38,7 +39,8 @@ class ResultsFile:
         t = TypeAdapter(AnyResult)
         with open(path) as f:
             for line in f:
-                if line.startswith("//"):
+                stripped = line.strip()
+                if not stripped or stripped.startswith("//"):
                     continue
-                commands.append(t.validate_json(line.strip()))
+                commands.append(t.validate_json(stripped))
         return commands

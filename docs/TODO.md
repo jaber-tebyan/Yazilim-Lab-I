@@ -306,7 +306,7 @@ High — a single malformed command currently takes down the whole run.
 
 ## 14. JSONL readers crash on blank lines
 
-- [ ] Fix
+- [x] Fix
 
 **Where**
 - `src/yazilim_lab_project/__init__.py` → `CommandsFile.read`
