@@ -48,6 +48,6 @@ Reference: `Yaz_Lab_I.txt` Section 7 ("Masaüstü uygulaması").
 - [x] Selecting a row reveals formatted JSON command and JSON result
 
 ## 9. Requirements 8 & 9: Dynamic User & Resource Creation (Yeni Üye ve Kaynak Ekleme)
-- [ ] Dialog to add user (`kullanici_ekle`) with role/certificate selection from initial data
-- [ ] Dialog to add resource (`kaynak_ekle`) with type/role selection from initial data
-- [ ] Immediate live update of calendar, user dropdown, and resource lists
+- [x] Dialog to add user (`kullanici_ekle`) with role/certificate selection from initial data
+- [x] Dialog to add resource (`kaynak_ekle`) with type/role selection from initial data
+- [x] Immediate live update of calendar, user dropdown, and resource lists
