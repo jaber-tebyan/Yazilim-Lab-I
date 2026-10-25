@@ -96,6 +96,8 @@ class CalendarCanvas(QWidget):
             return
 
         self._rendered_boxes.clear()
+        day_start = datetime.combine(self.selected_date, time(self.start_hour, 0))
+        day_end = datetime.combine(self.selected_date, time(self.end_hour, 0))
         resources = state.config.resources
         y = float(self.time_header_height)
 
@@ -111,8 +113,6 @@ class CalendarCanvas(QWidget):
             painter.drawText(QRectF(10, y + 30, self.header_width - 15, 18), Qt.AlignLeft | Qt.AlignVCenter, f"{resource.type} ({resource.name})")
 
             # Find maintenance windows for this resource overlapping selected date
-            day_start = datetime.combine(self.selected_date, time(self.start_hour, 0))
-            day_end = datetime.combine(self.selected_date, time(self.end_hour, 0))
 
             for maint in state.config.maintenance_windows:
                 if maint.resource == resource.id:
