@@ -35,9 +35,9 @@ Reference: `Yaz_Lab_I.txt` Section 7 ("Masaüstü uygulaması").
 - [x] Tables/lists of selected user's active/past reservations and waiting list entries
 
 ## 6. Requirement 5: Reservation Actions & Auto-Waiting Prompt (Eylemler)
-- [ ] Action buttons for check-in (`giris`), check-out (`cikis`), and cancellation (`iptal`) directly from the selected reservation
-- [ ] Display refund, balance change, reliability delta, and triggered `OTOMATIK_ATAMA`
-- [ ] When a reservation request returns `KESISME` or `HAZIRLIK_IHLALI`, prompt user to join waiting list (`bekleme`) without re-entering parameters
+- [x] Action buttons for check-in (`giris`), check-out (`cikis`), and cancellation (`iptal`) directly from the selected reservation
+- [x] Display refund, balance change, reliability delta, and triggered `OTOMATIK_ATAMA`
+- [x] When a reservation request returns `KESISME` or `HAZIRLIK_IHLALI`, prompt user to join waiting list (`bekleme`) without re-entering parameters
 
 ## 7. Requirement 6: Simulated Clock Controls (Simüle Saat Denetimi)
 - [ ] Persistent clock display on screen
