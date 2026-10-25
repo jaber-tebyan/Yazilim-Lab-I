@@ -44,8 +44,8 @@ Reference: `Yaz_Lab_I.txt` Section 7 ("Masaüstü uygulaması").
 - [x] Advance clock dialog/controls (`saat` command) with chronological event log viewer (`TAMAMLANDI`, `GELMEDI`, `OTOMATIK_ATAMA`, `HAFTALIK_SIFIRLAMA`)
 
 ## 8. Requirement 7: Session Audit Log (Olay Günlüğü)
-- [ ] Chronological table of all commands and results executed during the session
-- [ ] Selecting a row reveals formatted JSON command and JSON result
+- [x] Chronological table of all commands and results executed during the session
+- [x] Selecting a row reveals formatted JSON command and JSON result
 
 ## 9. Requirements 8 & 9: Dynamic User & Resource Creation (Yeni Üye ve Kaynak Ekleme)
 - [ ] Dialog to add user (`kullanici_ekle`) with role/certificate selection from initial data
