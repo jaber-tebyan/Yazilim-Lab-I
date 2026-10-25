@@ -20,6 +20,7 @@ from PySide6.QtWidgets import (
 
 from yazilim_lab_project.gui.controller import AppController
 from yazilim_lab_project.gui.error_mapper import get_error_desc
+from yazilim_lab_project.gui.logger import log_gui_action
 from yazilim_lab_project.models.command import (
     PackageCommand,
     PriceCommand,
@@ -166,6 +167,7 @@ class BookingForm(QWidget):
         resource = self.combo_resource.currentText()
         start = self.dt_start.dateTime().toPython()
         end = self.dt_end.dateTime().toPython()
+        log_gui_action("click_preview_price", user=user, resource=resource, start=str(start), end=str(end))
 
         cmd = PriceCommand(
             kullanici=user,
@@ -187,6 +189,7 @@ class BookingForm(QWidget):
         resource = self.combo_resource.currentText()
         start = self.dt_start.dateTime().toPython()
         end = self.dt_end.dateTime().toPython()
+        log_gui_action("click_submit_reservation", user=user, resource=resource, start=str(start), end=str(end))
 
         cmd = ReservationCommand(
             kullanici=user,
@@ -234,6 +237,7 @@ class BookingForm(QWidget):
 
     def _submit_package(self):
         user = self.combo_user.currentText()
+        log_gui_action("click_submit_package", user=user, item_count=len(self.package_items))
         items = [
             ReservationRequests(kaynak=itm["resource"], baslangic=itm["start"], bitis=itm["end"])
             for itm in self.package_items

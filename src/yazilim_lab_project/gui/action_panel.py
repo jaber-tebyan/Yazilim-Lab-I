@@ -13,6 +13,7 @@ from PySide6.QtWidgets import (
 
 from yazilim_lab_project.gui.controller import AppController
 from yazilim_lab_project.gui.error_mapper import get_error_desc
+from yazilim_lab_project.gui.logger import log_gui_action
 from yazilim_lab_project.models.command import CancelCommand, EntryCommand, ExitCommand
 from yazilim_lab_project.models.results import CancelResult, EntryResult, ExitResult
 
@@ -80,6 +81,7 @@ class ReservationActionPanel(QWidget):
     def _do_entry(self):
         if not self.active_res_id:
             return
+        log_gui_action("click_entry_reservation", reservation=self.active_res_id)
         cmd = EntryCommand(rezervasyon=self.active_res_id)
         result = self.controller.execute(cmd, record=True)
         match result:
@@ -94,6 +96,7 @@ class ReservationActionPanel(QWidget):
     def _do_exit(self):
         if not self.active_res_id:
             return
+        log_gui_action("click_exit_reservation", reservation=self.active_res_id)
         cmd = ExitCommand(rezervasyon=self.active_res_id)
         result = self.controller.execute(cmd, record=True)
         match result:
@@ -111,6 +114,7 @@ class ReservationActionPanel(QWidget):
     def _do_cancel(self):
         if not self.active_res_id:
             return
+        log_gui_action("click_cancel_reservation", reservation=self.active_res_id)
         cmd = CancelCommand(rezervasyon=self.active_res_id)
         result = self.controller.execute(cmd, record=True)
         match result:

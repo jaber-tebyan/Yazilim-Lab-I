@@ -17,6 +17,7 @@ from PySide6.QtWidgets import (
 
 from yazilim_lab_project.gui.controller import AppController
 from yazilim_lab_project.gui.error_mapper import get_error_desc
+from yazilim_lab_project.gui.logger import log_gui_action
 from yazilim_lab_project.models.command import ClockCommand
 from yazilim_lab_project.models.results import ClockResult
 
@@ -75,6 +76,7 @@ class ClockControlWidget(QWidget):
 
     def _advance_time(self):
         target = self.dt_target.dateTime().toPython()
+        log_gui_action("click_advance_clock", target_time=str(target))
         cmd = ClockCommand(zaman=target)
         result = self.controller.execute(cmd, record=True)
         match result:
