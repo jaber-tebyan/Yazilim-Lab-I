@@ -81,14 +81,17 @@ class BookingForm(QWidget):
         row2.addWidget(self.dt_end)
         f_layout.addLayout(row2)
 
-        # Buttons for single booking & price preview
+        # Buttons for single booking, price preview & waiting list
         self.row_btns = QHBoxLayout()
         self.btn_preview_price = QPushButton("Fiyat Önizle")
         self.btn_preview_price.clicked.connect(self._preview_price)
         self.btn_submit = QPushButton("Rezervasyon Yap")
         self.btn_submit.clicked.connect(self._submit_single)
+        self.btn_waitlist = QPushButton("Beklemeye Gir")
+        self.btn_waitlist.clicked.connect(self._submit_waiting)
         self.row_btns.addWidget(self.btn_preview_price)
         self.row_btns.addWidget(self.btn_submit)
+        self.row_btns.addWidget(self.btn_waitlist)
         f_layout.addLayout(self.row_btns)
 
         # Package builder section (hidden by default)
@@ -165,6 +168,7 @@ class BookingForm(QWidget):
         is_single = self.radio_single.isChecked()
         self.btn_preview_price.setVisible(is_single)
         self.btn_submit.setVisible(is_single)
+        self.btn_waitlist.setVisible(is_single)
         self.package_widget.setVisible(not is_single)
 
     def _preview_price(self):
@@ -218,6 +222,28 @@ class BookingForm(QWidget):
                         "end": end,
                         "code": code,
                     })
+
+    def _submit_waiting(self):
+        user = self.combo_user.currentText()
+        resource = self.combo_resource.currentText()
+        start = self.dt_start.dateTime().toPython()
+        end = self.dt_end.dateTime().toPython()
+        log_gui_action("click_submit_waiting", user=user, resource=resource, start=str(start), end=str(end))
+
+        cmd = WaitingCommand(
+            kullanici=user,
+            kaynak=resource,
+            baslangic=start,
+            bitis=end,
+        )
+        result = self.controller.execute(cmd, record=True)
+        match result:
+            case WaitingResult.Ok(waiting_id=w_id, position=pos):
+                self.lbl_feedback.setStyleSheet("color: green; font-weight: bold;")
+                self.lbl_feedback.setText(f"Bekleme Kaydı Başarılı! ID: {w_id}, Sıra: {pos}")
+            case WaitingResult.Red(error_code=code):
+                self.lbl_feedback.setStyleSheet("color: red; font-weight: bold;")
+                self.lbl_feedback.setText(f"Bekleme Reddedildi [{code}]: {get_error_desc(code)}")
 
     def _add_package_item(self):
         if len(self.package_items) >= 4:
