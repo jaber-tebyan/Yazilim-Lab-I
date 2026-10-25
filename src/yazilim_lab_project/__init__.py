@@ -9,7 +9,7 @@ from yazilim_lab_project.models.command import AnyCommand
 assets_folder = pathlib.Path(__file__).parent / "assets"
 APP_STATE: AppState = AppState(
     config=InitialData.model_validate_json(
-        pathlib.Path(assets_folder / "baslangic.json").read_text()
+        pathlib.Path(assets_folder / "baslangic.json").read_text(encoding="utf-8")
     )
 )
 
@@ -24,7 +24,7 @@ class CommandsFile:
     def read(self, path: pathlib.Path) -> list[AnyCommand]:
         commands: list[AnyCommand] = []
         t = TypeAdapter(AnyCommand)
-        with open(path) as f:
+        with open(path, encoding="utf-8") as f:
             for line in f:
                 stripped = line.strip()
                 if not stripped or stripped.startswith("//"):
@@ -37,7 +37,7 @@ class ResultsFile:
     def read(self, path: pathlib.Path) -> list[AnyResult]:
         commands: list[AnyResult] = []
         t = TypeAdapter(AnyResult)
-        with open(path) as f:
+        with open(path, encoding="utf-8") as f:
             for line in f:
                 stripped = line.strip()
                 if not stripped or stripped.startswith("//"):

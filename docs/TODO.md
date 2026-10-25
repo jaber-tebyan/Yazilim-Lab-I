@@ -334,7 +334,7 @@ Medium-high — easy to trigger with a hand-edited input file.
 
 ## 15. File I/O does not force UTF-8
 
-- [ ] Fix
+- [x] Fix
 
 **Where**
 - `src/yazilim_lab_project/__init__.py` → `read_text()` for bundled initial
