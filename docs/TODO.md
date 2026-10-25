@@ -485,7 +485,7 @@ Medium-high — reachable through a legal early-entry window.
 
 ## 19. Cancellation refund can be negative
 
-- [ ] Fix
+- [x] Fix
 
 **Where**
 - `src/yazilim_lab_project/rules/cancel_rules.py` →

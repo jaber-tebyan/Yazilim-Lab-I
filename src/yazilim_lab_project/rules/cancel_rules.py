@@ -60,9 +60,9 @@ def all_rules_cancel(
         refund_amount = 0
         new_reliability = max(0, user.reliability - 5)
 
-    # Balance cannot exceed role's weekly quota
-    new_balance = min(role.weekly_quota, user.balance + refund_amount)
-    actual_refund = new_balance - user.balance
+    # Balance cannot exceed role's weekly quota and cannot go below current balance if above quota
+    new_balance = max(user.balance, min(role.weekly_quota, user.balance + refund_amount))
+    actual_refund = max(0, new_balance - user.balance)
 
     return Ok(
         CancelData(
