@@ -204,6 +204,35 @@ class CalendarCanvas(QWidget):
             painter.setBrush(QColor(231, 76, 60))
             painter.drawPolygon([QPointF(cx - 5, self.time_header_height), QPointF(cx + 5, self.time_header_height), QPointF(cx, self.time_header_height + 8)])
 
+    def mouseMoveEvent(self, event):
+        pos = event.position()
+        for rect, obj in self._rendered_boxes:
+            if rect.contains(pos):
+                if isinstance(obj, Reservation):
+                    st = obj.state.value if hasattr(obj.state, "value") else str(obj.state)
+                    pkg = f"\nPaket: {obj.package}" if obj.package else ""
+                    tip = (
+                        f"<b>Rezervasyon No:</b> {obj.id}<br>"
+                        f"<b>Kullanıcı:</b> {obj.user}<br>"
+                        f"<b>Kaynak:</b> {obj.resource}<br>"
+                        f"<b>Aralık:</b> {obj.start.strftime('%H:%M')} – {obj.end.strftime('%H:%M')}<br>"
+                        f"<b>Ücret:</b> {obj.price} KP<br>"
+                        f"<b>Durum:</b> {st}"
+                        f"{pkg}"
+                    )
+                    QToolTip.showText(event.globalPosition().toPoint(), tip, self)
+                    return
+                elif hasattr(obj, "resource") and hasattr(obj, "start") and hasattr(obj, "end"):
+                    tip = (
+                        f"<b>Bakım Penceresi</b><br>"
+                        f"<b>Kaynak:</b> {obj.resource}<br>"
+                        f"<b>Aralık:</b> {obj.start.strftime('%H:%M')} – {obj.end.strftime('%H:%M')}"
+                    )
+                    QToolTip.showText(event.globalPosition().toPoint(), tip, self)
+                    return
+        QToolTip.hideText()
+        super().mouseMoveEvent(event)
+
     def mousePressEvent(self, event):
         pos = event.position()
         for rect, obj in self._rendered_boxes:
