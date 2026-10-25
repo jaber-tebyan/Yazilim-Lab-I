@@ -180,7 +180,7 @@ class BookingForm(QWidget):
             baslangic=start,
             bitis=end,
         )
-        result = self.controller.execute(cmd, record=False)
+        result = self.controller.execute(cmd, record=True)
         match result:
             case PriceResult.Ok(price=price):
                 self.lbl_feedback.setStyleSheet("color: green; font-weight: bold;")
