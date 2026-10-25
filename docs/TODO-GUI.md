@@ -40,8 +40,8 @@ Reference: `Yaz_Lab_I.txt` Section 7 ("Masaüstü uygulaması").
 - [x] When a reservation request returns `KESISME` or `HAZIRLIK_IHLALI`, prompt user to join waiting list (`bekleme`) without re-entering parameters
 
 ## 7. Requirement 6: Simulated Clock Controls (Simüle Saat Denetimi)
-- [ ] Persistent clock display on screen
-- [ ] Advance clock dialog/controls (`saat` command) with chronological event log viewer (`TAMAMLANDI`, `GELMEDI`, `OTOMATIK_ATAMA`, `HAFTALIK_SIFIRLAMA`)
+- [x] Persistent clock display on screen
+- [x] Advance clock dialog/controls (`saat` command) with chronological event log viewer (`TAMAMLANDI`, `GELMEDI`, `OTOMATIK_ATAMA`, `HAFTALIK_SIFIRLAMA`)
 
 ## 8. Requirement 7: Session Audit Log (Olay Günlüğü)
 - [ ] Chronological table of all commands and results executed during the session

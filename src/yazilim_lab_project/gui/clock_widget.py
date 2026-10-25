@@ -103,6 +103,7 @@ class ClockControlWidget(QWidget):
                     self.table_events.setItem(row, 1, QTableWidgetItem(evt_type))
                     self.table_events.setItem(row, 2, QTableWidgetItem(str(target_id)))
                     self.table_events.setItem(row, 3, QTableWidgetItem(detail_str))
+                self.refresh()
                 self.time_advanced.emit()
             case ClockResult.Red(error_code=code):
                 self.lbl_error.setText(f"Hata [{code}]: {get_error_desc(code)}")
