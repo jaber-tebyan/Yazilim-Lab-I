@@ -370,7 +370,7 @@ High for the Windows deliverable; invisible on Linux.
 
 ## 16. `APP_STATE` is built at import time
 
-- [ ] Fix
+- [x] Fix
 
 **Where**
 - `src/yazilim_lab_project/__init__.py` → module-level `APP_STATE`

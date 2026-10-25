@@ -2,7 +2,7 @@ from pathlib import Path
 
 from pydantic import TypeAdapter
 
-from yazilim_lab_project import APP_STATE, CommandsFile, ResultsFile, assets_folder
+from yazilim_lab_project import CommandsFile, ResultsFile
 from yazilim_lab_project.interface import AddUser
 from yazilim_lab_project.models.app_state import AppState
 from yazilim_lab_project.models.command import AddUserCommand, AnyCommand

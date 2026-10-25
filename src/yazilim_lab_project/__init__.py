@@ -1,23 +1,35 @@
-from pydantic import TypeAdapter
+import argparse
 import pathlib
+import sys
+from pydantic import TypeAdapter
 
+from yazilim_lab_project.interface.engine import Engine
 from yazilim_lab_project.models import AnyResult
 from yazilim_lab_project.models.app_state import AppState
-from yazilim_lab_project.models.initial_data import InitialData
 from yazilim_lab_project.models.command import AnyCommand
+from yazilim_lab_project.models.initial_data import InitialData
 
-assets_folder = pathlib.Path(__file__).parent / "assets"
-APP_STATE: AppState = AppState(
-    config=InitialData.model_validate_json(
-        pathlib.Path(assets_folder / "baslangic.json").read_text(encoding="utf-8")
+
+def main(argv: list[str] | None = None) -> None:
+    parser = argparse.ArgumentParser(description="Campus Resource Reservation System")
+    parser.add_argument(
+        "initial_data", type=pathlib.Path, help="Path to initial data JSON file"
     )
-)
+    parser.add_argument(
+        "commands", type=pathlib.Path, help="Path to commands JSONL file"
+    )
+    args = parser.parse_args(argv)
 
+    config = InitialData.model_validate_json(
+        args.initial_data.read_text(encoding="utf-8")
+    )
+    state = AppState(config=config)
+    engine = Engine(state)
 
-def main() -> None:
-    # we have jsonl file inside assets folder
-    commands_file = CommandsFile()
-    commands = commands_file.read(assets_folder / "komutlar_1.jsonl")
+    commands = CommandsFile().read(args.commands)
+    for cmd in commands:
+        result = engine.execute(cmd)
+        print(result.model_dump_json(by_alias=True, exclude_none=True))
 
 
 class CommandsFile:
