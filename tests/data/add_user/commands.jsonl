@@ -2,3 +2,5 @@
 {"komut":"kullanici_ekle","id":"u1","ad":"Tekrar Eden","rol":"OGRENCI","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
 {"komut":"kullanici_ekle","id":"u2","ad":"Geçersiz Rol","rol":"BILINMEYEN","sertifikalar":[],"bakiye":120,"guvenilirlik":80}
 {"komut":"kullanici_ekle","id":"u3","ad":"Negatif Bakiye","rol":"OGRENCI","sertifikalar":[],"bakiye":-10,"guvenilirlik":80}
+{"komut":"kullanici_ekle","id":"u4","ad":"Kesirli Guvenilirlik","rol":"OGRENCI","sertifikalar":[],"bakiye":100,"guvenilirlik":80.5}
+{"komut":"kullanici_ekle","id":"u5","ad":"Kesirli Bakiye","rol":"OGRENCI","sertifikalar":[],"bakiye":10.5,"guvenilirlik":80}

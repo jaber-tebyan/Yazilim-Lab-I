@@ -147,8 +147,8 @@ class Engine:
                 name=cmd.name,
                 role=cmd.role,
                 certificates=cmd.certificates,
-                balance=cmd.balance,
-                reliability=cmd.reliability,
+                balance=int(cmd.balance),
+                reliability=int(cmd.reliability),
             ),
         )
         return AddUserResult.new(no)

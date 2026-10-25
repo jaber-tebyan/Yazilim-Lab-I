@@ -37,8 +37,8 @@ def test_rules_on_add_user_command():
                 name=cmd.name,
                 role=cmd.role,
                 certificates=cmd.certificates,
-                balance=cmd.balance,
-                reliability=cmd.reliability,
+                balance=int(cmd.balance),
+                reliability=int(cmd.reliability),
             ),
         )
         print(result.model_dump_json(by_alias=True))

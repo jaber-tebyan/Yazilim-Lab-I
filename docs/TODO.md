@@ -260,7 +260,7 @@ the safer and more consistent interpretation.
 
 ## 13. Non-integer command values abort the whole run
 
-- [ ] Fix
+- [x] Fix
 
 **Where**
 - `src/yazilim_lab_project/models/command.py` →

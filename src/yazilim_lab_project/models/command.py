@@ -21,8 +21,8 @@ class AddUserCommand(_Base):
     certificates: list[str] = Field(
         validation_alias="sertifikalar", serialization_alias="sertifikalar"
     )
-    balance: int = Field(validation_alias="bakiye", serialization_alias="bakiye")
-    reliability: int = Field(
+    balance: int | float = Field(validation_alias="bakiye", serialization_alias="bakiye")
+    reliability: int | float = Field(
         validation_alias="guvenilirlik", serialization_alias="guvenilirlik"
     )
 

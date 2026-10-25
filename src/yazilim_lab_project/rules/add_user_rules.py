@@ -12,7 +12,21 @@ def rule_user_undefined_value(cmd: AddUserCommand, state: AppState) -> bool:
     return cmd.role not in state.config.roles
 
 
+def _is_integer(val: object) -> bool:
+    if isinstance(val, bool):
+        return False
+    if isinstance(val, int):
+        return True
+    if isinstance(val, float) and val.is_integer():
+        return True
+    return False
+
+
 def rule_user_invalid_value(cmd: AddUserCommand, state: AppState) -> bool:
+    if not _is_integer(cmd.balance) or not _is_integer(cmd.reliability):
+        return True
+    if cmd.role not in state.config.roles:
+        return False
     return (
         cmd.balance < 0
         or cmd.balance > state.config.roles[cmd.role].weekly_quota
