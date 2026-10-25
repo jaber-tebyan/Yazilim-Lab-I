@@ -1,6 +1,6 @@
 from datetime import timedelta
+
 from yazilim_lab_project.interface.price import get_price
-from yazilim_lab_project.models import reservation
 from yazilim_lab_project.models.app_state import AppState
 from yazilim_lab_project.models.command import (
     PackageCommand,
@@ -8,8 +8,22 @@ from yazilim_lab_project.models.command import (
     ReservationCommand,
 )
 from yazilim_lab_project.models.generic import Err, Ok, Result
-from yazilim_lab_project.models.results import PackageResult
 from yazilim_lab_project.models.initial_data import User
+from yazilim_lab_project.models.results import PackageResult
+from yazilim_lab_project.rules.atomic.reservation import (
+    atomic_intervals_overlap,
+    atomic_rule_reservation_consecutive_use,
+    atomic_rule_reservation_duration_limit,
+    atomic_rule_reservation_future_date_limit,
+    atomic_rule_reservation_intersection,
+    atomic_rule_reservation_maintenance,
+    atomic_rule_reservation_no_certificate,
+    atomic_rule_reservation_no_role_permission,
+    atomic_rule_reservation_out_of_working_hours,
+    atomic_rule_reservation_past_time,
+    atomic_rule_reservation_preparation_violation,
+    atomic_rule_reservation_time_step_error,
+)
 
 # --- Package-Level Rules ---
 
@@ -39,84 +53,62 @@ def rule_package_item_not_found(item: ReservationRequests, state: AppState) -> b
 
 def rule_package_item_time_step_error(item: ReservationRequests) -> bool:
     """Checks if start/end times sit on 15-minute intervals and end is after start."""
-    start_not_on_15 = item.start.minute % 15 != 0
-    end_not_on_15 = item.end.minute % 15 != 0
-    end_not_after_start = item.end <= item.start
-    return start_not_on_15 or end_not_on_15 or end_not_after_start
+    return atomic_rule_reservation_time_step_error(item.start, item.end)
 
 
 def rule_package_item_past_time(item: ReservationRequests, state: AppState) -> bool:
     """Checks if start time is before simulated time."""
-    return item.start < state.config.time
+    return atomic_rule_reservation_past_time(item.start, state.config.time)
 
 
 def rule_package_item_out_of_working_hours(item: ReservationRequests) -> bool:
     """Checks if reservation falls within 08:00 and 22:00 on the same day."""
-    that_day = item.start.replace(hour=0, minute=0, second=0)
-    opening, closing = that_day.replace(hour=8, minute=0), that_day.replace(
-        hour=22, minute=0
-    )
-    return not (item.start >= opening and item.end <= closing)
+    return atomic_rule_reservation_out_of_working_hours(item.start, item.end)
 
 
 def rule_package_item_duration_limit(
     item: ReservationRequests, user: User, state: AppState
 ) -> bool:
     """Checks if duration is between 30 minutes and the role's maximum allowed duration."""
-    role_duration = state.config.roles[user.role].max_duration_min
-    duration_mins = (item.end - item.start).total_seconds() / 60
-    return duration_mins < 30 or duration_mins > role_duration
+    return atomic_rule_reservation_duration_limit(
+        user.id, item.start, item.end, state
+    )
 
 
 def rule_package_item_future_date_limit(
     item: ReservationRequests, user: User, state: AppState
 ) -> bool:
     """Checks if start date exceeds the future date limit based on role and reliability."""
-    normal_future = state.config.time + timedelta(
-        days=state.config.roles[user.role].future_day
-    )
-    low_rel_future = state.config.time + timedelta(days=1)
-    max_future = low_rel_future if user.reliability < 50 else normal_future
-    return item.start > max_future
+    return atomic_rule_reservation_future_date_limit(user.id, item.start, state)
 
 
 def rule_package_item_no_role_permission(
     item: ReservationRequests, user: User, state: AppState
 ) -> bool:
     """Checks if user's role is permitted to use the resource."""
-    resource = next(r for r in state.config.resources if r.id == item.resource)
-    return user.role not in resource.allowed_roles
+    return atomic_rule_reservation_no_role_permission(
+        user.id, item.resource, state
+    )
 
 
 def rule_package_item_no_certificate(
     item: ReservationRequests, user: User, state: AppState
 ) -> bool:
     """Checks if required resource certificate is present."""
-    resource = next(r for r in state.config.resources if r.id == item.resource)
-    res_type = state.config.resource_types[resource.type]
-    return res_type.certificate is not None and all(
-        c != res_type.certificate for c in user.certificates
-    )
+    return atomic_rule_reservation_no_certificate(user.id, item.resource, state)
 
 
 def rule_package_item_maintenance(item: ReservationRequests, state: AppState) -> bool:
     """Checks for collision with maintenance windows."""
-    return any(
-        m
-        for m in state.config.maintenance_windows
-        if m.resource == item.resource and m.start < item.end and item.start < m.end
+    return atomic_rule_reservation_maintenance(
+        item.resource, item.start, item.end, state
     )
 
 
 def rule_package_item_intersection(item: ReservationRequests, state: AppState) -> bool:
     """Checks for collision with existing approved or in-use reservations."""
-    return any(
-        r
-        for r in state.reservations
-        if r.resource == item.resource
-        and r.state in [reservation.State.APPROVED, reservation.State.IN_USE]
-        and r.start < item.end
-        and item.start < r.end
+    return atomic_rule_reservation_intersection(
+        item.resource, item.start, item.end, state
     )
 
 
@@ -124,21 +116,8 @@ def rule_package_item_preparation_violation(
     item: ReservationRequests, state: AppState
 ) -> bool:
     """Checks for resource preparation time violations."""
-    resource = next(r for r in state.config.resources if r.id == item.resource)
-    res_type = state.config.resource_types[resource.type]
-    prep_delta = timedelta(minutes=res_type.preparation_min)
-    return any(
-        r
-        for r in state.reservations
-        if r.resource == item.resource
-        and r.state
-        in [
-            reservation.State.COMPLETED,
-            reservation.State.APPROVED,
-            reservation.State.IN_USE,
-        ]
-        and r.start < item.end + prep_delta
-        and item.start < r.end + prep_delta
+    return atomic_rule_reservation_preparation_violation(
+        item.resource, item.start, item.end, state
     )
 
 
@@ -146,20 +125,8 @@ def rule_package_item_consecutive_use(
     item: ReservationRequests, user: User, state: AppState
 ) -> bool:
     """Checks for consecutive use violations by the same user on the same resource."""
-    cons_delta = timedelta(minutes=60)
-    return any(
-        r
-        for r in state.reservations
-        if r.resource == item.resource
-        and r.user == user.id
-        and r.state
-        in [
-            reservation.State.COMPLETED,
-            reservation.State.APPROVED,
-            reservation.State.IN_USE,
-        ]
-        and r.start < item.end + cons_delta
-        and item.start < r.end + cons_delta
+    return atomic_rule_reservation_consecutive_use(
+        user.id, item.resource, item.start, item.end, state
     )
 
 
@@ -175,7 +142,9 @@ def rule_package_intra_package_intersection(
             item1 = cmd.items[i]
             item2 = cmd.items[j]
             if item1.resource == item2.resource:
-                if item1.start < item2.end and item2.start < item1.end:
+                if atomic_intervals_overlap(
+                    item1.start, item1.end, item2.start, item2.end
+                ):
                     return True
 
                 resource = next(
@@ -184,16 +153,20 @@ def rule_package_intra_package_intersection(
                 if resource:
                     res_type = state.config.resource_types[resource.type]
                     prep_delta = timedelta(minutes=res_type.preparation_min)
-                    if (
-                        item1.start < item2.end + prep_delta
-                        and item2.start < item1.end + prep_delta
+                    if atomic_intervals_overlap(
+                        item1.start,
+                        item1.end + prep_delta,
+                        item2.start,
+                        item2.end + prep_delta,
                     ):
                         return True
 
                 cons_delta = timedelta(minutes=60)
-                if (
-                    item1.start < item2.end + cons_delta
-                    and item2.start < item1.end + cons_delta
+                if atomic_intervals_overlap(
+                    item1.start,
+                    item1.end + cons_delta,
+                    item2.start,
+                    item2.end + cons_delta,
                 ):
                     return True
     return False

@@ -8,6 +8,12 @@ from yazilim_lab_project.models.reservation import Reservation
 
 
 
+def atomic_intervals_overlap(
+    start_a: datetime, end_a: datetime, start_b: datetime, end_b: datetime
+) -> bool:
+    return start_a < end_b and start_b < end_a
+
+
 def atomic_rule_reservation_not_found(
     user_id: str, resource_id: str, state: AppState
 ) -> bool:
@@ -84,7 +90,8 @@ def atomic_rule_reservation_maintenance(
     return any(
         maint
         for maint in state.config.maintenance_windows
-        if maint.resource == resource_id and maint.start < end and start < maint.end
+        if maint.resource == resource_id
+        and atomic_intervals_overlap(start, end, maint.start, maint.end)
     )
 
 
@@ -99,8 +106,7 @@ def atomic_rule_reservation_intersection(
         for resv in state.reservations
         if resv.resource == resource_id
         and resv.state in [reservation.State.IN_USE, reservation.State.APPROVED]
-        and resv.start < end
-        and start < resv.end
+        and atomic_intervals_overlap(start, end, resv.start, resv.end)
     )
 
 
@@ -123,8 +129,9 @@ def atomic_rule_reservation_preparation_violation(
             reservation.State.APPROVED,
             reservation.State.IN_USE,
         ]
-        and res.start < end + preparation_delta
-        and start < res.end + preparation_delta
+        and atomic_intervals_overlap(
+            start, end + preparation_delta, res.start, res.end + preparation_delta
+        )
     )
 
 
@@ -146,8 +153,7 @@ def atomic_rule_reservation_consecutive_use(
             reservation.State.APPROVED,
             reservation.State.IN_USE,
         ]
-        and res.start < end + delta
-        and start < res.end + delta
+        and atomic_intervals_overlap(start, end + delta, res.start, res.end + delta)
         and res.user == user_id
     )
 

@@ -1,9 +1,21 @@
-from datetime import timedelta
-
-from yazilim_lab_project.models import reservation
 from yazilim_lab_project.models.app_state import AppState
 from yazilim_lab_project.models.command import PriceCommand
 from yazilim_lab_project.models.results import PriceResult
+from yazilim_lab_project.rules.atomic.reservation import (
+    atomic_rule_reservation_consecutive_use,
+    atomic_rule_reservation_duration_limit,
+    atomic_rule_reservation_future_date_limit,
+    atomic_rule_reservation_intersection,
+    atomic_rule_reservation_maintenance,
+    atomic_rule_reservation_no_certificate,
+    atomic_rule_reservation_no_role_permission,
+    atomic_rule_reservation_not_found,
+    atomic_rule_reservation_out_of_working_hours,
+    atomic_rule_reservation_past_time,
+    atomic_rule_reservation_preparation_violation,
+    atomic_rule_reservation_time_step_error,
+)
+
 
 """
     NOT_FOUND = "BULUNAMADI"
@@ -21,130 +33,63 @@ from yazilim_lab_project.models.results import PriceResult
 """
 
 
-# User or resource not found
 def rule_price_not_found(cmd: PriceCommand, state: AppState):
-    user_exists = any(user.id == cmd.user for user in state.config.users)
-    resource_exists = any(res.id == cmd.resource for res in state.config.resources)
-    return not (user_exists and resource_exists)
+    return atomic_rule_reservation_not_found(cmd.user, cmd.resource, state)
 
 
-# Start or end date doesn't sit on 15 minutes or end date is not after start date
 def rule_price_time_step_error(cmd: PriceCommand):
-    start_not_on_15_minutes = cmd.start.minute % 15 != 0
-    end_not_on_15_minutes = cmd.end.minute % 15 != 0
-    end_not_after_start = cmd.end <= cmd.start
-    return start_not_on_15_minutes or end_not_on_15_minutes or end_not_after_start
+    return atomic_rule_reservation_time_step_error(cmd.start, cmd.end)
 
 
-# Start date is before simulated time
 def rule_price_past_time(cmd: PriceCommand, state: AppState):
-    return cmd.start < state.config.time
+    return atomic_rule_reservation_past_time(cmd.start, state.config.time)
 
 
-# start and end not on same day or on opening and closing hours which are between 08:00 and 22:00
 def rule_price_out_of_working_hours(cmd: PriceCommand):
-    that_day = cmd.start.replace(hour=0, minute=0)
-    opening_time, closeing_time = that_day.replace(hour=8, minute=0), that_day.replace(
-        hour=22, minute=0
-    )
-    return not (cmd.start >= opening_time and cmd.end <= closeing_time)
+    return atomic_rule_reservation_out_of_working_hours(cmd.start, cmd.end)
 
 
-# Duration is less than 30 minutes or higher than role's allowed duration
 def rule_price_duration_limit(cmd: PriceCommand, state: AppState):
-    user = next(user for user in state.config.users if user.id == cmd.user)
-    role_duration_mins = state.config.roles[user.role].max_duration_min
-    current_duration_mins = (cmd.end - cmd.start).total_seconds() / 60
-    return current_duration_mins < 30 or current_duration_mins > role_duration_mins
+    return atomic_rule_reservation_duration_limit(
+        cmd.user, cmd.start, cmd.end, state
+    )
 
 
-# End date is more than 1 day after role's allowed end date
 def rule_price_future_date_limit(cmd: PriceCommand, state: AppState):
-    user = next(user for user in state.config.users if user.id == cmd.user)
-    normal_end_date = state.config.time + timedelta(
-        days=state.config.roles[user.role].future_day
-    )
-    low_reliability_end_date = state.config.time + timedelta(days=1)
-    end_date = low_reliability_end_date if user.reliability < 50 else normal_end_date
-    return cmd.start > end_date
+    return atomic_rule_reservation_future_date_limit(cmd.user, cmd.start, state)
 
 
-# Role has no permission to use this resource
 def rule_price_no_role_permission(cmd: PriceCommand, state: AppState):
-    user = next(user for user in state.config.users if user.id == cmd.user)
-    res = next(res for res in state.config.resources if res.id == cmd.resource)
-    return user.role not in res.allowed_roles
+    return atomic_rule_reservation_no_role_permission(
+        cmd.user, cmd.resource, state
+    )
 
 
-# Required certificate is not present
 def rule_price_no_certificate(cmd: PriceCommand, state: AppState):
-    user = next(user for user in state.config.users if user.id == cmd.user)
-    resource = next(res for res in state.config.resources if res.id == cmd.resource)
-    res_type = state.config.resource_types[resource.type]
-    return res_type.certificate != None and all(
-        cert != res_type.certificate for cert in user.certificates
-    )
+    return atomic_rule_reservation_no_certificate(cmd.user, cmd.resource, state)
 
 
-# Reservation collision with maintenance window
 def rule_price_maintenance(cmd: PriceCommand, state: AppState):
-    return any(
-        maint
-        for maint in state.config.maintenance_windows
-        if maint.resource == cmd.resource
-        and maint.start < cmd.end
-        and cmd.start < maint.end
+    return atomic_rule_reservation_maintenance(
+        cmd.resource, cmd.start, cmd.end, state
     )
 
 
-# Reservation collision with other reservations
 def rule_price_intersection(cmd: PriceCommand, state: AppState):
-    return any(
-        resv
-        for resv in state.reservations
-        if resv.resource == cmd.resource
-        and resv.state in [reservation.State.IN_USE, reservation.State.APPROVED]
-        and resv.start < cmd.end
-        and cmd.start < resv.end
+    return atomic_rule_reservation_intersection(
+        cmd.resource, cmd.start, cmd.end, state
     )
 
 
-# Preparation time violation
 def rule_price_preparation_violation(cmd: PriceCommand, state: AppState):
-    resource = next(res for res in state.config.resources if res.id == cmd.resource)
-    res_type = state.config.resource_types[resource.type]
-    preparation_delta = timedelta(minutes=res_type.preparation_min)
-    return any(
-        res
-        for res in state.reservations
-        if res.resource == cmd.resource
-        and res.state
-        in [
-            reservation.State.COMPLETED,
-            reservation.State.APPROVED,
-            reservation.State.IN_USE,
-        ]
-        and res.start < cmd.end + preparation_delta
-        and cmd.start < res.end + preparation_delta
+    return atomic_rule_reservation_preparation_violation(
+        cmd.resource, cmd.start, cmd.end, state
     )
 
 
-# Same user cannot use same resource in a duration less than 60 minutes
 def rule_price_consecutive_use(cmd: PriceCommand, state: AppState):
-    delta = timedelta(minutes=60)
-    return any(
-        res
-        for res in state.reservations
-        if res.resource == cmd.resource
-        and res.state
-        in [
-            reservation.State.COMPLETED,
-            reservation.State.APPROVED,
-            reservation.State.IN_USE,
-        ]
-        and res.start < cmd.end + delta
-        and cmd.start < res.end + delta
-        and res.user == cmd.user
+    return atomic_rule_reservation_consecutive_use(
+        cmd.user, cmd.resource, cmd.start, cmd.end, state
     )
 
 

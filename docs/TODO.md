@@ -522,7 +522,7 @@ Medium — an edge case, but it violates a basic balance invariant.
 
 ## 20. Validation logic is duplicated across four paths
 
-- [ ] Fix
+- [x] Fix
 
 **Where**
 - `src/yazilim_lab_project/rules/atomic/reservation.py`
