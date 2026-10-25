@@ -30,9 +30,9 @@ Reference: `Yaz_Lab_I.txt` Section 7 ("Masaüstü uygulaması").
 - [x] Itemized status table for `PAKET_RED` showing which items passed and which failed
 
 ## 5. Requirement 4: User Panel (Kullanıcı Paneli)
-- [ ] User selector dropdown/list (no login screen required)
-- [ ] Real-time display of user's KP balance, weekly quota, and reliability score (0–100)
-- [ ] Tables/lists of selected user's active/past reservations and waiting list entries
+- [x] User selector dropdown/list (no login screen required)
+- [x] Real-time display of user's KP balance, weekly quota, and reliability score (0–100)
+- [x] Tables/lists of selected user's active/past reservations and waiting list entries
 
 ## 6. Requirement 5: Reservation Actions & Auto-Waiting Prompt (Eylemler)
 - [ ] Action buttons for check-in (`giris`), check-out (`cikis`), and cancellation (`iptal`) directly from the selected reservation
