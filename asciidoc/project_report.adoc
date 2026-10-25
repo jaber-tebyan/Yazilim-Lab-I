@@ -28,7 +28,7 @@ _Department of Computer Engineering, Kocaeli University, Software Laboratory I, 
 == Abstract
 
 This report describes the Campus Resource Reservation System developed for Software Laboratory I.
-The system shares scarce campus resources (meeting rooms, laboratories, 3D printers and a GPU server) among students, researchers and technicians under a Resource Point (KP) economy.
+The system shares limited campus resources (meeting rooms, laboratories, 3D printers and a GPU server) among students, researchers and technicians under a Resource Point (KP) economy.
 Its core is a reservation module that is independent of any user interface: it reads an initial configuration file, executes a JSON Lines command script in order, and writes exactly one result line per command.
 The module implements thirteen ordered validation rules, maintenance windows, preparation times, a consecutive-use limit, occupancy-based dynamic pricing with a peak surcharge, a weekly quota, all-or-nothing package reservations, a reservation state machine, a reliability score, and an automatic waiting list.
 A deterministic, event-driven simulated clock applies simultaneous events in a fixed order.
