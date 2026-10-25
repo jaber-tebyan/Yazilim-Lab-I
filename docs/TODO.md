@@ -407,7 +407,7 @@ High — the CLI can silently ignore its input file.
 
 ## 17. `sorgu kaynak` misses maintenance windows spanning midnight
 
-- [ ] Fix
+- [x] Fix
 
 **Where**
 - `src/yazilim_lab_project/rules/query_resource_rules.py` →
