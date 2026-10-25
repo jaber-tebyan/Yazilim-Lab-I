@@ -95,8 +95,13 @@ class BookingForm(QWidget):
         self.package_widget = QWidget()
         p_layout = QVBoxLayout(self.package_widget)
         p_layout.setContentsMargins(0, 0, 0, 0)
+
+        self.lbl_package_hint = QLabel("Paket için en az 2, en fazla 4 kalem ekleyiniz (Şu an: 0 kalem).")
+        self.lbl_package_hint.setStyleSheet("color: #7f8c8d; font-style: italic;")
+        p_layout.addWidget(self.lbl_package_hint)
+
         p_btns = QHBoxLayout()
-        self.btn_add_item = QPushButton("Kalem Ekle")
+        self.btn_add_item = QPushButton("Kalem Ekle (+)")
         self.btn_add_item.clicked.connect(self._add_package_item)
         self.btn_clear_items = QPushButton("Kalemleri Temizle")
         self.btn_clear_items.clicked.connect(self._clear_package_items)
@@ -109,7 +114,7 @@ class BookingForm(QWidget):
 
         self.table_package = QTableWidget()
         self.table_package.setColumnCount(4)
-        self.table_package.setHorizontalHeaderLabels(["No", "Kaynak", "Başlangıç", "Bitiş"])
+        self.table_package.setHorizontalHeaderLabels(["Kalem No", "Kaynak", "Başlangıç", "Bitiş"])
         self.table_package.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         p_layout.addWidget(self.table_package)
         self.package_widget.setVisible(False)
@@ -215,27 +220,48 @@ class BookingForm(QWidget):
                     })
 
     def _add_package_item(self):
+        if len(self.package_items) >= 4:
+            QMessageBox.warning(self, "Paket Boyutu Sınırı", "Bir pakete en fazla 4 kalem eklenebilir.")
+            return
+
         resource = self.combo_resource.currentText()
         start = self.dt_start.dateTime().toPython()
         end = self.dt_end.dateTime().toPython()
 
         item = {"resource": resource, "start": start, "end": end}
         self.package_items.append(item)
+        log_gui_action("add_package_item", resource=resource, start=str(start), end=str(end), total_items=len(self.package_items))
         self._refresh_package_table()
 
     def _clear_package_items(self):
         self.package_items.clear()
+        log_gui_action("clear_package_items")
         self._refresh_package_table()
 
     def _refresh_package_table(self):
-        self.table_package.setRowCount(len(self.package_items))
+        count = len(self.package_items)
+        self.lbl_package_hint.setText(f"Paket için en az 2, en fazla 4 kalem ekleyiniz (Şu an: {count} kalem eklendi).")
+        if count >= 2:
+            self.lbl_package_hint.setStyleSheet("color: green; font-weight: bold;")
+        else:
+            self.lbl_package_hint.setStyleSheet("color: #e67e22; font-style: italic;")
+
+        self.table_package.setRowCount(count)
         for row, itm in enumerate(self.package_items):
-            self.table_package.setItem(row, 0, QTableWidgetItem(str(row + 1)))
+            self.table_package.setItem(row, 0, QTableWidgetItem(f"Kalem {row + 1}"))
             self.table_package.setItem(row, 1, QTableWidgetItem(itm["resource"]))
             self.table_package.setItem(row, 2, QTableWidgetItem(itm["start"].strftime("%Y-%m-%d %H:%M")))
             self.table_package.setItem(row, 3, QTableWidgetItem(itm["end"].strftime("%Y-%m-%d %H:%M")))
 
     def _submit_package(self):
+        if len(self.package_items) < 2:
+            QMessageBox.warning(
+                self,
+                "Yetersiz Kalem",
+                f"Paket rezervasyon için en az 2 kalem eklenmelidir.\nŞu an ekli kalem sayısı: {len(self.package_items)}.\nLütfen 'Kalem Ekle (+)' butonunu kullanınız.",
+            )
+            return
+
         user = self.combo_user.currentText()
         log_gui_action("click_submit_package", user=user, item_count=len(self.package_items))
         items = [
