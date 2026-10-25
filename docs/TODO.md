@@ -441,7 +441,7 @@ High — realistic scheduling case and an easy hidden-test target.
 
 ## 18. Early exit can produce `end < start`
 
-- [ ] Fix
+- [x] Fix
 
 **Where**
 - `src/yazilim_lab_project/rules/entry_rules.py` →

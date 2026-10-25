@@ -16,7 +16,7 @@ def exit_reservation(
 ) -> list[AutoAssign]:
     res.state = reservation.State.COMPLETED
     if state.config.time < res.end:
-        res.end = state.config.time
+        res.end = max(state.config.time, res.start)
     user = next(u for u in state.config.users if u.id == res.user)
     user.reliability = new_reliability
 
