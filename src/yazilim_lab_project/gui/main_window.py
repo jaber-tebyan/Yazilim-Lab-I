@@ -197,8 +197,8 @@ class MainWindow(QMainWindow):
         if state:
             # Sync calendar picker with current simulated date
             self.date_picker.blockSignals(True)
-            self.date_picker.setDate(QDate(state.clock.year, state.clock.month, state.clock.day))
-            self.calendar_canvas.set_date(state.clock.date())
+            self.date_picker.setDate(QDate(state.config.time.year, state.config.time.month, state.config.time.day))
+            self.calendar_canvas.set_date(state.config.time.date())
             self.date_picker.blockSignals(False)
 
         self.calendar_canvas.update()

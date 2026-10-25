@@ -114,7 +114,7 @@ class CalendarCanvas(QWidget):
             day_start = datetime.combine(self.selected_date, time(self.start_hour, 0))
             day_end = datetime.combine(self.selected_date, time(self.end_hour, 0))
 
-            for maint in state.config.maintenance:
+            for maint in state.config.maintenance_windows:
                 if maint.resource == resource.id:
                     if maint.start < day_end and maint.end > day_start:
                         m_start = max(maint.start, day_start)
@@ -182,7 +182,7 @@ class CalendarCanvas(QWidget):
                 self._rendered_boxes.append((box_rect, r))
 
                 # Preparation time visualization after completed/in-use/approved reservations
-                prep_minutes = state.config.resource_types[resource.type].prep_minutes
+                prep_minutes = state.config.resource_types[resource.type].preparation_min
                 if prep_minutes > 0 and r.state in (State.APPROVED, State.IN_USE, State.COMPLETED):
                     prep_end = min(r.end + timedelta(minutes=prep_minutes), day_end)
                     if prep_end > r.end:
@@ -196,7 +196,7 @@ class CalendarCanvas(QWidget):
             y += self.row_height
 
         # Simulated Clock Line
-        sim_time = state.clock
+        sim_time = state.config.time
         if sim_time.date() == self.selected_date and (day_start <= sim_time <= day_end):
             cx = self._time_to_x(sim_time, w)
             painter.setPen(QPen(QColor(231, 76, 60), 2, Qt.SolidLine))

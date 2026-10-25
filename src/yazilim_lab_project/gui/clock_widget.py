@@ -69,7 +69,7 @@ class ClockControlWidget(QWidget):
         if not state:
             self.lbl_clock.setText("Mevcut Saat: -")
             return
-        curr = state.clock
+        curr = state.config.time
         self.lbl_clock.setText(f"Mevcut Saat: {curr.strftime('%Y-%m-%d %H:%M')}")
         self.dt_target.setDateTime(QDateTime(curr).addSecs(3600))
 

@@ -145,7 +145,7 @@ class BookingForm(QWidget):
         self.combo_resource.blockSignals(False)
 
         # Set default times aligned with state clock
-        clock = state.clock
+        clock = state.config.time
         start_dt = clock.replace(minute=(clock.minute // 15) * 15, second=0, microsecond=0)
         self.dt_start.setDateTime(QDateTime(start_dt))
         self.dt_end.setDateTime(QDateTime(start_dt).addSecs(3600))
